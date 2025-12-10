@@ -39,9 +39,9 @@ final class BlogController extends AbstractController
         // generate a URL with no route arguments
         $signUpPage = $this->generateUrl('sign_up'); // ou $this->router->generate('sign_up');
         // generate a URL with route arguments
-        $userProfilePage = $this->generateUrl('user_profile', [
-            'username' => $user->getUserIdentifier(),
-        ]);
+        // $userProfilePage = $this->generateUrl('user_profile', [
+        //     'username' => $user->getUserIdentifier(),
+        // ]);
         // generated URLs are "absolute paths" by default. Pass a third optional
         // argument to generate different URLs (e.g. an "absolute URL")
         $signUpPage = $this->generateUrl('sign_up', [], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -80,10 +80,34 @@ final class BlogController extends AbstractController
         return new Response("Affichage de l'article de blog avec l'id : " . $page . " et le titre : " . $title);
     }
 
-    #[Route('/blog/{page}', name: 'blog_edit', methods: ['PUT'])]
-    public function edit(int $page): Response
+    #[Route('/twig', name: 'blog_edit')]
+    public function edit(): Response
     {
         // ...
-        return new Response("" . $page);
+        $users = [
+            ['name' => 'Alice', 'age' => 30],
+            ['name' => 'Bob', 'age' => 25],
+            ['name' => 'Charlie', 'age' => 35],
+        ];
+
+        return $this->render('blog/index.html.twig', [
+            'controller_name' => 'BlogController',
+            'users' => $users,
+        ]);
+    }
+
+    #[Route('/users', name: 'blog_users')]
+    public function users(): Response
+    {
+        // ...
+        $users = [
+            ['name' => 'Alice', 'age' => 30],
+            ['name' => 'Bob', 'age' => 25],
+            ['name' => 'Charlie', 'age' => 35],
+        ];
+        
+        return $this->render('blog/_user_profile.html.twig', [
+            'users' => $users,
+        ]);
     }
 }

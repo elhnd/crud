@@ -16,5 +16,52 @@
         <li>Your controller at <code>/home/elhadji/certif/crud/src/Controller/BlogController.php</code></li>
         <li>Your template at <code>/home/elhadji/certif/crud/templates/blog/index.html.twig</code></li>
     </ul>
+
+    {% for i in 0..10 %}
+        * {{i}}
+         {# {{ loop.parent }} - #}
+    {% endfor %}
+    <br>
+    {% for i in range(50, 60) %}
+        * {{loop.index0}} -
+        * {{i}}
+    {% endfor %}
+    <br>
+    {% for letter in 'a'..'z' %}
+        * {{loop.revindex0}} -
+        * {{ letter }}
+    {% endfor %}
+    <br>
+    {% for letter in 'a'|upper..'z'|upper %}
+        {% if loop.first %}
+            {{ 'This is the first letter: ' ~ letter }} <br>
+        {% endif %}
+
+        {% if loop.last %}
+            This is the last letter: 
+        {% endif %}
+        * {{ letter }}
+    {% endfor %}
+    <br>
+
+    {# <h1>Members</h1>
+    <ul>
+        {% for key in users|keys %}
+            <li>{{ key }}</li>
+        {% endfor %}
+    </ul>
+    <ul>
+    {% for key, user in users %}
+        <li>{{ key }}: {{ user.name|e }}</li>
+    {% endfor %} #}
+</ul>
+{# {{ include('blog/_user_profile.html.twig', {'users': users}) }} #}
+
+<h1>Members</h1>
+ {# {{ render(path('blog_users')) }} #}
+  {# {{ render(url('blog_users')) }} #}
+  {{ render(controller(
+        'App\\Controller\\BlogController::users'
+    )) }}
 </div>
 {% endblock %}
