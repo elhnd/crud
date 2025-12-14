@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Weak Areas - Symfony & PHP Quiz Trainer{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">
+            <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i> Areas to Improve
+        </h1>
+        <p class="text-gray-500">Focus on these topics to improve your overall score</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Weak Areas List -->
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <div class="bg-red-50 px-6 py-4 border-b border-red-100">
+                <h2 class="text-xl font-bold text-red-800">
+                    <i class="fas fa-chart-line mr-2"></i> Low Score Areas
+                </h2>
+                <p class="text-red-600 text-sm">Subcategories with less than 70% success rate</p>
+            </div>
+            <div class="p-6 max-h-96 overflow-y-auto">
+                {% if weakAreas|length > 0 %}
+                <div class="space-y-4">
+                    {% for area in weakAreas %}
+                    <div class="p-4 bg-red-50 rounded-lg border border-red-100">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center">
+                                <span class="bg-red-200 text-red-700 px-2 py-1 rounded text-xs mr-3 uppercase">
+                                    {{ area.type }}
+                                </span>
+                                <span class="font-medium text-gray-800">{{ area.name }}</span>
+                            </div>
+                            <span class="text-red-600 font-bold">
+                                {{ area.averageScore|number_format(1) }}%
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500">{{ area.totalAttempts }} attempts</span>
+                            <a href="{{ path('quiz_start_form') }}" 
+                               class="text-red-600 hover:text-red-800 font-medium">
+                                Practice Now <i class="fas fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                        <!-- Progress bar -->
+                        <div class="mt-2 w-full bg-red-200 rounded-full h-2">
+                            <div class="bg-red-500 h-2 rounded-full" style="width: {{ area.averageScore }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-12">
+                    <i class="fas fa-trophy text-yellow-400 text-5xl mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Great job!</h3>
+                    <p class="text-gray-500">You don't have any weak areas. Keep up the good work!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Most Failed Questions -->
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <div class="bg-orange-50 px-6 py-4 border-b border-orange-100">
+                <h2 class="text-xl font-bold text-orange-800">
+                    <i class="fas fa-times-circle mr-2"></i> Most Failed Questions
+                </h2>
+                <p class="text-orange-600 text-sm">Questions you got wrong most often</p>
+            </div>
+            <div class="p-6 max-h-96 overflow-y-auto">
+                {% if mostFailedQuestions|length > 0 %}
+                <div class="space-y-4">
+                    {% for question in mostFailedQuestions %}
+                    <div class="p-4 bg-orange-50 rounded-lg border border-orange-100">
+                        <div class="text-gray-800 font-medium mb-2 question-text">
+                            {{ question.questionText|truncate_question(20000) }}
+                        </div>
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-orange-600">
+                                <i class="fas fa-times mr-1"></i>
+                                Failed {{ question.wrongCount }} / {{ question.totalAttempts }} times
+                                ({{ question.failureRate|number_format(0) }}%)
+                            </span>
+                        </div>
+                        <!-- Failure rate bar -->
+                        <div class="mt-2 w-full bg-orange-200 rounded-full h-2">
+                            <div class="bg-orange-500 h-2 rounded-full" style="width: {{ question.failureRate }}%"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-12">
+                    <i class="fas fa-check-circle text-green-400 text-5xl mb-4"></i>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Perfect!</h3>
+                    <p class="text-gray-500">No failed questions yet. Start practicing to track your progress!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Study Tips -->
+    <div class="mt-8 bg-blue-50 border border-blue-200 rounded-xl p-6">
+        <h3 class="text-lg font-bold text-blue-800 mb-4">
+            <i class="fas fa-lightbulb mr-2"></i> Tips for Improvement
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="flex items-start">
+                <i class="fas fa-book text-blue-500 mt-1 mr-3"></i>
+                <div>
+                    <h4 class="font-medium text-blue-800">Review Documentation</h4>
+                    <p class="text-blue-600 text-sm">Re-read the official Symfony and PHP documentation for weak areas.</p>
+                </div>
+            </div>
+            <div class="flex items-start">
+                <i class="fas fa-repeat text-blue-500 mt-1 mr-3"></i>
+                <div>
+                    <h4 class="font-medium text-blue-800">Practice Regularly</h4>
+                    <p class="text-blue-600 text-sm">Take focused quizzes on your weak topics until you improve.</p>
+                </div>
+            </div>
+            <div class="flex items-start">
+                <i class="fas fa-code text-blue-500 mt-1 mr-3"></i>
+                <div>
+                    <h4 class="font-medium text-blue-800">Hands-on Practice</h4>
+                    <p class="text-blue-600 text-sm">Build projects using concepts you struggle with.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-8 flex justify-center space-x-4">
+        <a href="{{ path('quiz_start_form') }}" 
+           class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition">
+            <i class="fas fa-play mr-2"></i> Practice Weak Areas
+        </a>
+        <a href="{{ path('statistics_dashboard') }}" 
+           class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
+            <i class="fas fa-chart-bar mr-2"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.name }} Statistics - Quiz Trainer{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center mb-4">
+            <a href="{{ path('statistics_dashboard') }}" class="text-gray-400 hover:text-gray-600 mr-4">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">
+                    {{ category.name }} Statistics
+                </h1>
+                <p class="text-gray-500">Detailed performance analysis for {{ category.name }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subcategory Stats -->
+    <div class="bg-white rounded-xl shadow overflow-hidden mb-8">
+        <div class="px-6 py-4 border-b">
+            <h2 class="text-xl font-bold text-gray-800">
+                <i class="fas fa-chart-bar text-indigo-600 mr-2"></i> Performance by Subcategory
+            </h2>
+        </div>
+        
+        {% if stats.successRates|length > 0 %}
+        <div class="p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {% for rate in stats.successRates %}
+                <div class="p-4 bg-gray-50 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-medium text-gray-800">{{ rate.subcategoryName }}</span>
+                        <span class="font-bold {% if rate.successRate >= 80 %}text-green-600{% elseif rate.successRate >= 60 %}text-yellow-600{% else %}text-red-600{% endif %}">
+                            {{ rate.successRate|number_format(1) }}%
+                        </span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
+                        <div class="h-2 rounded-full {% if rate.successRate >= 80 %}bg-green-500{% elseif rate.successRate >= 60 %}bg-yellow-500{% else %}bg-red-500{% endif %}" 
+                             style="width: {{ rate.successRate }}%"></div>
+                    </div>
+                    <div class="text-sm text-gray-500">
+                        {{ rate.correct }} / {{ rate.total }} correct
+                    </div>
+                    <a href="{{ path('quiz_start_form') }}" class="text-indigo-600 text-sm hover:text-indigo-800 mt-2 inline-block">
+                        Practice <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+        <div class="p-8 text-center">
+            <i class="fas fa-chart-pie text-gray-300 text-5xl mb-4"></i>
+            <p class="text-gray-500">No statistics available yet. Start taking quizzes!</p>
+            <a href="{{ path('quiz_by_category', {id: category.id}) }}" 
+               class="inline-block mt-4 bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition">
+                Start Quiz
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Chart -->
+    <div class="bg-white rounded-xl shadow p-6 mb-8">
+        <h2 class="text-xl font-bold text-gray-800 mb-4">
+            <i class="fas fa-chart-line text-indigo-600 mr-2"></i> Subcategory Comparison
+        </h2>
+        <div class="h-80">
+            <canvas id="subcategoryComparisonChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-center space-x-4">
+        <a href="{{ path('quiz_by_category', {id: category.id}) }}" 
+           class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition">
+            <i class="fas fa-play mr-2"></i> Practice {{ category.name }}
+        </a>
+        <a href="{{ path('statistics_dashboard') }}" 
+           class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
+            <i class="fas fa-chart-bar mr-2"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', async function() {
+    try {
+        const data = await fetch('{{ path("api_subcategory_success_rate", {id: category.id}) }}').then(r => r.json());
+        new Chart(document.getElementById('subcategoryComparisonChart'), {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: 'Success Rate (%)',
+                    data: data.data,
+                    backgroundColor: data.colors,
+                    borderRadius: 8,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: value => value + '%'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    } catch (e) {
+        console.log('No data available');
+    }
+});
+</script>
+{% endblock %}

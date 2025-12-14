@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ category.name }} - Symfony & PHP Quiz Trainer{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center mb-4">
+            <a href="{{ path('category_list') }}" class="text-gray-400 hover:text-gray-600 mr-4">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">
+                    {{ category.name }}
+                </h1>
+                {% if category.description %}
+                <p class="text-gray-500">{{ category.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Action -->
+    <div class="bg-gradient-to-r {% if category.name == 'Symfony' %}from-gray-900 to-gray-700{% else %}from-indigo-600 to-purple-600{% endif %} rounded-xl p-6 mb-8 text-white">
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="text-xl font-bold mb-2">Practice {{ category.name }}</h2>
+                <p class="text-white/80">Take a quiz with questions from all subcategories</p>
+            </div>
+            <a href="{{ path('quiz_by_category', {id: category.id}) }}" 
+               class="bg-white text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                <i class="fas fa-play mr-2"></i> Start Quiz
+            </a>
+        </div>
+    </div>
+
+    <!-- Subcategories -->
+    <h2 class="text-xl font-bold text-gray-800 mb-4">
+        <i class="fas fa-tags text-indigo-600 mr-2"></i> Subcategories
+    </h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for subcategory in subcategories %}
+        <div class="bg-white rounded-xl shadow p-6 card-hover">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-bold text-gray-800">{{ subcategory.name }}</h3>
+                <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm">
+                    {{ questionCounts[subcategory.id] ?? 0 }} questions
+                </span>
+            </div>
+            
+            {% if subcategory.description %}
+            <p class="text-gray-600 text-sm mb-4">{{ subcategory.description }}</p>
+            {% endif %}
+            
+            <a href="{{ path('quiz_by_subcategory', {id: subcategory.id}) }}" 
+               class="block w-full text-center bg-indigo-50 text-indigo-600 py-2 rounded-lg font-medium hover:bg-indigo-100 transition">
+                <i class="fas fa-play mr-1"></i> Practice
+            </a>
+        </div>
+        {% else %}
+        <div class="col-span-3 text-center py-12">
+            <i class="fas fa-folder-open text-gray-300 text-5xl mb-4"></i>
+            <p class="text-gray-500">No subcategories available for this category.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

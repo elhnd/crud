@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories - Symfony & PHP Quiz Trainer{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">
+            <i class="fas fa-folder-open text-indigo-600 mr-2"></i> Categories
+        </h1>
+        <p class="text-gray-500">Browse all available quiz categories and topics</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="mb-6">
+        <div class="max-w-md mx-auto">
+            <div class="relative">
+                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="categorySearch" placeholder="Search categories..." 
+                       class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+        </div>
+    </div>
+
+    <!-- Categories Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {% for category in categories %}
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
+            <div class="bg-gradient-to-r {% if category.name == 'Symfony' %}from-gray-900 to-gray-700{% else %}from-indigo-600 to-purple-600{% endif %} px-6 py-4">
+                <div class="flex items-center justify-between text-white">
+                    <div class="flex items-center">
+                        <i class="fas fa-{{ category.icon ?? 'book' }} text-2xl mr-3"></i>
+                        <h2 class="text-xl font-bold">{{ category.name }}</h2>
+                    </div>
+                    <span class="bg-white/20 px-3 py-1 rounded-full text-sm">
+                        {{ questionCounts[category.id] ?? 0 }} questions
+                    </span>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                {% if category.description %}
+                <p class="text-gray-600 mb-4">{{ category.description }}</p>
+                {% endif %}
+
+                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                    Subcategories ({{ category.subcategories|length }})
+                </h3>
+
+                <!-- Subcategory search -->
+                {% if category.subcategories|length > 5 %}
+                <div class="mb-3">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
+                        <input type="text" class="subcategory-search" placeholder="Search subcategories..." data-category-id="{{ category.id }}"
+                               style="width: 100%; padding: 6px 8px 6px 28px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 0.875rem;">
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="subcategory-list max-h-80 overflow-y-auto space-y-2 mb-6" data-category-id="{{ category.id }}">
+                    {% for subcategory in category.subcategories %}
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                        <div class="flex items-center">
+                            <i class="fas fa-tag text-gray-400 mr-2"></i>
+                            <span class="text-gray-700">{{ subcategory.name }}</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-gray-400 text-sm">
+                                {{ subcategoryCounts[subcategory.id] ?? 0 }} Q
+                            </span>
+                            <a href="{{ path('quiz_by_subcategory', {id: subcategory.id}) }}" 
+                               class="text-indigo-600 hover:text-indigo-800">
+                                <i class="fas fa-play-circle"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="flex space-x-3">
+                    <a href="{{ path('quiz_by_category', {id: category.id}) }}" 
+                       class="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-lg text-center font-semibold hover:bg-indigo-700 transition">
+                        <i class="fas fa-play mr-2"></i> Practice All
+                    </a>
+                    <a href="{{ path('statistics_category', {id: category.id}) }}" 
+                       class="bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-200 transition">
+                        <i class="fas fa-chart-bar"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-span-2 bg-white rounded-xl shadow p-12 text-center">
+            <i class="fas fa-database text-gray-300 text-6xl mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-800 mb-2">No Categories Yet</h3>
+            <p class="text-gray-500 mb-4">Run the fixtures to populate the database with sample questions.</p>
+            <code class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg inline-block">
+                php bin/console doctrine:fixtures:load
+            </code>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Search categories
+    const categorySearch = document.getElementById('categorySearch');
+    const categoryCards = document.querySelectorAll('.card-hover');
+
+    categorySearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        categoryCards.forEach(card => {
+            const categoryName = card.querySelector('h2').textContent.toLowerCase();
+            const categoryDesc = card.querySelector('p');
+            const description = categoryDesc ? categoryDesc.textContent.toLowerCase() : '';
+            
+            if (categoryName.includes(searchTerm) || description.includes(searchTerm)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+
+    // Search subcategories
+    const subcategorySearches = document.querySelectorAll('.subcategory-search');
+    
+    subcategorySearches.forEach(search => {
+        search.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const categoryId = this.getAttribute('data-category-id');
+            const subcategoryList = document.querySelector(`.subcategory-list[data-category-id="${categoryId}"]`);
+            const subcategoryItems = subcategoryList.querySelectorAll('.flex.items-center.justify-between');
+            
+            subcategoryItems.forEach(item => {
+                const subcategoryName = item.querySelector('span.text-gray-700').textContent.toLowerCase();
+                
+                if (subcategoryName.includes(searchTerm)) {
+                    item.style.display = 'flex';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
