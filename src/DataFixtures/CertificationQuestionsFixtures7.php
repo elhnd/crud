@@ -8,14 +8,22 @@ use App\Entity\Question;
 use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 /**
  * Certification-style questions - Batch 7
  */
-class CertificationQuestionsFixtures7 extends Fixture implements DependentFixtureInterface
+class CertificationQuestionsFixtures7 extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
+    use UpsertQuestionTrait;
+
+    public static function getGroups(): array
+    {
+        return ['certification', 'questions'];
+    }
+
     public function getDependencies(): array
     {
         return [CertificationQuestionsFixtures6::class];
@@ -247,7 +255,7 @@ $twig = new Environment($loader, [
             // Config - FileLocator
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Config'],
+                'subcategory' => $subcategories['Symfony:Configuration'],
                 'text' => 'What is the first argument of the <code>Symfony\\Component\\Config\\FileLocator::locate</code> method?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -622,24 +630,7 @@ class MyController
         ];
 
         foreach ($questions as $questionData) {
-            $question = new Question();
-            $question->setText($questionData['text']);
-            $question->setTypeEnum($questionData['type']);
-            $question->setDifficulty($questionData['difficulty']);
-            $question->setExplanation($questionData['explanation']);
-            $question->setResourceUrl($questionData['resourceUrl']);
-            $question->setCategory($questionData['category']);
-            $question->setSubcategory($questionData['subcategory']);
-
-            $manager->persist($question);
-
-            foreach ($questionData['answers'] as $answerData) {
-                $answer = new Answer();
-                $answer->setText($answerData['text']);
-                $answer->setIsCorrect($answerData['correct']);
-                $answer->setQuestion($question);
-                $manager->persist($answer);
-            }
+            $this->upsertQuestion($manager, $questionData);
         }
 
         $manager->flush();

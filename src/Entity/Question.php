@@ -10,6 +10,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
+#[ORM\Index(columns: ['identifier'], name: 'idx_question_identifier')]
 class Question
 {
     #[ORM\Id]
@@ -17,13 +18,16 @@ class Question
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\Column(length: 64, unique: true, nullable: true)]
+    private ?string $identifier = null;
+
     #[ORM\Column(type: Types::TEXT)]
     private ?string $text = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $explanation = null;
 
-    #[ORM\Column(length: 500, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resourceUrl = null;
 
     #[ORM\Column(length: 20)]
@@ -71,6 +75,51 @@ class Question
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getIdentifier(): ?string
+    {
+        return $this->identifier;
+    }
+
+    public function setIdentifier(?string $identifier): static
+    {
+        $this->identifier = $identifier;
+
+        return $this;
+    }
+
+    /**
+     * Génère un identifiant unique basé sur:
+     * - Le texte de la question
+     * - La catégorie
+     * - La sous-catégorie
+     * - Les réponses
+     */
+    public function generateIdentifier(): static
+    {
+        if ($this->text && $this->category && $this->subcategory) {
+            $parts = [
+                mb_strtolower(trim($this->text)),
+                $this->category->getName(),
+                $this->subcategory->getName(),
+            ];
+
+            // Ajouter les réponses triées pour cohérence
+            if (!$this->answers->isEmpty()) {
+                $answerStrings = [];
+                foreach ($this->answers as $answer) {
+                    $answerStrings[] = mb_strtolower(trim($answer->getText())) . ':' . ($answer->isCorrect() ? '1' : '0');
+                }
+                sort($answerStrings);
+                $parts[] = implode('|', $answerStrings);
+            }
+
+            $normalized = implode('###', $parts);
+            $this->identifier = substr(hash('sha256', $normalized), 0, 16);
+        }
+
+        return $this;
     }
 
     public function getText(): ?string

@@ -9,35 +9,54 @@ use App\Entity\Subcategory;
 use App\Entity\User;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class AppFixtures extends Fixture
+class AppFixtures extends Fixture implements FixtureGroupInterface
 {
+    use UpsertQuestionTrait;
+
+    public static function getGroups(): array
+    {
+        return ['base', 'questions'];
+    }
+
     public function load(ObjectManager $manager): void
     {
-        // Create default user
-        $user = new User();
-        $user->setEmail('user@quiz.local');
-        $user->setUsername('Quiz User');
-        $user->setPassword('$2y$13$dummy.password.hash');
-        $user->setRoles(['ROLE_USER']);
-        $manager->persist($user);
+        // Get or create default user
+        $userRepo = $manager->getRepository(User::class);
+        $user = $userRepo->findOneBy(['email' => 'user@quiz.local']);
+        if (!$user) {
+            $user = new User();
+            $user->setEmail('user@quiz.local');
+            $user->setUsername('Quiz User');
+            $user->setPassword('$2y$13$dummy.password.hash');
+            $user->setRoles(['ROLE_USER']);
+            $manager->persist($user);
+        }
 
-        // Create Symfony Category
-        $symfony = new Category();
-        $symfony->setName('Symfony');
-        $symfony->setDescription('Symfony framework concepts and features');
-        $symfony->setIcon('code');
-        $symfony->setColor('#000000');
-        $manager->persist($symfony);
+        // Get or create Symfony Category
+        $categoryRepo = $manager->getRepository(Category::class);
+        $symfony = $categoryRepo->findOneBy(['name' => 'Symfony']);
+        if (!$symfony) {
+            $symfony = new Category();
+            $symfony->setName('Symfony');
+            $symfony->setDescription('Symfony framework concepts and features');
+            $symfony->setIcon('code');
+            $symfony->setColor('#000000');
+            $manager->persist($symfony);
+        }
 
-        // Create PHP Category
-        $php = new Category();
-        $php->setName('PHP');
-        $php->setDescription('PHP language features and best practices');
-        $php->setIcon('php');
-        $php->setColor('#777BB4');
-        $manager->persist($php);
+        // Get or create PHP Category
+        $php = $categoryRepo->findOneBy(['name' => 'PHP']);
+        if (!$php) {
+            $php = new Category();
+            $php->setName('PHP');
+            $php->setDescription('PHP language features and best practices');
+            $php->setIcon('php');
+            $php->setColor('#777BB4');
+            $manager->persist($php);
+        }
 
         // Symfony Subcategories
         $symfonySubcategories = [
@@ -53,13 +72,17 @@ class AppFixtures extends Fixture
             'Validation' => 'Data validation constraints',
         ];
 
+        $subcategoryRepo = $manager->getRepository(Subcategory::class);
         $symfonySubcategoryEntities = [];
         foreach ($symfonySubcategories as $name => $description) {
-            $sub = new Subcategory();
-            $sub->setName($name);
-            $sub->setDescription($description);
-            $sub->setCategory($symfony);
-            $manager->persist($sub);
+            $sub = $subcategoryRepo->findOneBy(['name' => $name, 'category' => $symfony]);
+            if (!$sub) {
+                $sub = new Subcategory();
+                $sub->setName($name);
+                $sub->setDescription($description);
+                $sub->setCategory($symfony);
+                $manager->persist($sub);
+            }
             $symfonySubcategoryEntities[$name] = $sub;
         }
 
@@ -77,11 +100,14 @@ class AppFixtures extends Fixture
 
         $phpSubcategoryEntities = [];
         foreach ($phpSubcategories as $name => $description) {
-            $sub = new Subcategory();
-            $sub->setName($name);
-            $sub->setDescription($description);
-            $sub->setCategory($php);
-            $manager->persist($sub);
+            $sub = $subcategoryRepo->findOneBy(['name' => $name, 'category' => $php]);
+            if (!$sub) {
+                $sub = new Subcategory();
+                $sub->setName($name);
+                $sub->setDescription($description);
+                $sub->setCategory($php);
+                $manager->persist($sub);
+            }
             $phpSubcategoryEntities[$name] = $sub;
         }
 
@@ -115,23 +141,9 @@ class AppFixtures extends Fixture
         ];
 
         foreach ($questions as $q) {
-            $question = new Question();
-            $question->setText($q['text']);
-            $question->setTypeEnum($q['type']);
-            $question->setDifficulty($q['difficulty']);
-            $question->setExplanation($q['explanation']);
-            $question->setResourceUrl($q['resourceUrl'] ?? null);
-            $question->setCategory($symfony);
-            $question->setSubcategory($subcategories[$q['subcategory']]);
-
-            foreach ($q['answers'] as $a) {
-                $answer = new Answer();
-                $answer->setText($a['text']);
-                $answer->setIsCorrect($a['correct']);
-                $question->addAnswer($answer);
-            }
-
-            $manager->persist($question);
+            $q['category'] = $symfony;
+            $q['subcategory'] = $subcategories[$q['subcategory']];
+            $this->upsertQuestion($manager, $q);
         }
     }
 
@@ -443,23 +455,9 @@ class AppFixtures extends Fixture
         ];
 
         foreach ($questions as $q) {
-            $question = new Question();
-            $question->setText($q['text']);
-            $question->setTypeEnum($q['type']);
-            $question->setDifficulty($q['difficulty']);
-            $question->setExplanation($q['explanation']);
-            $question->setResourceUrl($q['resourceUrl'] ?? null);
-            $question->setCategory($php);
-            $question->setSubcategory($subcategories[$q['subcategory']]);
-
-            foreach ($q['answers'] as $a) {
-                $answer = new Answer();
-                $answer->setText($a['text']);
-                $answer->setIsCorrect($a['correct']);
-                $question->addAnswer($answer);
-            }
-
-            $manager->persist($question);
+            $q['category'] = $php;
+            $q['subcategory'] = $subcategories[$q['subcategory']];
+            $this->upsertQuestion($manager, $q);
         }
     }
 }

@@ -12,7 +12,27 @@ class CodeFormatterExtension extends AbstractExtension
         return [
             new TwigFilter('format_code', [$this, 'formatCode'], ['is_safe' => ['html']]),
             new TwigFilter('truncate_question', [$this, 'truncateQuestion'], ['is_safe' => ['html']]),
+            new TwigFilter('parse_urls', [$this, 'parseUrls']),
         ];
+    }
+
+    /**
+     * Parse multiple URLs separated by commas
+     * Returns an array of URLs
+     */
+    public function parseUrls(?string $urls): array
+    {
+        if (empty($urls)) {
+            return [];
+        }
+
+        // Split by comma, trim whitespace, filter empty values
+        $urlList = array_filter(
+            array_map('trim', explode(',', $urls)),
+            fn($url) => !empty($url)
+        );
+
+        return $urlList;
     }
 
     /**

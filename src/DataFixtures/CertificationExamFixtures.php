@@ -18,6 +18,7 @@ use Doctrine\Persistence\ObjectManager;
  */
 class CertificationExamFixtures extends Fixture implements FixtureGroupInterface
 {
+    use UpsertQuestionTrait;
     public static function getGroups(): array
     {
         return ['certification'];
@@ -40,26 +41,10 @@ class CertificationExamFixtures extends Fixture implements FixtureGroupInterface
         // Define certification exam questions
         $questions = $this->getCertificationQuestions($symfony, $php, $subcategories);
 
-        // Persist all questions
+        // Persist all questions using upsert
         foreach ($questions as $q) {
-            $question = new Question();
-            $question->setText($q['text']);
-            $question->setTypeEnum($q['type']);
-            $question->setDifficulty($q['difficulty']);
-            $question->setExplanation($q['explanation']);
-            $question->setResourceUrl($q['resourceUrl'] ?? null);
-            $question->setCategory($q['category']);
-            $question->setSubcategory($q['subcategory']);
-            $question->setIsCertification(true); // Mark as certification question
-
-            foreach ($q['answers'] as $a) {
-                $answer = new Answer();
-                $answer->setText($a['text']);
-                $answer->setIsCorrect($a['correct']);
-                $question->addAnswer($answer);
-            }
-
-            $manager->persist($question);
+            $q['isCertification'] = true; // Mark as certification question
+            $this->upsertQuestion($manager, $q);
         }
 
         $manager->flush();
@@ -346,7 +331,7 @@ What is the HTTP status code of the returned response?',
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Session'],
-                'text' => 'In a controller that extends Symfony\'s AbstractController, which statement allows to store a temporary message in the session to display it after a redirect?',
+                'text' => 'In a controller that extends Symfony\'s AbstractController and receives the current Request object in an argument called $request, which of the following statements allows to store a temporary message in the session in order to display it after a redirect?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
                 'explanation' => 'La méthode addFlash() est la manière recommandée dans Symfony pour créer des messages flash temporaires.',
@@ -363,9 +348,11 @@ What is the HTTP status code of the returned response?',
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Services'],
-                'text' => 'Consider the following controller:
+                'text' => 'Consider the following controller in a default Symfony application with both autowiring and autoconfiguration enabled:
 <pre><code class="language-php">use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+// ...
 
 class SomeController extends AbstractController
 {
@@ -377,7 +364,7 @@ class SomeController extends AbstractController
     }
 }</code></pre>
 
-Which statement does ??? successfully replace to inject the service with ID app.request_logger?',
+Which statement does ??? successfully replace in order to inject the service with ID app.request_logger in the $logger controller argument?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
                 'explanation' => 'L\'attribut #[Autowire(service: \'id\')] est utilisé pour injecter un service spécifique par son ID.',
@@ -461,8 +448,12 @@ Is this a valid route definition in Symfony?',
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Routing'],
-                'text' => 'Consider the following controller code and route configuration:
+                'text' => 'Consider the following controller code:
 <pre><code class="language-php"># src/Controller/BlogController.php
+namespace App\Controller;
+
+use Symfony\Component\HttpFoundation\Response;
+
 class BlogController
 {
     public function showAction(): Response
@@ -471,13 +462,15 @@ class BlogController
     }
 }</code></pre>
 
+And the following YAML route configuration:
+
 <pre><code class="language-yaml"># config/routes.yaml
 app_blog:
     path: /blog
     controller: \'App\Controller\BlogController::show\'
     methods: [\'GET\']</code></pre>
 
-Will the showAction() method be executed if a user requests the /blog URL?',
+Will the showAction() method be executed if a user requests the /blog URL using the address bar of a web browser?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'La route pointe vers \'show\' mais la méthode s\'appelle \'showAction()\'. Symfony cherchera show() qui n\'existe pas.',
@@ -553,8 +546,8 @@ Which will be the name of the route associated with the show() method?',
                 'resourceUrl' => 'https://symfony.com/doc/current/routing.html#route-groups-and-prefixes',
                 'answers' => [
                     ['text' => 'show', 'correct' => false],
-                    ['text' => 'blog_1 (if show() is the first method)', 'correct' => false],
-                    ['text' => 'This code will throw an exception', 'correct' => false],
+                    ['text' => 'blog_1 (if show() is the first method, blog_2 if it\'s the second, etc.)', 'correct' => false],
+                    ['text' => 'This code will throw an exception (the parent #[Route] cannot define a name parameter).', 'correct' => false],
                     ['text' => 'blog_show', 'correct' => true],
                     ['text' => 'blog_', 'correct' => false],
                 ],
@@ -569,14 +562,14 @@ Which will be the name of the route associated with the show() method?',
 imports:
     - { resource: \'./parameters.yaml\', ignore_errors: true }</code></pre>
 
-What will happen if the parameters.yaml file does not exist?',
+What will happen if the parameters.yaml file does not exist in the same config/ directory from where it\'s being imported?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
                 'explanation' => 'Le paramètre \'ignore_errors: true\' indique à Symfony d\'ignorer les erreurs. L\'application continuera normalement.',
                 'resourceUrl' => 'https://symfony.com/doc/current/service_container.html#importing-other-container-configuration-files',
                 'answers' => [
                     ['text' => 'You\'ll get an exception.', 'correct' => false],
-                    ['text' => 'The application will return a 404 HTTP response.', 'correct' => false],
+                    ['text' => 'The application will return a 404 (not found) HTTP response.', 'correct' => false],
                     ['text' => 'The application will keep working (and that file won\'t be imported).', 'correct' => true],
                 ],
             ],
@@ -601,7 +594,7 @@ What will happen if the parameters.yaml file does not exist?',
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Services'],
-                'text' => 'In a Symfony application that uses autowiring, which class should you use to type-hint a constructor argument to inject the current request stack?',
+                'text' => 'In a Symfony application that uses autowiring, which of the following classes should you use to type-hint a class constructor argument in order to inject the current request stack?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
                 'explanation' => 'RequestStack est la classe concrète dans le composant HttpFoundation pour gérer la pile de requêtes.',
@@ -688,7 +681,8 @@ In which services will Symfony inject the value of kernel.project_dir in any con
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'A Symfony application wants to store the templates in the resources/views/ directory instead of the default templates/ directory. Which statements do xxx and yyy successfully replace?
+                'text' => 'A Symfony application wants to store the templates in the resources/views/ directory instead of the default templates/ directory. Which statements do xxx and yyy successfully replace in the following config to achieve that?
+
 <pre><code class="language-yaml"># config/packages/twig.yaml
 twig:
     xxx: [\'yyy\']</code></pre>',
@@ -708,15 +702,21 @@ twig:
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'Consider the following Twig template inheritance:
+                'text' => 'Consider the following simple Twig template inheritance:
+
 <pre><code class="language-twig">{# parent.html.twig #}
-<title>{% block title %}Lorem ipsum{% endblock %}</title>
+<head>
+    <title>
+        {% block title %}Lorem ipsum{% endblock %}
+    </title>
+    ...
+</head>
 
 {# child.html.twig #}
 {% extends "parent.html.twig" %}
 {% block title %}???{% endblock %}</code></pre>
 
-Which statement does ??? successfully replace to render "Lorem ipsum - Dolor Sit Amet" as the page title?',
+In the child.html.twig template, which statement does ??? successfully replace to render "Lorem ipsum - Dolor Sit Amet" as the page title?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
                 'explanation' => 'La fonction parent() dans Twig permet d\'accéder au contenu du block parent.',
@@ -751,6 +751,7 @@ Which statement does ??? successfully replace to render "Lorem ipsum - Dolor Sit
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Assets'],
                 'text' => 'A default Symfony application defines the following asset configuration:
+
 <pre><code class="language-yaml"># config/packages/framework.yaml
 framework:
     assets:
@@ -760,9 +761,11 @@ framework:
             docs:
                 base_path: /docs/pdf</code></pre>
 
-A Twig template has: <code>{{ asset(\'terms_and_conditions.pdf\', \'docs\') }}</code>
+A Twig template has the following code:
 
-What will be the link generated?',
+{{ asset(\'terms_and_conditions.pdf\', \'docs\') }}
+
+What will be the link generated by the above Twig snippet?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 3,
                 'explanation' => 'La fonction asset() génère un chemin avec le base_path et applique le version_format.',
@@ -788,8 +791,8 @@ What will be the link generated?',
                 'explanation' => 'La fonction block() avec deux arguments rend le contenu du block spécifié depuis le template indiqué.',
                 'resourceUrl' => 'https://twig.symfony.com/doc/3.x/functions/block.html',
                 'answers' => [
-                    ['text' => 'It renders the footer block. If undefined, it renders base.html.twig as fallback.', 'correct' => false],
-                    ['text' => 'It renders the footer block (the second argument is ignored).', 'correct' => false],
+                    ['text' => 'It renders the contents of the footer block. If that block is undefined, it renders the contents of the base.html.twig template as a fallback content.', 'correct' => false],
+                    ['text' => 'It renders the contents of the footer block (the second argument base.html.twig is ignored).', 'correct' => false],
                     ['text' => 'It renders the contents of the footer block from the base.html.twig template.', 'correct' => true],
                     ['text' => 'This code throws an exception because block() doesn\'t accept more than 1 argument.', 'correct' => false],
                 ],
@@ -799,7 +802,7 @@ What will be the link generated?',
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'Is the following a valid Twig statement that won\'t produce any error? (consider that the variable title is defined)
+                'text' => 'Is the following a valid Twig statement that won\'t produce any error? (consider that the variable title is defined in the template and the some_template.html.twig exists)
 
 <code>{% include \'some_template.html.twig\' with { title } only %}</code>',
                 'type' => QuestionType::TRUE_FALSE,

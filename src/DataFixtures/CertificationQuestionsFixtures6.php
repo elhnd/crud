@@ -8,14 +8,22 @@ use App\Entity\Question;
 use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 /**
  * Certification-style questions - Batch 6
  */
-class CertificationQuestionsFixtures6 extends Fixture implements DependentFixtureInterface
+class CertificationQuestionsFixtures6 extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
+    use UpsertQuestionTrait;
+
+    public static function getGroups(): array
+    {
+        return ['certification', 'questions'];
+    }
+
     public function getDependencies(): array
     {
         return [CertificationQuestionsFixtures5::class];
@@ -680,24 +688,7 @@ return function(ContainerConfigurator $configurator): void {
         ];
 
         foreach ($questions as $questionData) {
-            $question = new Question();
-            $question->setText($questionData['text']);
-            $question->setTypeEnum($questionData['type']);
-            $question->setDifficulty($questionData['difficulty']);
-            $question->setExplanation($questionData['explanation']);
-            $question->setResourceUrl($questionData['resourceUrl']);
-            $question->setCategory($questionData['category']);
-            $question->setSubcategory($questionData['subcategory']);
-
-            $manager->persist($question);
-
-            foreach ($questionData['answers'] as $answerData) {
-                $answer = new Answer();
-                $answer->setText($answerData['text']);
-                $answer->setIsCorrect($answerData['correct']);
-                $answer->setQuestion($question);
-                $manager->persist($answer);
-            }
+            $this->upsertQuestion($manager, $questionData);
         }
 
         $manager->flush();

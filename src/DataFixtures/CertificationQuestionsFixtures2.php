@@ -8,14 +8,21 @@ use App\Entity\Question;
 use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 /**
  * Certification-style questions - Batch 2
  */
-class CertificationQuestionsFixtures2 extends Fixture implements DependentFixtureInterface
+class CertificationQuestionsFixtures2 extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
+    use UpsertQuestionTrait;
+    public static function getGroups(): array
+    {
+        return ['certification', 'questions'];
+    }
+
     public function getDependencies(): array
     {
         return [CertificationQuestionsFixtures::class];
@@ -299,8 +306,10 @@ var_dump($language->compile(\'1 + 2\'));</code></pre>',
                 'answers' => [
                     ['text' => '<code>$client = new RetryableHttpClient(HttpClient::create(), null, 4);</code>', 'correct' => true],
                     ['text' => '<code>$client = new RetryableHttpClient(HttpClient::create(), null, [\'max_retries\' => 4]);</code>', 'correct' => true],
-                    ['text' => '<code>$client = $client->withOptions([\'max_retries\' => 4]);</code>', 'correct' => false],
-                    ['text' => '<code>$client->request(\'GET\', \'/url\', [\'max_retries\' => 4]);</code>', 'correct' => false],
+                    ['text' => '<code>$client = new RetryableHttpClient(HttpClient::create());
+                    $client = $client->withOptions([\'max_retries\' => 4]);</code>', 'correct' => false],
+                    ['text' => '<code>$client = new RetryableHttpClient(HttpClient::create());
+                    $client->request(\'GET\', \'/url\', [\'max_retries\' => 4]);</code>', 'correct' => false],
                 ],
             ],
             // Q14: Twig block names
@@ -371,23 +380,7 @@ var_dump($language->compile(\'1 + 2\'));</code></pre>',
         ];
 
         foreach ($questions as $q) {
-            $question = new Question();
-            $question->setText($q['text']);
-            $question->setTypeEnum($q['type']);
-            $question->setDifficulty($q['difficulty']);
-            $question->setExplanation($q['explanation']);
-            $question->setResourceUrl($q['resourceUrl']);
-            $question->setCategory($q['category']);
-            $question->setSubcategory($q['subcategory']);
-
-            foreach ($q['answers'] as $a) {
-                $answer = new Answer();
-                $answer->setText($a['text']);
-                $answer->setIsCorrect($a['correct']);
-                $question->addAnswer($answer);
-            }
-
-            $manager->persist($question);
+            $this->upsertQuestion($manager, $q);
         }
 
         $manager->flush();

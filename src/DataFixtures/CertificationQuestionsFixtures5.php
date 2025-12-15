@@ -8,14 +8,21 @@ use App\Entity\Question;
 use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 /**
  * Certification-style questions - Batch 5
  */
-class CertificationQuestionsFixtures5 extends Fixture implements DependentFixtureInterface
+class CertificationQuestionsFixtures5 extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
+    use UpsertQuestionTrait;
+    public static function getGroups(): array
+    {
+        return ['certification', 'questions'];
+    }
+
     public function getDependencies(): array
     {
         return [CertificationQuestionsFixtures4::class];
@@ -41,12 +48,10 @@ class CertificationQuestionsFixtures5 extends Fixture implements DependentFixtur
             ['HttpClient', $symfony],
             ['OptionsResolver', $symfony],
             ['VarDumper', $symfony],
-            ['Asset', $symfony],
             ['Console', $symfony],
             ['PasswordHasher', $symfony],
             ['Runtime', $symfony],
             ['CssSelector', $symfony],
-            ['Config', $symfony],
             ['PSR', $php],
             ['PHP Basics', $php],
         ];
@@ -237,7 +242,7 @@ $result = $cloner->cloneVar($myVar);</code></pre>',
             // Asset version access
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Asset'],
+                'subcategory' => $subcategories['Symfony:Assets'],
                 'text' => 'Could the version of an asset be accessed from within a class implementing the <code>VersionStrategyInterface</code>?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -860,7 +865,7 @@ $dumper->setTheme(\'light\');</code></pre>',
             // Config array prototype
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Config'],
+                'subcategory' => $subcategories['Symfony:Configuration'],
                 'text' => 'Is the following YAML configuration valid with this array prototype definition?<pre><code class="language-php">$rootNode
     ->children()
         ->arrayNode(\'connections\')
@@ -887,23 +892,7 @@ $dumper->setTheme(\'light\');</code></pre>',
         ];
 
         foreach ($questions as $q) {
-            $question = new Question();
-            $question->setText($q['text']);
-            $question->setTypeEnum($q['type']);
-            $question->setDifficulty($q['difficulty']);
-            $question->setExplanation($q['explanation']);
-            $question->setResourceUrl($q['resourceUrl']);
-            $question->setCategory($q['category']);
-            $question->setSubcategory($q['subcategory']);
-
-            foreach ($q['answers'] as $a) {
-                $answer = new Answer();
-                $answer->setText($a['text']);
-                $answer->setIsCorrect($a['correct']);
-                $question->addAnswer($answer);
-            }
-
-            $manager->persist($question);
+            $this->upsertQuestion($manager, $q);
         }
 
         $manager->flush();

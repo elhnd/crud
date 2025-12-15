@@ -8,14 +8,21 @@ use App\Entity\Question;
 use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 /**
  * Certification-style questions extracted from SymfonyInsight quizzes
  */
-class CertificationQuestionsFixtures extends Fixture implements DependentFixtureInterface
+class CertificationQuestionsFixtures extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
+    use UpsertQuestionTrait;
+    public static function getGroups(): array
+    {
+        return ['certification', 'questions'];
+    }
+
     public function getDependencies(): array
     {
         return [AppFixtures::class];
@@ -35,7 +42,6 @@ class CertificationQuestionsFixtures extends Fixture implements DependentFixture
         // Create additional subcategories needed
         $additionalSymfonySubcategories = [
             'Process' => 'Process component for executing system commands',
-            'Config' => 'Configuration component and tree builder',
             'Clock' => 'Clock component for time handling',
             'Serializer' => 'Serializer component for data transformation',
             'Messenger' => 'Messenger component for async messaging',
@@ -181,7 +187,7 @@ book_list:
             // Question 7: Config - Normalization
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Config'],
+                'subcategory' => $subcategories['Symfony:Configuration'],
                 'text' => 'Is the following configuration valid?<pre><code class="language-php">$rootNode
     ->children()
         ->arrayNode(\'connections\')
@@ -405,26 +411,10 @@ book_list:
             ],
         ];
 
-        // Persist all questions
+        // Persist all questions using upsert
         foreach ($questions as $q) {
-            $question = new Question();
-            $question->setText($q['text']);
-            $question->setTypeEnum($q['type']);
-            $question->setDifficulty($q['difficulty']);
-            $question->setExplanation($q['explanation']);
-            $question->setResourceUrl($q['resourceUrl']);
-            $question->setCategory($q['category']);
-            $question->setSubcategory($q['subcategory']);
-            $question->setIsCertification(false); // These are training questions
-
-            foreach ($q['answers'] as $a) {
-                $answer = new Answer();
-                $answer->setText($a['text']);
-                $answer->setIsCorrect($a['correct']);
-                $question->addAnswer($answer);
-            }
-
-            $manager->persist($question);
+            $q['isCertification'] = false; // These are training questions
+            $this->upsertQuestion($manager, $q);
         }
 
         $manager->flush();

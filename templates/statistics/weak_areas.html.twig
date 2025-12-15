@@ -39,7 +39,7 @@
                         </div>
                         <div class="flex items-center justify-between text-sm">
                             <span class="text-gray-500">{{ area.totalAttempts }} attempts</span>
-                            <a href="{{ path('quiz_start_form') }}" 
+                            <a href="{{ path('quiz_start_form', {'subcategory[]': area.subcategoryId}) }}" 
                                class="text-red-600 hover:text-red-800 font-medium">
                                 Practice Now <i class="fas fa-arrow-right ml-1"></i>
                             </a>

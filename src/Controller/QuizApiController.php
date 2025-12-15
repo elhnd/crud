@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Answer;
 use App\Entity\Question;
-use App\Repository\AnswerRepository;
-use App\Repository\QuestionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,8 +16,6 @@ class QuizApiController extends AbstractController
 {
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly QuestionRepository $questionRepository,
-        private readonly AnswerRepository $answerRepository,
     ) {
     }
 

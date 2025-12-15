@@ -194,12 +194,12 @@
             <!-- Resource URL -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-book-open text-purple-500 mr-1"></i> Learn More URL (optional)
+                    <i class="fas fa-book-open text-purple-500 mr-1"></i> Learn More URLs (optional)
+                    <span class="text-gray-400 font-normal ml-1">- separate multiple URLs with commas</span>
                 </label>
-                <input type="url" id="edit-resource-url" 
+                <textarea id="edit-resource-url" rows="2"
                     class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                    placeholder="https://symfony.com/doc/..."
-                    value="{{ question.resourceUrl }}">
+                    placeholder="https://symfony.com/doc/..., https://php.net/...">{{ question.resourceUrl }}</textarea>
             </div>
             
             <!-- Answers -->

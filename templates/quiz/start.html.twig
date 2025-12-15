@@ -179,7 +179,8 @@
                             {% for subcategory in category.subcategories %}
                             <label class="subcategory-item cursor-pointer" data-name="{{ subcategory.name|lower }}">
                                 <input type="checkbox" name="subcategories[]" value="{{ subcategory.id }}" 
-                                       class="peer sr-only subcategory-checkbox">
+                                       class="peer sr-only subcategory-checkbox"
+                                       {{ subcategory.id in preSelectedSubcategories|default([]) ? 'checked' : '' }}>
                                 <div class="flex items-center p-2 rounded-lg transition
                                             peer-checked:bg-indigo-100 peer-checked:text-indigo-700
                                             hover:bg-gray-100">
@@ -220,6 +221,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const subcategorySearch = document.getElementById('subcategory-search');
     const subcategoryCheckboxes = document.querySelectorAll('.subcategory-checkbox');
     const selectedCountEl = document.getElementById('selected-count');
+
+    // Check if there are pre-selected subcategories
+    const hasPreSelected = document.querySelectorAll('.subcategory-checkbox:checked').length > 0;
+    if (hasPreSelected) {
+        // Auto-select subcategory mode
+        document.getElementById('mode-subcategory').checked = true;
+    }
 
     function updateVisibility() {
         const selectedMode = document.querySelector('input[name="mode"]:checked').value;

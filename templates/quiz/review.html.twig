@@ -147,18 +147,25 @@
                 </div>
                 {% endif %}
 
-                <!-- Resource Link -->
-                {% if answer.question.resourceUrl %}
+                <!-- Resource Links -->
+                {% set urls = answer.question.resourceUrl|parse_urls %}
+                {% if urls|length > 0 %}
                 <div class="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-xl">
-                    <div class="flex items-center">
-                        <i class="fas fa-book-open text-purple-500 text-xl mr-3"></i>
+                    <div class="flex items-start">
+                        <i class="fas fa-book-open text-purple-500 text-xl mr-3 mt-1"></i>
                         <div class="flex-1">
-                            <h4 class="font-semibold text-purple-800 mb-1">Learn More</h4>
-                            <a href="{{ answer.question.resourceUrl }}" target="_blank" rel="noopener noreferrer"
-                               class="text-purple-700 hover:text-purple-900 underline break-all">
-                                <i class="fas fa-external-link-alt mr-1"></i>
-                                {{ answer.question.resourceUrl }}
-                            </a>
+                            <h4 class="font-semibold text-purple-800 mb-2">Learn More</h4>
+                            <div class="space-y-2">
+                                {% for url in urls %}
+                                <div>
+                                    <a href="{{ url }}" target="_blank" rel="noopener noreferrer"
+                                       class="text-purple-700 hover:text-purple-900 underline break-all text-sm">
+                                        <i class="fas fa-external-link-alt mr-1"></i>
+                                        {{ url }}
+                                    </a>
+                                </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -276,12 +283,12 @@ async function openEditModal(questionId) {
             <!-- Resource URL -->
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-book-open text-purple-500 mr-1"></i> Learn More URL (optional)
+                    <i class="fas fa-book-open text-purple-500 mr-1"></i> Learn More URLs (optional)
+                    <span class="text-gray-400 font-normal ml-1">- separate multiple URLs with commas</span>
                 </label>
-                <input type="url" id="edit-resource-url" 
+                <textarea id="edit-resource-url" rows="2"
                     class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                    placeholder="https://symfony.com/doc/..."
-                    value="${escapeHtml(question.resourceUrl || '')}">
+                    placeholder="https://symfony.com/doc/..., https://php.net/...">${escapeHtml(question.resourceUrl || '')}</textarea>
             </div>
             
             <!-- Answers -->

@@ -24,12 +24,14 @@ class QuizController extends AbstractController
     }
 
     #[Route('/start', name: 'quiz_start_form', methods: ['GET'])]
-    public function startForm(): Response
+    public function startForm(Request $request): Response
     {
         $categories = $this->categoryRepository->findAllWithSubcategories();
+        $preSelectedSubcategories = $request->query->all('subcategory');
 
         return $this->render('quiz/start.html.twig', [
             'categories' => $categories,
+            'preSelectedSubcategories' => array_map('intval', $preSelectedSubcategories),
         ]);
     }
 

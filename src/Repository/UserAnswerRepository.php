@@ -146,12 +146,14 @@ class UserAnswerRepository extends ServiceEntityRepository
     {
         // Get only weak subcategories based on individual answers
         $results = $this->createQueryBuilder('ua')
-            ->leftJoin('ua.quizSession', 'qs')
-            ->leftJoin('ua.question', 'q')
+            ->innerJoin('ua.quizSession', 'qs')
+            ->innerJoin('ua.question', 'q')
             ->leftJoin('q.subcategory', 's')
-            ->leftJoin('q.category', 'c')
+            ->innerJoin('q.category', 'c')
             ->select(
-                "CONCAT(c.name, ' - ', s.name) as name",
+                'IDENTITY(q.subcategory) as subcategoryId',
+                'c.name as categoryName',
+                's.name as subcategoryName',
                 "'subcategory' as type",
                 '(SUM(CASE WHEN ua.isCorrect = true THEN 1 ELSE 0 END) * 100.0 / COUNT(ua.id)) as averageScore',
                 'COUNT(ua.id) as totalAttempts'
@@ -160,7 +162,7 @@ class UserAnswerRepository extends ServiceEntityRepository
             ->andWhere('q.subcategory IS NOT NULL')
             ->setParameter('user', $user)
             ->groupBy('q.subcategory', 's.name', 'c.name')
-            ->having('(SUM(CASE WHEN ua.isCorrect = true THEN 1 ELSE 0 END) * 100.0 / COUNT(ua.id)) < :threshold')
+            ->having('averageScore < :threshold')
             ->setParameter('threshold', $threshold)
             ->orderBy('averageScore', 'ASC')
             ->getQuery()
@@ -168,7 +170,8 @@ class UserAnswerRepository extends ServiceEntityRepository
 
         return array_map(function ($row) {
             return [
-                'name' => $row['name'],
+                'subcategoryId' => (int)$row['subcategoryId'],
+                'name' => $row['categoryName'] . ' - ' . $row['subcategoryName'],
                 'type' => $row['type'],
                 'averageScore' => (float)$row['averageScore'],
                 'totalAttempts' => (int)$row['totalAttempts'],
@@ -209,7 +212,8 @@ class UserAnswerRepository extends ServiceEntityRepository
             ->leftJoin('q.subcategory', 's')
             ->leftJoin('q.category', 'c')
             ->select(
-                "CONCAT(c.name, ' - ', s.name) as name",
+                'c.name as categoryName',
+                's.name as subcategoryName',
                 "'subcategory' as type",
                 'SUM(CASE WHEN ua.isCorrect = true THEN 1 ELSE 0 END) * 100.0 / COUNT(ua.id) as averageScore',
                 'COUNT(ua.id) as totalAttempts'
@@ -223,6 +227,15 @@ class UserAnswerRepository extends ServiceEntityRepository
             ->orderBy('averageScore', 'DESC')
             ->getQuery()
             ->getResult();
+
+        $subcategoryResults = array_map(function ($row) {
+            return [
+                'name' => $row['categoryName'] . ' - ' . $row['subcategoryName'],
+                'type' => $row['type'],
+                'averageScore' => (float)$row['averageScore'],
+                'totalAttempts' => (int)$row['totalAttempts'],
+            ];
+        }, $subcategoryResults);
 
         $results = array_merge($categoryResults, $subcategoryResults);
         usort($results, fn($a, $b) => (float)$b['averageScore'] <=> (float)$a['averageScore']);
