@@ -350,4 +350,146 @@ class QuizSessionRepository extends ServiceEntityRepository
             ];
         }, $results);
     }
+
+    /**
+     * Find quiz sessions with pagination and filters (for admin)
+     * @return array{sessions: QuizSession[], total: int}
+     */
+    public function findPaginatedWithFilters(
+        int $offset,
+        int $limit,
+        ?string $status = null,
+        ?int $categoryId = null,
+        ?string $dateFrom = null,
+        ?string $dateTo = null,
+    ): array {
+        $qb = $this->createQueryBuilder('qs')
+            ->leftJoin('qs.user', 'u')
+            ->leftJoin('qs.category', 'c')
+            ->leftJoin('qs.subcategory', 's')
+            ->orderBy('qs.startedAt', 'DESC');
+
+        if ($status) {
+            $qb->andWhere('qs.status = :status')
+                ->setParameter('status', $status);
+        }
+
+        if ($categoryId) {
+            $qb->andWhere('qs.category = :category')
+                ->setParameter('category', $categoryId);
+        }
+
+        if ($dateFrom) {
+            $qb->andWhere('qs.startedAt >= :dateFrom')
+                ->setParameter('dateFrom', new \DateTimeImmutable($dateFrom));
+        }
+
+        if ($dateTo) {
+            $qb->andWhere('qs.startedAt <= :dateTo')
+                ->setParameter('dateTo', new \DateTimeImmutable($dateTo . ' 23:59:59'));
+        }
+
+        // Count total
+        $countQb = clone $qb;
+        $total = (int) $countQb->select('COUNT(qs.id)')->getQuery()->getSingleScalarResult();
+
+        // Get paginated results
+        $sessions = $qb->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        return [
+            'sessions' => $sessions,
+            'total' => $total,
+        ];
+    }
+
+    /**
+     * Get admin statistics for quiz sessions
+     * @return array{total: int, byStatus: array<string, int>, averageScore: float, sessionsToday: int, sessionsThisWeek: int}
+     */
+    public function getAdminStatistics(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        // Total sessions by status
+        $statusStats = $conn->fetchAllAssociative(
+            'SELECT status, COUNT(*) as count FROM quiz_session GROUP BY status'
+        );
+
+        $byStatus = [];
+        foreach ($statusStats as $stat) {
+            $byStatus[$stat['status']] = (int) $stat['count'];
+        }
+
+        // Average score
+        $avgScore = $conn->fetchOne(
+            'SELECT AVG(score) FROM quiz_session WHERE status = ?',
+            [QuizSession::STATUS_COMPLETED]
+        );
+
+        // Sessions today
+        $today = (new \DateTimeImmutable())->format('Y-m-d');
+        $sessionsToday = $conn->fetchOne(
+            'SELECT COUNT(*) FROM quiz_session WHERE DATE(started_at) = ?',
+            [$today]
+        );
+
+        // Sessions this week
+        $weekStart = (new \DateTimeImmutable('monday this week'))->format('Y-m-d');
+        $sessionsThisWeek = $conn->fetchOne(
+            'SELECT COUNT(*) FROM quiz_session WHERE started_at >= ?',
+            [$weekStart]
+        );
+
+        return [
+            'total' => array_sum($byStatus),
+            'byStatus' => $byStatus,
+            'averageScore' => $avgScore ? round((float) $avgScore, 1) : 0,
+            'sessionsToday' => (int) $sessionsToday,
+            'sessionsThisWeek' => (int) $sessionsThisWeek,
+        ];
+    }
+
+    /**
+     * Bulk delete quiz sessions by IDs
+     * @param int[] $ids
+     * @return int Number of deleted sessions
+     */
+    public function bulkDelete(array $ids): int
+    {
+        if (empty($ids)) {
+            return 0;
+        }
+
+        $deleted = $this->getEntityManager()->createQueryBuilder()
+            ->delete(QuizSession::class, 'qs')
+            ->where('qs.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->execute();
+
+        return $deleted;
+    }
+
+    /**
+     * Cleanup abandoned sessions older than specified days
+     * @return int Number of deleted sessions
+     */
+    public function cleanupAbandoned(int $daysOld = 7): int
+    {
+        $threshold = new \DateTimeImmutable("-{$daysOld} days");
+
+        $deleted = $this->getEntityManager()->createQueryBuilder()
+            ->delete(QuizSession::class, 'qs')
+            ->where('qs.status = :status')
+            ->andWhere('qs.startedAt < :threshold')
+            ->setParameter('status', QuizSession::STATUS_IN_PROGRESS)
+            ->setParameter('threshold', $threshold)
+            ->getQuery()
+            ->execute();
+
+        return $deleted;
+    }
 }

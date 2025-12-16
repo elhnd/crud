@@ -1,0 +1,239 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Quiz Session #{{ session.id }} - Admin{% endblock %}
+
+{% block body %}
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between mb-4">
+            <a href="{{ path('admin_quiz_index') }}" class="text-indigo-600 hover:text-indigo-800">
+                <i class="fas fa-arrow-left mr-2"></i> Back to Quiz List
+            </a>
+            <form action="{{ path('admin_quiz_delete', {id: session.id}) }}" method="POST" 
+                  onsubmit="return confirm('Delete this quiz session?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ session.id) }}">
+                <button type="submit" class="bg-red-100 text-red-600 px-4 py-2 rounded-lg hover:bg-red-200 transition">
+                    <i class="fas fa-trash mr-2"></i> Delete Session
+                </button>
+            </form>
+        </div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">
+            <i class="fas fa-clipboard-list text-indigo-600 mr-2"></i> Quiz Session #{{ session.id }}
+        </h1>
+        <p class="text-gray-500">{{ session.sessionLabel }}</p>
+    </div>
+
+    <!-- Session Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-xl shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm">Status</p>
+                    {% if session.status == 'completed' %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                            <i class="fas fa-check mr-2"></i> Completed
+                        </span>
+                    {% elseif session.status == 'in_progress' %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                            <i class="fas fa-spinner mr-2"></i> In Progress
+                        </span>
+                    {% else %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                            <i class="fas fa-ban mr-2"></i> Abandoned
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm">Score</p>
+                    {% if session.isCompleted %}
+                        <p class="text-3xl font-bold {% if session.score >= 80 %}text-green-600{% elseif session.score >= 60 %}text-yellow-600{% else %}text-red-600{% endif %}">
+                            {{ session.score|number_format(1) }}%
+                        </p>
+                    {% else %}
+                        <p class="text-3xl font-bold text-gray-400">-</p>
+                    {% endif %}
+                </div>
+                <div class="bg-purple-100 p-3 rounded-lg">
+                    <i class="fas fa-percentage text-purple-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm">Questions</p>
+                    <p class="text-2xl font-bold text-gray-800">
+                        <span class="text-green-600">{{ session.correctAnswers }}</span>
+                        <span class="text-gray-400">/</span>
+                        {{ session.totalQuestions }}
+                    </p>
+                </div>
+                <div class="bg-blue-100 p-3 rounded-lg">
+                    <i class="fas fa-question-circle text-blue-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-gray-500 text-sm">Duration</p>
+                    <p class="text-2xl font-bold text-gray-800">
+                        {% if session.timeSpentSeconds %}
+                            {{ session.formattedTimeSpent }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="bg-indigo-100 p-3 rounded-lg">
+                    <i class="fas fa-clock text-indigo-600 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session Details -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <!-- Info Card -->
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
+                <h2 class="text-lg font-bold text-gray-800">
+                    <i class="fas fa-info-circle text-indigo-600 mr-2"></i> Session Info
+                </h2>
+            </div>
+            <div class="p-6">
+                <dl class="space-y-4">
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Mode</dt>
+                        <dd class="mt-1 text-gray-900 capitalize">{{ session.mode }}</dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Category</dt>
+                        <dd class="mt-1 text-gray-900">
+                            {{ session.category ? session.category.name : 'Multiple / Random' }}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Subcategory</dt>
+                        <dd class="mt-1 text-gray-900">
+                            {{ session.subcategory ? session.subcategory.name : '-' }}
+                        </dd>
+                    </div>
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Started At</dt>
+                        <dd class="mt-1 text-gray-900">{{ session.startedAt|date('Y-m-d H:i:s') }}</dd>
+                    </div>
+                    {% if session.completedAt %}
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Completed At</dt>
+                        <dd class="mt-1 text-gray-900">{{ session.completedAt|date('Y-m-d H:i:s') }}</dd>
+                    </div>
+                    {% endif %}
+                    <div>
+                        <dt class="text-sm font-medium text-gray-500">Current Question Index</dt>
+                        <dd class="mt-1 text-gray-900">{{ session.currentQuestionIndex + 1 }}</dd>
+                    </div>
+                </dl>
+            </div>
+        </div>
+
+        <!-- Answers List -->
+        <div class="lg:col-span-2 bg-white rounded-xl shadow overflow-hidden">
+            <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <h2 class="text-lg font-bold text-gray-800">
+                    <i class="fas fa-list-check text-indigo-600 mr-2"></i> Answers ({{ session.userAnswers|length }})
+                </h2>
+            </div>
+            <div class="overflow-x-auto max-h-96">
+                <table class="w-full">
+                    <thead class="bg-gray-50 sticky top-0">
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Question</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Result</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Time</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        {% for userAnswer in session.userAnswers %}
+                        <tr class="hover:bg-gray-50 {{ userAnswer.isCorrect ? '' : 'bg-red-50' }}">
+                            <td class="px-4 py-3 text-sm text-gray-600">{{ loop.index }}</td>
+                            <td class="px-4 py-3 text-sm text-gray-900 max-w-md">
+                                <div class="truncate" title="{{ userAnswer.question.text|striptags }}">
+                                    {{ userAnswer.question.text|striptags|slice(0, 100) }}{% if userAnswer.question.text|length > 100 %}...{% endif %}
+                                </div>
+                                <div class="text-xs text-gray-400 mt-1">
+                                    {{ userAnswer.question.subcategory.name }}
+                                </div>
+                            </td>
+                            <td class="px-4 py-3">
+                                {% if userAnswer.isCorrect %}
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check mr-1"></i> Correct
+                                    </span>
+                                {% else %}
+                                    <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        <i class="fas fa-times mr-1"></i> Incorrect
+                                    </span>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-600">
+                                {{ userAnswer.answeredAt|date('H:i:s') }}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="px-4 py-8 text-center text-gray-500">
+                                <i class="fas fa-inbox text-gray-300 text-3xl mb-2"></i>
+                                <p>No answers yet</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Bar -->
+    {% if session.totalQuestions > 0 %}
+    <div class="bg-white rounded-xl shadow p-6">
+        <h2 class="text-lg font-bold text-gray-800 mb-4">
+            <i class="fas fa-tasks text-indigo-600 mr-2"></i> Progress
+        </h2>
+        
+        <div class="mb-4">
+            <div class="flex justify-between text-sm text-gray-600 mb-2">
+                <span>Answered: {{ session.userAnswers|length }} / {{ session.totalQuestions }}</span>
+                <span>{{ ((session.userAnswers|length / session.totalQuestions) * 100)|number_format(0) }}%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3">
+                <div class="bg-indigo-600 h-3 rounded-full transition-all" 
+                     style="width: {{ (session.userAnswers|length / session.totalQuestions) * 100 }}%"></div>
+            </div>
+        </div>
+
+        {% if session.isCompleted %}
+        <div class="grid grid-cols-2 gap-4 mt-6">
+            <div class="text-center p-4 bg-green-50 rounded-lg">
+                <p class="text-3xl font-bold text-green-600">{{ session.correctAnswers }}</p>
+                <p class="text-sm text-gray-600">Correct</p>
+            </div>
+            <div class="text-center p-4 bg-red-50 rounded-lg">
+                <p class="text-3xl font-bold text-red-600">{{ session.incorrectAnswers }}</p>
+                <p class="text-sm text-gray-600">Incorrect</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

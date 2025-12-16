@@ -64,7 +64,6 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
             'HTTP Kernel' => 'Request lifecycle and HTTP handling',
             'Security' => 'Authentication, authorization, and security features',
             'Forms' => 'Form building, validation, and handling',
-            'Doctrine ORM' => 'Database abstraction and entity management',
             'Event Dispatcher' => 'Event-driven architecture',
             'Console' => 'CLI commands and console components',
             'Twig' => 'Templating engine features',

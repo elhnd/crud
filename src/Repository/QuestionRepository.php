@@ -262,4 +262,148 @@ class QuestionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Find questions with pagination and filters (for admin)
+     * @return array{questions: Question[], total: int}
+     */
+    public function findPaginatedWithFilters(
+        int $offset,
+        int $limit,
+        ?string $search = null,
+        ?int $categoryId = null,
+        ?int $subcategoryId = null,
+        ?string $type = null,
+        ?int $difficulty = null,
+        ?string $certification = null,
+    ): array {
+        $qb = $this->createQueryBuilder('q')
+            ->leftJoin('q.category', 'c')
+            ->leftJoin('q.subcategory', 's')
+            ->orderBy('q.id', 'DESC');
+
+        if ($search) {
+            $qb->andWhere('q.text LIKE :search OR q.explanation LIKE :search')
+                ->setParameter('search', '%' . $search . '%');
+        }
+
+        if ($categoryId) {
+            $qb->andWhere('q.category = :category')
+                ->setParameter('category', $categoryId);
+        }
+
+        if ($subcategoryId) {
+            $qb->andWhere('q.subcategory = :subcategory')
+                ->setParameter('subcategory', $subcategoryId);
+        }
+
+        if ($type) {
+            $qb->andWhere('q.type = :type')
+                ->setParameter('type', $type);
+        }
+
+        if ($difficulty) {
+            $qb->andWhere('q.difficulty = :difficulty')
+                ->setParameter('difficulty', $difficulty);
+        }
+
+        if ($certification !== null && $certification !== '') {
+            $qb->andWhere('q.isCertification = :certification')
+                ->setParameter('certification', $certification === '1');
+        }
+
+        // Count total
+        $countQb = clone $qb;
+        $total = (int) $countQb->select('COUNT(q.id)')->getQuery()->getSingleScalarResult();
+
+        // Get paginated results
+        $questions = $qb->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        return [
+            'questions' => $questions,
+            'total' => $total,
+        ];
+    }
+
+    /**
+     * Get question statistics for admin dashboard
+     * @return array{total: int, byType: array<string, int>, byCategory: array<string, int>}
+     */
+    public function getAdminStatistics(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        // By type
+        $typeStats = $conn->fetchAllAssociative(
+            'SELECT type, COUNT(*) as count FROM question GROUP BY type'
+        );
+
+        $byType = [];
+        foreach ($typeStats as $stat) {
+            $byType[$stat['type']] = (int) $stat['count'];
+        }
+
+        // By category
+        $categoryStats = $conn->fetchAllAssociative(
+            'SELECT c.name, COUNT(q.id) as count 
+             FROM question q 
+             LEFT JOIN category c ON q.category_id = c.id 
+             GROUP BY q.category_id, c.name 
+             ORDER BY count DESC 
+             LIMIT 5'
+        );
+
+        $byCategory = [];
+        foreach ($categoryStats as $stat) {
+            $name = $stat['name'] ?? 'Uncategorized';
+            $byCategory[$name] = (int) $stat['count'];
+        }
+
+        // Count certification questions
+        $certification = (int) $conn->fetchOne(
+            'SELECT COUNT(*) FROM question WHERE is_certification = 1'
+        );
+
+        return [
+            'total' => array_sum($byType),
+            'byType' => $byType,
+            'byCategory' => $byCategory,
+            'certification' => $certification,
+        ];
+    }
+
+    /**
+     * Bulk delete questions by IDs
+     * @param int[] $ids
+     * @return int Number of deleted questions
+     */
+    public function bulkDelete(array $ids): int
+    {
+        if (empty($ids)) {
+            return 0;
+        }
+
+        $em = $this->getEntityManager();
+
+        // First delete associated answers
+        $em->createQueryBuilder()
+            ->delete('App\Entity\Answer', 'a')
+            ->where('a.question IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->execute();
+
+        // Then delete questions
+        $deleted = $em->createQueryBuilder()
+            ->delete('App\Entity\Question', 'q')
+            ->where('q.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->execute();
+
+        return $deleted;
+    }
 }

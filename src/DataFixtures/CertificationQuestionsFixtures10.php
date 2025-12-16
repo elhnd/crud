@@ -18,7 +18,7 @@ use Doctrine\Persistence\ObjectManager;
 class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtureInterface, FixtureGroupInterface
 {
     use UpsertQuestionTrait;
-    
+
     public static function getGroups(): array
     {
         return ['certification', 'questions'];
@@ -43,24 +43,7 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
         $questions = $this->getCertificationQuestions($symfony, $php, $subcategories);
 
         foreach ($questions as $q) {
-            $question = new Question();
-            $question->setText($q['text']);
-            $question->setTypeEnum($q['type']);
-            $question->setDifficulty($q['difficulty']);
-            $question->setExplanation($q['explanation']);
-            $question->setResourceUrl($q['resourceUrl'] ?? null);
-            $question->setCategory($q['category']);
-            $question->setSubcategory($q['subcategory']);
-            $question->setIsCertification(false);
-
-            foreach ($q['answers'] as $a) {
-                $answer = new Answer();
-                $answer->setText($a['text']);
-                $answer->setIsCorrect($a['correct']);
-                $question->addAnswer($answer);
-            }
-
-            $manager->persist($question);
+            $this->upsertQuestion($manager, $q);
         }
 
         $manager->flush();
@@ -79,7 +62,6 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
             'Symfony' => [
                 'HttpCache' => 'HTTP Cache component (ESI, SSI)',
                 'Clock' => 'Clock component for time management',
-                'HttpKernel' => 'HttpKernel component',
                 'Process' => 'Process component for running external processes',
                 'VarDumper' => 'VarDumper component for debugging',
             ],
@@ -194,23 +176,6 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
                 ],
             ],
 
-            // Q5 - Clock component classes
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Clock'] ?? $subcategories['Symfony:Services'],
-                'text' => 'Which classes are available in the <code>Clock</code> Component?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Le composant Clock de Symfony inclut: MonotonicClock (temps monotone), MockClock (pour les tests), et NativeClock (horloge système). Clock n\'est pas une classe mais une interface.',
-                'resourceUrl' => 'https://symfony.com/doc/current/components/clock.html',
-                'answers' => [
-                    ['text' => 'MockClock', 'correct' => true],
-                    ['text' => 'NativeClock', 'correct' => true],
-                    ['text' => 'Clock', 'correct' => false],
-                    ['text' => 'MonotonicClock', 'correct' => true],
-                ],
-            ],
-
             // Q6 - Form Extension
             [
                 'category' => $symfony,
@@ -239,7 +204,7 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
             // Q7 - Container build hash
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpKernel'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:HTTP Kernel'] ?? $subcategories['Symfony:Services'],
                 'text' => 'Could the build hash of the container be configured?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -445,5 +410,11 @@ What will be displayed?',
                 ],
             ],
         ];
+
+        foreach ($questions as $qData) {
+            $this->upsertQuestion($manager, $qData);
+        }
+
+        $manager->flush();
     }
 }

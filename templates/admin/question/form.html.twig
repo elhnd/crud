@@ -1,0 +1,545 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ question ? 'Edit Question #' ~ question.id : 'New Question' }} - Admin{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <a href="{{ path('admin_question_index') }}" class="text-indigo-600 hover:text-indigo-800 mb-4 inline-block">
+            <i class="fas fa-arrow-left mr-2"></i> Back to Questions
+        </a>
+        <h1 class="text-3xl font-bold text-gray-800">
+            <i class="fas {{ question ? 'fa-edit' : 'fa-plus-circle' }} text-indigo-600 mr-2"></i>
+            {{ question ? 'Edit Question #' ~ question.id : 'New Question' }}
+        </h1>
+    </div>
+
+    <!-- Form -->
+    <form method="POST" class="space-y-6">
+        <input type="hidden" name="_token" value="{{ csrf_token('question_form') }}">
+
+        <!-- Question Text -->
+        <div class="bg-white rounded-xl shadow p-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-question text-indigo-600 mr-2"></i> Question Text
+            </h2>
+            
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Question <span class="text-red-500">*</span>
+                </label>
+                <textarea name="text" rows="6" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm"
+                    placeholder="Enter question text. You can use HTML for code blocks: <pre><code class='language-php'>...</code></pre>">{{ formData.text ?? question.text ?? '' }}</textarea>
+                <p class="text-xs text-gray-500 mt-1">
+                    <i class="fas fa-info-circle mr-1"></i> Supports HTML. Use <code class="bg-gray-100 px-1 rounded">&lt;pre&gt;&lt;code class="language-php"&gt;...&lt;/code&gt;&lt;/pre&gt;</code> for code blocks.
+                </p>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Explanation
+                </label>
+                <textarea name="explanation" rows="3"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Explain why the correct answer is correct...">{{ formData.explanation ?? question.explanation ?? '' }}</textarea>
+            </div>
+        </div>
+
+        <!-- Category & Type -->
+        <div class="bg-white rounded-xl shadow p-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-tag text-indigo-600 mr-2"></i> Classification
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Category <span class="text-red-500">*</span>
+                    </label>
+                    <div class="flex gap-2">
+                        <select name="category" id="categorySelect" required
+                            class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500">
+                            <option value="">Select a category</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}" 
+                                    {{ (formData.category ?? question.category.id ?? '') == category.id ? 'selected' : '' }}>
+                                    {{ category.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <button type="button" id="addCategoryBtn" class="bg-green-100 text-green-700 px-3 py-2 rounded-lg hover:bg-green-200 transition" title="Add new category">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Subcategory <span class="text-red-500">*</span>
+                    </label>
+                    <div class="flex gap-2">
+                        <select name="subcategory" id="subcategorySelect" required
+                            class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500">
+                            <option value="">Select a subcategory</option>
+                            {% for sub in subcategories %}
+                                <option value="{{ sub.id }}"
+                                    {{ (formData.subcategory ?? question.subcategory.id ?? '') == sub.id ? 'selected' : '' }}>
+                                    {{ sub.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <button type="button" id="addSubcategoryBtn" class="bg-green-100 text-green-700 px-3 py-2 rounded-lg hover:bg-green-200 transition disabled:opacity-50 disabled:cursor-not-allowed" title="Add new subcategory" disabled>
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Question Type <span class="text-red-500">*</span>
+                    </label>
+                    <select name="type" required
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500">
+                        {% for qType in questionTypes %}
+                            <option value="{{ qType.value }}"
+                                {{ (formData.type ?? question.type ?? '') == qType.value ? 'selected' : '' }}>
+                                {{ qType.label }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Difficulty <span class="text-red-500">*</span>
+                    </label>
+                    <select name="difficulty" required
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500">
+                        <option value="1" {{ (formData.difficulty ?? question.difficulty ?? 1) == 1 ? 'selected' : '' }}>1 - Easy</option>
+                        <option value="2" {{ (formData.difficulty ?? question.difficulty ?? 1) == 2 ? 'selected' : '' }}>2 - Medium</option>
+                        <option value="3" {{ (formData.difficulty ?? question.difficulty ?? 1) == 3 ? 'selected' : '' }}>3 - Hard</option>
+                        <option value="4" {{ (formData.difficulty ?? question.difficulty ?? 1) == 4 ? 'selected' : '' }}>4 - Very Hard</option>
+                        <option value="5" {{ (formData.difficulty ?? question.difficulty ?? 1) == 5 ? 'selected' : '' }}>5 - Expert</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Certification Question
+                    </label>
+                    <label class="flex items-center mt-3">
+                        <input type="checkbox" name="is_certification" value="1" 
+                            {{ (formData.is_certification ?? question.isCertification ?? false) ? 'checked' : '' }}
+                            class="rounded text-indigo-600 focus:ring-indigo-500 h-5 w-5">
+                        <span class="ml-2 text-gray-700">This is a certification question</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resource URL -->
+        <div class="bg-white rounded-xl shadow p-6">
+            <h2 class="text-lg font-bold text-gray-800 mb-4">
+                <i class="fas fa-link text-indigo-600 mr-2"></i> Resources
+            </h2>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    Resource URLs
+                </label>
+                <textarea name="resource_url" rows="2"
+                    class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="https://symfony.com/doc/...">{{ formData.resource_url ?? question.resourceUrl ?? '' }}</textarea>
+                <p class="text-xs text-gray-500 mt-1">
+                    <i class="fas fa-info-circle mr-1"></i> Separate multiple URLs with commas
+                </p>
+            </div>
+        </div>
+
+        <!-- Answers -->
+        <div class="bg-white rounded-xl shadow p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-bold text-gray-800">
+                    <i class="fas fa-list-check text-indigo-600 mr-2"></i> Answers
+                </h2>
+                <button type="button" id="addAnswerBtn" class="bg-indigo-100 text-indigo-600 px-3 py-1.5 rounded-lg text-sm hover:bg-indigo-200 transition">
+                    <i class="fas fa-plus mr-1"></i> Add Answer
+                </button>
+            </div>
+            
+            <p class="text-sm text-gray-500 mb-4">
+                <i class="fas fa-info-circle mr-1"></i> Mark correct answers by checking the checkbox. At least 2 answers required.
+            </p>
+
+            <div id="answersContainer" class="space-y-3">
+                {% set existingAnswers = formData.answers ?? (question ? question.answers : []) %}
+                {% if existingAnswers is empty %}
+                    <!-- Default empty answers for new question -->
+                    {% for i in 0..3 %}
+                    <div class="answer-row flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                        <input type="checkbox" name="answers[{{ i }}][correct]" value="1" 
+                            class="rounded text-green-600 focus:ring-green-500 h-5 w-5 flex-shrink-0">
+                        <input type="text" name="answers[{{ i }}][text]" placeholder="Answer {{ i + 1 }}"
+                            class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500">
+                        <button type="button" class="remove-answer text-red-500 hover:text-red-700 p-2" title="Remove">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    {% for key, answer in existingAnswers %}
+                        {% if answer is iterable %}
+                            {# From form data #}
+                            <div class="answer-row flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                <input type="checkbox" name="answers[{{ key }}][correct]" value="1" 
+                                    {{ answer.correct is defined and answer.correct ? 'checked' : '' }}
+                                    class="rounded text-green-600 focus:ring-green-500 h-5 w-5 flex-shrink-0">
+                                <input type="text" name="answers[{{ key }}][text]" value="{{ answer.text ?? '' }}" placeholder="Answer"
+                                    class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500">
+                                <button type="button" class="remove-answer text-red-500 hover:text-red-700 p-2" title="Remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        {% else %}
+                            {# From entity #}
+                            <div class="answer-row flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                                <input type="checkbox" name="answers[{{ loop.index0 }}][correct]" value="1" 
+                                    {{ answer.isCorrect ? 'checked' : '' }}
+                                    class="rounded text-green-600 focus:ring-green-500 h-5 w-5 flex-shrink-0">
+                                <input type="text" name="answers[{{ loop.index0 }}][text]" value="{{ answer.text }}" placeholder="Answer"
+                                    class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500">
+                                <button type="button" class="remove-answer text-red-500 hover:text-red-700 p-2" title="Remove">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="flex items-center justify-between">
+            <a href="{{ path('admin_question_index') }}" class="text-gray-600 hover:text-gray-800">
+                <i class="fas fa-times mr-2"></i> Cancel
+            </a>
+            <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
+                <i class="fas fa-save mr-2"></i> {{ question ? 'Update Question' : 'Create Question' }}
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Modal: Add Category -->
+<div id="categoryModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center">
+    <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-800">
+                <i class="fas fa-folder-plus text-indigo-600 mr-2"></i> Add New Category
+            </h3>
+            <button type="button" class="close-modal text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Category Name <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="newCategoryName" 
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500"
+                        placeholder="e.g., Symfony, PHP, JavaScript">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <input type="text" id="newCategoryDescription" 
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Brief description (optional)">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Icon</label>
+                    <input type="text" id="newCategoryIcon" value="folder"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Font Awesome icon name (e.g., book, code)">
+                </div>
+            </div>
+            <div id="categoryError" class="hidden mt-3 text-sm text-red-600 bg-red-50 p-3 rounded-lg"></div>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
+            <button type="button" class="close-modal px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+            <button type="button" id="saveCategoryBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                <i class="fas fa-save mr-2"></i> Create Category
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Add Subcategory -->
+<div id="subcategoryModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center">
+    <div class="bg-white rounded-xl shadow-xl max-w-md w-full mx-4">
+        <div class="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-800">
+                <i class="fas fa-tag text-indigo-600 mr-2"></i> Add New Subcategory
+            </h3>
+            <button type="button" class="close-modal text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="p-6">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Parent Category
+                    </label>
+                    <div id="subcategoryParent" class="bg-gray-100 px-4 py-3 rounded-lg text-gray-700 font-medium"></div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Subcategory Name <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="newSubcategoryName" 
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500"
+                        placeholder="e.g., Routing, Controllers, Events">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <input type="text" id="newSubcategoryDescription" 
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500"
+                        placeholder="Brief description (optional)">
+                </div>
+            </div>
+            <div id="subcategoryError" class="hidden mt-3 text-sm text-red-600 bg-red-50 p-3 rounded-lg"></div>
+        </div>
+        <div class="px-6 py-4 border-t border-gray-200 flex justify-end gap-3">
+            <button type="button" class="close-modal px-4 py-2 text-gray-600 hover:text-gray-800">Cancel</button>
+            <button type="button" id="saveSubcategoryBtn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
+                <i class="fas fa-save mr-2"></i> Create Subcategory
+            </button>
+        </div>
+    </div>
+</div>
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const categorySelect = document.getElementById('categorySelect');
+    const subcategorySelect = document.getElementById('subcategorySelect');
+    const answersContainer = document.getElementById('answersContainer');
+    const addAnswerBtn = document.getElementById('addAnswerBtn');
+    const addCategoryBtn = document.getElementById('addCategoryBtn');
+    const addSubcategoryBtn = document.getElementById('addSubcategoryBtn');
+
+    // Category -> Subcategory cascade
+    categorySelect.addEventListener('change', async function() {
+        const categoryId = this.value;
+        subcategorySelect.innerHTML = '<option value="">Select a subcategory</option>';
+        addSubcategoryBtn.disabled = !categoryId;
+
+        if (categoryId) {
+            try {
+                const response = await fetch(`/admin/questions/api/subcategories/${categoryId}`);
+                const subcategories = await response.json();
+                
+                subcategories.forEach(sub => {
+                    const option = document.createElement('option');
+                    option.value = sub.id;
+                    option.textContent = sub.name;
+                    subcategorySelect.appendChild(option);
+                });
+            } catch (e) {
+                console.error('Failed to load subcategories:', e);
+            }
+        }
+    });
+
+    // Modal handling
+    const categoryModal = document.getElementById('categoryModal');
+    const subcategoryModal = document.getElementById('subcategoryModal');
+
+    function openModal(modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        modal.querySelector('input[type="text"]').focus();
+    }
+
+    function closeModal(modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        modal.querySelectorAll('input').forEach(i => i.value = '');
+        modal.querySelector('[id$="Error"]').classList.add('hidden');
+    }
+
+    document.querySelectorAll('.close-modal').forEach(btn => {
+        btn.addEventListener('click', function() {
+            closeModal(this.closest('[id$="Modal"]'));
+        });
+    });
+
+    // Close modal on backdrop click
+    [categoryModal, subcategoryModal].forEach(modal => {
+        modal.addEventListener('click', function(e) {
+            if (e.target === this) closeModal(this);
+        });
+    });
+
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            [categoryModal, subcategoryModal].forEach(closeModal);
+        }
+    });
+
+    // Add Category
+    addCategoryBtn.addEventListener('click', () => openModal(categoryModal));
+
+    document.getElementById('saveCategoryBtn').addEventListener('click', async function() {
+        const name = document.getElementById('newCategoryName').value.trim();
+        const description = document.getElementById('newCategoryDescription').value.trim();
+        const icon = document.getElementById('newCategoryIcon').value.trim() || 'folder';
+        const errorDiv = document.getElementById('categoryError');
+
+        if (!name) {
+            errorDiv.textContent = 'Category name is required';
+            errorDiv.classList.remove('hidden');
+            return;
+        }
+
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creating...';
+
+        try {
+            const response = await fetch('/admin/questions/api/categories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, description, icon })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to create category');
+            }
+
+            // Add new option and select it
+            const option = document.createElement('option');
+            option.value = data.category.id;
+            option.textContent = data.category.name;
+            option.selected = true;
+            categorySelect.appendChild(option);
+
+            // Trigger change to enable subcategory button
+            categorySelect.dispatchEvent(new Event('change'));
+
+            closeModal(categoryModal);
+        } catch (e) {
+            errorDiv.textContent = e.message;
+            errorDiv.classList.remove('hidden');
+        } finally {
+            this.disabled = false;
+            this.innerHTML = '<i class="fas fa-save mr-2"></i> Create Category';
+        }
+    });
+
+    // Add Subcategory
+    addSubcategoryBtn.addEventListener('click', function() {
+        const categoryId = categorySelect.value;
+        const categoryName = categorySelect.options[categorySelect.selectedIndex].text;
+        
+        if (!categoryId) return;
+
+        document.getElementById('subcategoryParent').textContent = categoryName;
+        document.getElementById('subcategoryParent').dataset.categoryId = categoryId;
+        openModal(subcategoryModal);
+    });
+
+    document.getElementById('saveSubcategoryBtn').addEventListener('click', async function() {
+        const name = document.getElementById('newSubcategoryName').value.trim();
+        const description = document.getElementById('newSubcategoryDescription').value.trim();
+        const categoryId = document.getElementById('subcategoryParent').dataset.categoryId;
+        const errorDiv = document.getElementById('subcategoryError');
+
+        if (!name) {
+            errorDiv.textContent = 'Subcategory name is required';
+            errorDiv.classList.remove('hidden');
+            return;
+        }
+
+        this.disabled = true;
+        this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creating...';
+
+        try {
+            const response = await fetch('/admin/questions/api/subcategories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, description, category_id: categoryId })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to create subcategory');
+            }
+
+            // Add new option and select it
+            const option = document.createElement('option');
+            option.value = data.subcategory.id;
+            option.textContent = data.subcategory.name;
+            option.selected = true;
+            subcategorySelect.appendChild(option);
+
+            closeModal(subcategoryModal);
+        } catch (e) {
+            errorDiv.textContent = e.message;
+            errorDiv.classList.remove('hidden');
+        } finally {
+            this.disabled = false;
+            this.innerHTML = '<i class="fas fa-save mr-2"></i> Create Subcategory';
+        }
+    });
+
+    // Add answer
+    let answerIndex = answersContainer.querySelectorAll('.answer-row').length;
+    
+    addAnswerBtn.addEventListener('click', function() {
+        const row = document.createElement('div');
+        row.className = 'answer-row flex items-center gap-3 p-3 bg-gray-50 rounded-lg';
+        row.innerHTML = `
+            <input type="checkbox" name="answers[${answerIndex}][correct]" value="1" 
+                class="rounded text-green-600 focus:ring-green-500 h-5 w-5 flex-shrink-0">
+            <input type="text" name="answers[${answerIndex}][text]" placeholder="New answer"
+                class="flex-1 border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500">
+            <button type="button" class="remove-answer text-red-500 hover:text-red-700 p-2" title="Remove">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        answersContainer.appendChild(row);
+        answerIndex++;
+        
+        row.querySelector('input[type="text"]').focus();
+    });
+
+    // Remove answer
+    answersContainer.addEventListener('click', function(e) {
+        if (e.target.closest('.remove-answer')) {
+            const rows = answersContainer.querySelectorAll('.answer-row');
+            if (rows.length > 2) {
+                e.target.closest('.answer-row').remove();
+            } else {
+                alert('At least 2 answers are required.');
+            }
+        }
+    });
+
+    // Enable subcategory button if category is already selected
+    if (categorySelect.value) {
+        addSubcategoryBtn.disabled = false;
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

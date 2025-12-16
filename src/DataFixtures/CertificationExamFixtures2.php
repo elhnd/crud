@@ -60,7 +60,6 @@ class CertificationExamFixtures2 extends Fixture implements FixtureGroupInterfac
                 'Security' => 'Authentication and authorization',
                 'Events' => 'Event dispatcher and listeners',
                 'Serializer' => 'Symfony Serializer component',
-                'Doctrine' => 'Doctrine ORM integration',
                 'Testing' => 'Testing with PHPUnit and Symfony',
                 'Miscellaneous' => 'Other Symfony components and features',
                 'Architecture' => 'Symfony architecture and best practices',
