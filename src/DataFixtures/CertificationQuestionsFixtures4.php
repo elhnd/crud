@@ -134,7 +134,7 @@ class CertificationQuestionsFixtures4 extends Fixture implements DependentFixtur
             // PHP Named arguments as array
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:PHP 8+ Features'],
+                'subcategory' => $subcategories['PHP:PHP Basics'],
                 'text' => 'Is it valid to use the spread operator with an associative array for named arguments in PHP 8.0+?<pre><code class="language-php">$args = [\'secondArgument\' => \'arg\', \'firstArgument\' => true];
 $this->bar(...$args);</code></pre>',
                 'type' => QuestionType::TRUE_FALSE,
@@ -407,7 +407,7 @@ $this->bar(...$args);</code></pre>',
             // ControllerArgumentsEvent named arguments
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'Could the controller named arguments be retrieved from within <code>ControllerArgumentsEvent</code>?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -437,7 +437,7 @@ $this->bar(...$args);</code></pre>',
             // AbstractSessionListener NO_AUTO_CACHE_CONTROL
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'Could the <code>AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER</code> directive be used on sub-requests?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 3,
@@ -533,7 +533,7 @@ $this->bar(...$args);</code></pre>',
             // _controller request attribute
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'What is the name of the special request attribute used by <code>RouterListener</code> to know which callable to invoke?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,

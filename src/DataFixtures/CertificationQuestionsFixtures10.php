@@ -65,10 +65,6 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
                 'Process' => 'Process component for running external processes',
                 'VarDumper' => 'VarDumper component for debugging',
             ],
-            'PHP' => [
-                'PHP 8' => 'PHP 8 features and syntax',
-                'Arrays' => 'PHP Arrays',
-            ],
         ];
 
         foreach ($additional as $catName => $subs) {
@@ -96,7 +92,7 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
             // Q1 - PHP Named arguments as array
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:PHP 8'] ?? $subcategories['PHP:OOP'],
+                'subcategory' => $subcategories['PHP:PHP Basics'] ?? $subcategories['PHP:OOP'],
                 'text' => 'Is the following code correct?
 <pre><code class="language-php">class Foo
 {
@@ -128,7 +124,7 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
             // Q2 - PHP list() construct
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays'] ?? $subcategories['PHP:OOP'],
+                'subcategory' => $subcategories['PHP:Arrays & Collections'] ?? $subcategories['PHP:OOP'],
                 'text' => 'The <code>___________</code> language construct is particularly useful to assign your own variable names to values within an array.',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
@@ -142,24 +138,6 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
                     ['text' => 'current()', 'correct' => false],
                 ],
             ],
-
-            // Q3 - Service Configurator
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Services'],
-                'text' => 'What is a "Service Configurator" in Symfony?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Un Service Configurator est un callable PHP qui peut être exécuté pour configurer un service Symfony après son instanciation. Utile pour une configuration complexe qui ne peut pas être faite via l\'injection de dépendances.',
-                'resourceUrl' => 'https://symfony.com/doc/current/service_container/configurators.html',
-                'answers' => [
-                    ['text' => 'There\'s no such a thing in Symfony\'s Dependency Injection component.', 'correct' => false],
-                    ['text' => 'It\'s a feature of the Dependency Injection component that allows to apply some configuration logic to all the services that define a specific tag.', 'correct' => false],
-                    ['text' => 'It\'s a PHP callable that you can optionally execute to configure a Symfony service after its instantiation.', 'correct' => true],
-                    ['text' => 'It\'s a Symfony built-in service that can be obtained as $container->get(\'configurator\')', 'correct' => false],
-                ],
-            ],
-
             // Q4 - SSI render_ssi
             [
                 'category' => $symfony,
@@ -198,21 +176,6 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
                     ['text' => '<pre><code class="language-php">$formFactory = Forms::createFormFactoryBuilder()
     ->registerExtension(new MyFormExtension())
     ->getFormFactory();</code></pre>', 'correct' => false],
-                ],
-            ],
-
-            // Q7 - Container build hash
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'] ?? $subcategories['Symfony:Services'],
-                'text' => 'Could the build hash of the container be configured?',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'Le paramètre container.build_hash est exposé mais ne peut pas être configuré. Le hash est obtenu via ContainerBuilder::hash() pendant la phase de compilation/dump du conteneur.',
-                'resourceUrl' => 'https://symfony.com/doc/current/reference/configuration/kernel.html',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => false],
-                    ['text' => 'No', 'correct' => true],
                 ],
             ],
 
@@ -258,44 +221,6 @@ Does the path <code>/blog/articles?page=1</code> display the page without error?
                     ['text' => 'No', 'correct' => false],
                 ],
             ],
-
-            // Q10 - Serializer denormalize
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Serializer'],
-                'text' => 'Given the following denormalization attempt:
-<pre><code class="language-php">class ValueObject
-{
-    private $foo;
-
-    public function __construct($bar)
-    {
-        $this->foo = $bar;
-    }
-
-    public function getFoo()
-    {
-        return $this->foo;
-    }
-}
-
-$normalizer = new GetSetMethodNormalizer();
-$vo = $normalizer->denormalize([\'bar\' => \'symfony\'], ValueObject::class);
-
-echo $vo->getFoo();</code></pre>
-
-What will be displayed?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'Le GetSetMethodNormalizer utilise les paramètres du constructeur pour dénormaliser. Comme le constructeur attend $bar, la valeur "symfony" sera passée et stockée dans $foo.',
-                'resourceUrl' => 'https://symfony.com/doc/current/components/serializer.html',
-                'answers' => [
-                    ['text' => 'Nothing, an exception will be thrown', 'correct' => false],
-                    ['text' => '"symfony"', 'correct' => true],
-                    ['text' => 'An empty string', 'correct' => false],
-                ],
-            ],
-
             // Q11 - Console Cursor
             [
                 'category' => $symfony,

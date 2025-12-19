@@ -2,9 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Answer;
 use App\Entity\Category;
-use App\Entity\Question;
 use App\Entity\Subcategory;
 use App\Entity\User;
 use App\Enum\QuestionType;
@@ -53,7 +51,7 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
             $php = new Category();
             $php->setName('PHP');
             $php->setDescription('PHP language features and best practices');
-            $php->setIcon('php');
+            $php->setIcon('terminal');
             $php->setColor('#777BB4');
             $manager->persist($php);
         }
@@ -61,7 +59,7 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
         // Symfony Subcategories
         $symfonySubcategories = [
             'Dependency Injection' => 'Service Container and DI concepts',
-            'HTTP Kernel' => 'Request lifecycle and HTTP handling',
+            'HttpKernel' => 'Request lifecycle and HTTP handling',
             'Security' => 'Authentication, authorization, and security features',
             'Forms' => 'Form building, validation, and handling',
             'Event Dispatcher' => 'Event-driven architecture',
@@ -90,9 +88,9 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
             'OOP' => 'Object-Oriented Programming concepts',
             'Interfaces & Traits' => 'Interfaces, traits, and abstract classes',
             'Exceptions' => 'Error handling and exceptions',
-            'PHP 8+ Features' => 'Modern PHP features',
+            'PHP Basics' => 'PHP basics and syntax',
             'Typing & Strict Types' => 'Type declarations and strict mode',
-            'Arrays & Collections' => 'Array functions and manipulation',
+            'Arrays & Collections' => 'Arrays, array functions and manipulation',
             'Functions' => 'Functions, closures, and callbacks',
             'Namespaces' => 'Namespace organization and autoloading',
         ];
@@ -286,9 +284,9 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
                     ['text' => 'exception("message")', 'correct' => false],
                 ],
             ],
-            // PHP 8+ Features
+            // PHP Basics
             [
-                'subcategory' => 'PHP 8+ Features',
+                'subcategory' => 'PHP Basics',
                 'text' => 'What is the null coalescing operator in PHP?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
@@ -302,7 +300,7 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             [
-                'subcategory' => 'PHP 8+ Features',
+                'subcategory' => 'PHP Basics',
                 'text' => 'Which PHP 8 feature allows defining class properties directly in the constructor parameters?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -316,7 +314,7 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             [
-                'subcategory' => 'PHP 8+ Features',
+                'subcategory' => 'PHP Basics',
                 'text' => 'PHP 8 introduced the match expression as an improved alternative to switch.',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
@@ -328,7 +326,7 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             [
-                'subcategory' => 'PHP 8+ Features',
+                'subcategory' => 'PHP Basics',
                 'text' => 'Which of the following are features introduced in PHP 8? (Select all that apply)',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,

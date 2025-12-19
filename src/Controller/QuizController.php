@@ -176,9 +176,20 @@ class QuizController extends AbstractController
     #[Route('/review/{id}', name: 'quiz_review')]
     public function review(QuizSession $session): Response
     {
+        // Filter out answers where the question has been deleted
+        $answers = $session->getUserAnswers()->filter(function ($answer) {
+            try {
+                // Attempt to access the question to trigger lazy loading
+                // If the question was deleted, this will throw an exception
+                return $answer->getQuestion() !== null && $answer->getQuestion()->getId() !== null;
+            } catch (\Exception $e) {
+                return false;
+            }
+        });
+
         return $this->render('quiz/review.html.twig', [
             'session' => $session,
-            'answers' => $session->getUserAnswers(),
+            'answers' => $answers,
         ]);
     }
 

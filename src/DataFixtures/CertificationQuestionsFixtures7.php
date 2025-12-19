@@ -454,7 +454,7 @@ class TwitterClient
             // HttpKernel - Request locale
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'Is it possible to change directly the locale of a Request from an URL?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
@@ -569,7 +569,7 @@ framework:
             // HttpKernel - ResponseListener
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'What is the aim of the <code>Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener::onKernelResponse()</code> listener on <code>kernel.response</code> event?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,

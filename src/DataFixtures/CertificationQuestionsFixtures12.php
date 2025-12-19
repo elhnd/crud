@@ -61,9 +61,6 @@ class CertificationQuestionsFixtures12 extends Fixture implements DependentFixtu
                 'Runtime' => 'Runtime component for application bootstrapping',
                 'Validator' => 'Validator component for data validation',
             ],
-            'PHP' => [
-                'Arrays' => 'PHP Arrays and array functions',
-            ],
         ];
 
         foreach ($additional as $catName => $subs) {
@@ -166,7 +163,7 @@ My name is Amanda.</code></pre>
             // Q5 - PHP Arrays - range function
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays'] ?? $subcategories['PHP:PHP Basics'],
+                'subcategory' => $subcategories['PHP:Arrays & Collections'] ?? $subcategories['PHP:PHP Basics'],
                 'text' => 'What PHP function is used to create a new array pre-filled with a sequential series of values?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
@@ -341,7 +338,7 @@ class HomeController extends Controller {
             // Q12 - Runtime - HttpFoundation integration
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Runtime'] ?? $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:Runtime'] ?? $subcategories['Symfony:HttpKernel'],
                 'text' => 'Is the following code valid?
 <pre><code class="language-php">use Symfony\Component\HttpFoundation\Response;
 
