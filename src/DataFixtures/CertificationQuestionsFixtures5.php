@@ -225,7 +225,7 @@ $result = $cloner->cloneVar($myVar);</code></pre>',
             // AbstractSessionListener properties
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'Which sentences about <code>AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER</code> are true?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 3,
@@ -451,22 +451,6 @@ $parsed = Yaml::parse("!custom_tag { foo: bar }", Yaml::PARSE_CUSTOM_TAGS);</cod
                     ['text' => 'Setting the option <code>scope</code> to <code>request</code>.', 'correct' => false],
                 ],
             ],
-            // Compiler passes registration
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Dependency Injection'],
-                'text' => 'How can you register a new compiler pass?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Compiler passes are registered using addCompilerPass() on ContainerBuilder.',
-                'resourceUrl' => 'https://symfony.com/doc/current/service_container/compiler_passes.html',
-                'answers' => [
-                    ['text' => 'By passing an instance of the <code>CompilerPass</code> to the <code>addCompilerPass</code> of a <code>ContainerBuilder</code>.', 'correct' => true],
-                    ['text' => 'By passing an instance of the <code>CompilerPass</code> to the <code>registerCompilerPass</code> of a <code>ContainerBuilder</code>.', 'correct' => false],
-                    ['text' => 'By creating a new service with the tag <code>compiler.pass</code>.', 'correct' => false],
-                    ['text' => 'By passing an instance of the <code>CompilerPass</code> to the <code>pushCompilerPass</code> of a <code>ContainerBuilder</code>.', 'correct' => false],
-                ],
-            ],
             // Serializer context in attribute
             [
                 'category' => $symfony,
@@ -510,23 +494,6 @@ $parsed = Yaml::parse("!custom_tag { foo: bar }", Yaml::PARSE_CUSTOM_TAGS);</cod
                 'answers' => [
                     ['text' => 'Yes', 'correct' => true],
                     ['text' => 'No', 'correct' => false],
-                ],
-            ],
-            // Route compilation exception
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Routing'],
-                'text' => 'Which exception is thrown when a <code>Route</code> defined with <code>/page/{_fragment}</code> cannot be compiled?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'RouteCompiler throws an InvalidArgumentException when routes cannot be compiled.',
-                'resourceUrl' => 'https://github.com/symfony/symfony/blob/3.2/src/Symfony/Component/Routing/RouteCompiler.php#L39',
-                'answers' => [
-                    ['text' => '<code>InvalidArgumentException</code>', 'correct' => true],
-                    ['text' => '<code>InvalidRouteCompilationContextException</code>', 'correct' => false],
-                    ['text' => '<code>RouteCompilationException</code>', 'correct' => false],
-                    ['text' => '<code>LogicException</code>', 'correct' => false],
-                    ['text' => '<code>RuntimeException</code>', 'correct' => false],
                 ],
             ],
             // PSR-1 compliance

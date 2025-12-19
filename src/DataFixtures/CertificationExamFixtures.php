@@ -73,7 +73,6 @@ class CertificationExamFixtures extends Fixture implements FixtureGroupInterface
                 'Assets' => 'Asset management and versioning',
             ],
             'PHP' => [
-                'PHP 8' => 'PHP 8 features and syntax',
                 'OOP' => 'Object-Oriented Programming',
                 'Functions' => 'PHP functions and syntax',
             ],
@@ -104,7 +103,7 @@ class CertificationExamFixtures extends Fixture implements FixtureGroupInterface
             // QUESTION 1 - PHP match expression
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:PHP 8'],
+                'subcategory' => $subcategories['PHP:PHP Basics'],
                 'text' => 'Consider the following class:
 <pre><code class="language-php">class Order
 {
@@ -136,7 +135,7 @@ Will the finishCheckout() method throw any exception because of an error in the 
             // QUESTION 2 - PHP Named arguments
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:PHP 8'],
+                'subcategory' => $subcategories['PHP:PHP Basics'],
                 'text' => 'Consider the following function definition:
 <pre><code class="language-php">function sum(int $a, int $b): int
 {
@@ -159,7 +158,7 @@ When using PHP 8 or higher, can you call this function as follows without trigge
             // QUESTION 3 - PHP Constructor Property Promotion
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:PHP 8'],
+                'subcategory' => $subcategories['PHP:PHP Basics'],
                 'text' => 'Is the following class definition valid when using PHP 8 and higher?
 <pre><code class="language-php">class Point
 {
@@ -215,23 +214,17 @@ What is the result of executing this code snippet?',
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Controllers'],
-                'text' => 'Find all the working solutions for generating a 404 error page from a controller that extends Symfony\'s AbstractController:
-
-1. <code>return $this->error404();</code>
-2. <code>throw $this->createNotFoundException(\'Page not found\');</code>
-3. <code>throw new NotFoundHttpException(\'Page not found\');</code>
-4. <code>return new Response(\'Page not found\', 404);</code>
-5. <code>return $this->createNotFoundException(\'Page not found\');</code>',
+                'text' => 'Find all the working solutions for generating a 404 error page from a controller that extends Symfony\'s AbstractController:',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
                 'explanation' => 'Options 2, 3 et 4 sont correctes. createNotFoundException() lance une exception, NotFoundHttpException génère une 404, et Response avec code 404 fonctionne.',
                 'resourceUrl' => 'https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages',
                 'answers' => [
-                    ['text' => 'Option 1: return $this->error404();', 'correct' => false],
-                    ['text' => 'Option 2: throw $this->createNotFoundException(\'Page not found\');', 'correct' => true],
-                    ['text' => 'Option 3: throw new NotFoundHttpException(\'Page not found\');', 'correct' => true],
-                    ['text' => 'Option 4: return new Response(\'Page not found\', 404);', 'correct' => true],
-                    ['text' => 'Option 5: return $this->createNotFoundException(\'Page not found\');', 'correct' => false],
+                    ['text' => '<code>return $this->error404();</code>', 'correct' => false],
+                    ['text' => '<code>throw $this->createNotFoundException(\'Page not found\');</code>', 'correct' => true],
+                    ['text' => '<code>throw new NotFoundHttpException(\'Page not found\');</code>', 'correct' => true],
+                    ['text' => '<code>return new Response(\'Page not found\', 404);</code>', 'correct' => true],
+                    ['text' => 'return $this->createNotFoundException(\'Page not found\');', 'correct' => false],
                 ],
             ],
 

@@ -58,7 +58,6 @@ class CertificationExamFixtures2 extends Fixture implements FixtureGroupInterfac
                 'Cache' => 'HTTP caching and ESI',
                 'Console' => 'Symfony Console commands',
                 'Security' => 'Authentication and authorization',
-                'Events' => 'Event dispatcher and listeners',
                 'Serializer' => 'Symfony Serializer component',
                 'Testing' => 'Testing with PHPUnit and Symfony',
                 'Miscellaneous' => 'Other Symfony components and features',
@@ -1043,7 +1042,7 @@ In a default Symfony application which uses autowiring, which constructor argume
             // QUESTION 72 - Event listeners with same priority
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Events'],
+                'subcategory' => $subcategories['Symfony:Event Dispatcher'],
                 'text' => 'If two listeners are associated with the same event and they have exactly the same priority, Symfony only executes the listener which was first defined.',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -1076,7 +1075,7 @@ In a default Symfony application which uses autowiring, which constructor argume
             // QUESTION 74 - stopPropagation method
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Events'],
+                'subcategory' => $subcategories['Symfony:Event Dispatcher'],
                 'text' => 'Consider the following code from an event listener:
 <pre><code class="language-php">use App\Events\Blog\CommentPublishedEvent;
 

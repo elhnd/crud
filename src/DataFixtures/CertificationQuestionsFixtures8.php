@@ -109,7 +109,7 @@ class CertificationQuestionsFixtures8 extends Fixture implements DependentFixtur
             // HttpKernel - Container build hash
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'Could the build hash of the container be configured?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -246,29 +246,6 @@ class CertificationQuestionsFixtures8 extends Fixture implements DependentFixtur
                     ['text' => '<code>PHP_FLOAT_SMALLEST</code>', 'correct' => false],
                 ],
             ],
-            // Serializer - Date format context
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Serializer'],
-                'text' => 'How to specify the date format for a date attribute in a serialization context?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Since Symfony 5.3, you can use the #[Context] attribute or @Context annotation with DateTimeNormalizer::FORMAT_KEY.',
-                'resourceUrl' => 'https://symfony.com/blog/new-in-symfony-5-3-inlined-serialization-context',
-                'answers' => [
-                    ['text' => '<pre><code class="language-php">#[Serializer\\Context([DateTimeNormalizer::FORMAT_KEY => \'Y-m-d\'])]
-public \\DateTime $date;</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">/**
- * @Serializer\\Context({ DateTimeNormalizer::FORMAT_KEY = \'Y-m-d\' })
- */
-public \\DateTime $date;</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">/**
- * @Serializer\\DateFormat(\'Y-m-d\')
- */
-public \\DateTime $date;</code></pre>', 'correct' => false],
-                    ['text' => 'It\'s not possible', 'correct' => false],
-                ],
-            ],
             // Security - Token retrieval
             [
                 'category' => $symfony,
@@ -335,7 +312,7 @@ $containerBuilder->setParameter(\'.foo\', \'bar\');</code></pre>',
             // HttpKernel - MapQueryString context
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'Could the serialization context be configured when using <code>MapQueryString</code>?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -375,7 +352,7 @@ if (0 !== count($violations)) {
             // HttpKernel - Events order
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'In which order does Symfony trigger the following events?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -448,11 +425,11 @@ echo $a;</code></pre>',
                 'explanation' => 'References to string offsets work in PHP. Changing $b modifies the character at index 2 of $a.',
                 'resourceUrl' => 'http://www.php.net/manual/en/language.references.php',
                 'answers' => [
-                    ['text' => 'baz', 'correct' => true],
+                    ['text' => 'baz', 'correct' => false],
                     ['text' => 'bar', 'correct' => false],
                     ['text' => 'ba', 'correct' => false],
                     ['text' => 'baa', 'correct' => false],
-                    ['text' => 'An error is thrown', 'correct' => false],
+                    ['text' => 'An error is thrown', 'correct' => true],
                 ],
             ],
             // DI - Container dump single file
@@ -488,7 +465,7 @@ echo $a;</code></pre>',
             // HttpKernel - NO_AUTO_CACHE_CONTROL_HEADER
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'Given the <code>AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER</code> header directive is set, is an expiration date defined in the response?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -502,7 +479,7 @@ echo $a;</code></pre>',
             // HttpKernel - Service injection in controller
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'Given the context where <code>FooService</code> is defined as a service, is the following code valid?<pre><code class="language-php">&lt;?php
 
 class HomeController

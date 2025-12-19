@@ -324,7 +324,7 @@ echo $nodes-&gt;item(0)-&gt;getAttributeNode(\'bgcolor\')-&gt;value;</code></pre
             // Q15 - HttpKernel Fragment renderer
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'] ?? $subcategories['Symfony:Services'],
                 'text' => 'Could a custom fragment renderer strategy be created?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -350,22 +350,6 @@ echo $nodes-&gt;item(0)-&gt;getAttributeNode(\'bgcolor\')-&gt;value;</code></pre
                     ['text' => 'The given test will use a semantic validation in addition to the basic evaluation.', 'correct' => false],
                     ['text' => 'The given test will be compiled into PHP primitives.', 'correct' => true],
                     ['text' => 'The <code>node_class</code> is a mandatory option to get defined in a <code>Twig_Environment</code>.', 'correct' => false],
-                ],
-            ],
-
-            // Q17 - Twig Escaping with raw filter
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'Given <code>var</code> and <code>bar</code> are existing variables, among the following, which expressions are escaped?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'Le filtre raw doit être le dernier filtre pour empêcher l\'échappement. {{ var|raw|upper }} est échappé car upper est après raw. {{ var|raw~bar }} a bar qui est échappé car la concaténation crée une nouvelle valeur.',
-                'resourceUrl' => 'https://twig.symfony.com/doc/1.x/filters/raw.html',
-                'answers' => [
-                    ['text' => '<code>{{ var|raw~bar }}</code>', 'correct' => true],
-                    ['text' => '<code>{{ var|upper|raw }}</code>', 'correct' => false],
-                    ['text' => '<code>{{ var|raw|upper }}</code>', 'correct' => true],
                 ],
             ],
         ];

@@ -424,7 +424,7 @@ echo $values[$a][$b][$c][$d];</code></pre>',
             // HttpKernel - KernelEvent base class
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'What is the base class for events thrown in the HttpKernel component?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -552,7 +552,7 @@ return function(ContainerConfigurator $configurator): void {
             // HttpKernel - FragmentListener
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP Kernel'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'What is the aim of the <code>Symfony\\Component\\HttpKernel\\EventListener\\FragmentListener::onKernelRequest()</code> listener on <code>kernel.request</code> event?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,

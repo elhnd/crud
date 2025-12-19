@@ -212,20 +212,6 @@ class CertificationQuestionsFixtures9 extends Fixture implements DependentFixtur
                     ['text' => 'No', 'correct' => false],
                 ],
             ],
-            // Question 11 - PSR - PSR-1 compliance
-            [
-                'category' => $php,
-                'subcategory' => $subcategories['PHP:PSR'],
-                'text' => "Is this content PSR-1 compliant?\n<pre><code>&lt;?php\nini_set('error_reporting', E_ALL);\n\nconst APP_ENV = 'dev';\nconst APP_DEBUG = 1;</code></pre>",
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'No, PSR-1 requires that files should either declare symbols (classes, functions, constants) or cause side-effects, but not both. ini_set is a side-effect.',
-                'resourceUrl' => 'https://www.php-fig.org/psr/psr-1/',
-                'answers' => [
-                    ['text' => 'No', 'correct' => true],
-                    ['text' => 'Yes', 'correct' => false],
-                ],
-            ],
             // Question 12 - Event Dispatcher - Get EventDispatcher from Event
             [
                 'category' => $symfony,
@@ -254,23 +240,6 @@ class CertificationQuestionsFixtures9 extends Fixture implements DependentFixtur
                     ['text' => 'No', 'correct' => false],
                 ],
             ],
-            // Question 14 - Routing - Route compilation exception
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Routing'],
-                'text' => 'Which exception is thrown when a <code>Route</code> defined with <code>/page/{_fragment}</code> cannot be compiled?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'InvalidArgumentException is thrown when a route uses reserved variable names like _fragment.',
-                'resourceUrl' => 'https://github.com/symfony/symfony/blob/3.2/src/Symfony/Component/Routing/RouteCompiler.php#L39',
-                'answers' => [
-                    ['text' => 'LogicException', 'correct' => false],
-                    ['text' => 'RouteCompilationException', 'correct' => false],
-                    ['text' => 'InvalidRouteCompilationContextException', 'correct' => false],
-                    ['text' => 'InvalidArgumentException', 'correct' => true],
-                    ['text' => 'RuntimeException', 'correct' => false],
-                ],
-            ],
             // Question 15 - Form - TelType
             [
                 'category' => $symfony,
@@ -285,21 +254,6 @@ class CertificationQuestionsFixtures9 extends Fixture implements DependentFixtur
                     ['text' => 'TelType form field allows to use HTML5 input type tel and trigger some basic validation on the entered phone number', 'correct' => false],
                     ['text' => 'TelType form field only allows to use HTML5 input type tel', 'correct' => true],
                     ['text' => 'PhoneType form field only allows to use HTML5 input type tel', 'correct' => false],
-                ],
-            ],
-            // Question 16 - Twig - Escaping with raw filter
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'Given <code>var</code> and <code>bar</code> are existing variables, among the following, which expressions are escaped?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'The raw filter must be the last filter to prevent escaping. If raw is followed by upper, the result of upper will be escaped.',
-                'resourceUrl' => 'https://twig.symfony.com/doc/1.x/filters/raw.html',
-                'answers' => [
-                    ['text' => '{{ var|upper|raw }}', 'correct' => false],
-                    ['text' => '{{ var|raw|upper }}', 'correct' => true],
-                    ['text' => '{{ var|raw~bar }}', 'correct' => false],
                 ],
             ],
             // Question 17 - Twig - Template Inheritance
@@ -364,20 +318,6 @@ class CertificationQuestionsFixtures9 extends Fixture implements DependentFixtur
                     ['text' => 'Symfony\\Component\\Form\\Extension\\Core\\Type\\TimeType', 'correct' => false],
                 ],
             ],
-            // Question 21 - HttpClient - MockHttpClient
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpClient'],
-                'text' => 'Is it possible to simulate an HTTP request without mocking the <code>HttpClient</code> thanks to <code>createMock()</code> from PHPUnit?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Symfony provides MockHttpClient specifically for testing HTTP clients without using PHPUnit mocks.',
-                'resourceUrl' => 'https://symfony.com/doc/current/components/http_client.html#testing-http-clients-and-responses',
-                'answers' => [
-                    ['text' => 'Yes, by using Symfony\\Component\\HttpClient\\MockHttpClient', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
-                ],
-            ],
             // Question 22 - OptionsResolver - Callable without Options type-hint
             [
                 'category' => $symfony,
@@ -392,22 +332,6 @@ class CertificationQuestionsFixtures9 extends Fixture implements DependentFixtur
                     ['text' => '$options will automatically be casted to a nullable array', 'correct' => false],
                     ['text' => 'A fatal error is thrown because of the lack of type-hint', 'correct' => false],
                     ['text' => 'Nothing special', 'correct' => false],
-                ],
-            ],
-            // Question 23 - Translation - Escape percent character
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Translation'],
-                'text' => 'Which of this following code is correct to use the percent character <code>%</code> in a translated string?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'To display a literal percent sign, use %%. So %percent%%% will show the parameter value followed by %.',
-                'resourceUrl' => 'http://symfony.com/doc/current/translation.html#twig-templates',
-                'answers' => [
-                    ['text' => '{% trans %}Percent: %percent%[%]{% endtrans %}', 'correct' => false],
-                    ['text' => '{% trans %}Percent: %percent%%%{% endtrans %}', 'correct' => true],
-                    ['text' => '{% trans %}Percent: %percent%{%}{% endtrans %}', 'correct' => false],
-                    ['text' => '{% trans %}Percent: %percent%\\%{% endtrans %}', 'correct' => false],
                 ],
             ],
             // Question 24 - Routing - Route matching with defaults
