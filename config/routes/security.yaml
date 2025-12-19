@@ -1,3 +1,37 @@
 _security_logout:
     resource: security.route_loader.logout
     type: service
+
+
+    # security:
+    #     access_control:
+
+    #         # 1️⃣ Public access (login page)
+    #         - { path: ^/login, roles: PUBLIC_ACCESS }
+
+    #         # 2️⃣ Admin area (only admins on admin domain, HTTPS only)
+    #         - {
+    #             route: admin_dashboard,
+    #             host: ^admin\.example\.com$,
+    #             methods: [GET],
+    #             roles: ROLE_ADMIN,
+    #             requires_channel: https
+    #         }
+
+    #         # 3️⃣ API write access (POST/PUT only, authenticated users)
+    #         - {
+    #             path: ^/api,
+    #             methods: [POST, PUT],
+    #             roles: ROLE_USER
+    #         }
+
+    #         # 4️⃣ Internal area (only local network)
+    #         - {
+    #             path: ^/internal,
+    #             ips: 192.168.1.0/24,
+    #             roles: ROLE_INTERNAL
+    #         }
+
+    #         # 5️⃣ Default rule (must be logged in)
+    #         - { path: ^/, roles: ROLE_USER }
+

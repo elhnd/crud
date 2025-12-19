@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 #[ORM\Index(columns: ['identifier'], name: 'idx_question_identifier')]
+#[ORM\HasLifecycleCallbacks]
 class Question
 {
     #[ORM\Id]
@@ -96,6 +97,8 @@ class Question
      * - La sous-catégorie
      * - Les réponses
      */
+    #[ORM\PrePersist]
+    #[ORM\PreUpdate]
     public function generateIdentifier(): static
     {
         if ($this->text && $this->category && $this->subcategory) {

@@ -406,4 +406,264 @@ class QuestionRepository extends ServiceEntityRepository
 
         return $deleted;
     }
+
+    /**
+     * Get smart random questions prioritizing:
+     * 1. Questions never seen by the user
+     * 2. Questions with high failure rate
+     * 3. Random questions to fill the remaining slots
+     * 
+     * @param int $limit Number of questions to return
+     * @param array<int> $seenQuestionIds Question IDs already seen by user
+     * @param array<int, float> $questionFailureRates Map of questionId => failureRate
+     * @param Category|null $category Optional category filter
+     * @param Subcategory|null $subcategory Optional subcategory filter
+     * @return Question[]
+     */
+    public function findSmartRandomQuestions(
+        int $limit,
+        array $seenQuestionIds,
+        array $questionFailureRates,
+        ?Category $category = null,
+        ?Subcategory $subcategory = null
+    ): array {
+        // Get all matching question IDs
+        $qb = $this->createQueryBuilder('q')
+            ->select('q.id');
+
+        if ($subcategory) {
+            $qb->where('q.subcategory = :subcategory')
+                ->setParameter('subcategory', $subcategory);
+        } elseif ($category) {
+            $qb->where('q.category = :category')
+                ->setParameter('category', $category);
+        }
+
+        $allIds = array_column($qb->getQuery()->getArrayResult(), 'id');
+        
+        if (empty($allIds)) {
+            return [];
+        }
+
+        // Prioritize selection
+        $selectedIds = $this->selectSmartQuestionIds(
+            $allIds,
+            $seenQuestionIds,
+            $questionFailureRates,
+            $limit
+        );
+        
+        if (empty($selectedIds)) {
+            return [];
+        }
+
+        // Fetch the full questions with answers
+        return $this->createQueryBuilder('q')
+            ->leftJoin('q.answers', 'a')
+            ->addSelect('a')
+            ->where('q.id IN (:ids)')
+            ->setParameter('ids', $selectedIds)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get smart random questions from multiple categories
+     * @param int[] $categoryIds
+     * @param array<int> $seenQuestionIds
+     * @param array<int, float> $questionFailureRates
+     * @return Question[]
+     */
+    public function findSmartRandomQuestionsMultiCategory(
+        int $limit,
+        array $categoryIds,
+        array $seenQuestionIds,
+        array $questionFailureRates
+    ): array {
+        if (empty($categoryIds)) {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('q')
+            ->select('q.id')
+            ->where('q.category IN (:categoryIds)')
+            ->setParameter('categoryIds', $categoryIds);
+
+        $allIds = array_column($qb->getQuery()->getArrayResult(), 'id');
+        
+        $selectedIds = $this->selectSmartQuestionIds(
+            $allIds,
+            $seenQuestionIds,
+            $questionFailureRates,
+            $limit
+        );
+        
+        if (empty($selectedIds)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('q')
+            ->leftJoin('q.answers', 'a')
+            ->addSelect('a')
+            ->where('q.id IN (:ids)')
+            ->setParameter('ids', $selectedIds)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get smart random questions from multiple subcategories
+     * @param int[] $subcategoryIds
+     * @param array<int> $seenQuestionIds
+     * @param array<int, float> $questionFailureRates
+     * @return Question[]
+     */
+    public function findSmartRandomQuestionsMultiSubcategory(
+        int $limit,
+        array $subcategoryIds,
+        array $seenQuestionIds,
+        array $questionFailureRates
+    ): array {
+        if (empty($subcategoryIds)) {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('q')
+            ->select('q.id')
+            ->where('q.subcategory IN (:subcategoryIds)')
+            ->setParameter('subcategoryIds', $subcategoryIds);
+
+        $allIds = array_column($qb->getQuery()->getArrayResult(), 'id');
+        
+        $selectedIds = $this->selectSmartQuestionIds(
+            $allIds,
+            $seenQuestionIds,
+            $questionFailureRates,
+            $limit
+        );
+        
+        if (empty($selectedIds)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('q')
+            ->leftJoin('q.answers', 'a')
+            ->addSelect('a')
+            ->where('q.id IN (:ids)')
+            ->setParameter('ids', $selectedIds)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Get smart random certification questions
+     * @param array<int> $seenQuestionIds
+     * @param array<int, float> $questionFailureRates
+     * @return Question[]
+     */
+    public function findSmartRandomCertificationQuestions(
+        int $limit,
+        array $seenQuestionIds,
+        array $questionFailureRates
+    ): array {
+        $qb = $this->createQueryBuilder('q')
+            ->select('q.id')
+            ->where('q.isCertification = :isCert')
+            ->setParameter('isCert', true);
+
+        $allIds = array_column($qb->getQuery()->getArrayResult(), 'id');
+        
+        $selectedIds = $this->selectSmartQuestionIds(
+            $allIds,
+            $seenQuestionIds,
+            $questionFailureRates,
+            $limit
+        );
+        
+        if (empty($selectedIds)) {
+            return [];
+        }
+
+        return $this->createQueryBuilder('q')
+            ->leftJoin('q.answers', 'a')
+            ->addSelect('a')
+            ->where('q.id IN (:ids)')
+            ->setParameter('ids', $selectedIds)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Smart selection algorithm:
+     * - 40% unseen questions (prioritized)
+     * - 40% questions with high failure rate (>= 50%)
+     * - 20% random questions to add variety
+     * 
+     * @param array<int> $allIds All available question IDs
+     * @param array<int> $seenQuestionIds Questions already seen by user
+     * @param array<int, float> $questionFailureRates Map of questionId => failureRate
+     * @param int $limit Number of questions to select
+     * @return array<int>
+     */
+    private function selectSmartQuestionIds(
+        array $allIds,
+        array $seenQuestionIds,
+        array $questionFailureRates,
+        int $limit
+    ): array {
+        if (empty($allIds) || $limit <= 0) {
+            return [];
+        }
+
+        // Separate unseen from seen questions
+        $unseenIds = array_diff($allIds, $seenQuestionIds);
+        $seenInPool = array_intersect($allIds, $seenQuestionIds);
+
+        // Get high failure rate questions (>= 50% failure rate)
+        $highFailureIds = [];
+        foreach ($seenInPool as $id) {
+            if (isset($questionFailureRates[$id]) && $questionFailureRates[$id] >= 50.0) {
+                $highFailureIds[$id] = $questionFailureRates[$id];
+            }
+        }
+        // Sort by failure rate descending
+        arsort($highFailureIds);
+        $highFailureIds = array_keys($highFailureIds);
+
+        // Calculate quotas
+        $unseenQuota = (int) ceil($limit * 0.4);    // 40% unseen
+        $failureQuota = (int) ceil($limit * 0.4);   // 40% high failure
+        $randomQuota = $limit - $unseenQuota - $failureQuota; // Rest random
+
+        $selectedIds = [];
+
+        // 1. Add unseen questions (up to quota)
+        shuffle($unseenIds);
+        $unseenSelection = array_slice($unseenIds, 0, min($unseenQuota, count($unseenIds)));
+        $selectedIds = array_merge($selectedIds, $unseenSelection);
+
+        // 2. Add high failure rate questions (up to quota, not already selected)
+        $remainingHighFailure = array_diff($highFailureIds, $selectedIds);
+        $failureSelection = array_slice($remainingHighFailure, 0, min($failureQuota, count($remainingHighFailure)));
+        $selectedIds = array_merge($selectedIds, $failureSelection);
+
+        // 3. Fill remaining with random questions not yet selected
+        $remaining = array_diff($allIds, $selectedIds);
+        shuffle($remaining);
+        $needed = $limit - count($selectedIds);
+        if ($needed > 0 && !empty($remaining)) {
+            $randomSelection = array_slice($remaining, 0, min($needed, count($remaining)));
+            $selectedIds = array_merge($selectedIds, $randomSelection);
+        }
+
+        // If we still don't have enough (edge case), fill from any available
+        if (count($selectedIds) < $limit) {
+            $stillNeeded = $limit - count($selectedIds);
+            $remaining = array_diff($allIds, $selectedIds);
+            shuffle($remaining);
+            $selectedIds = array_merge($selectedIds, array_slice($remaining, 0, $stillNeeded));
+        }
+
+        return $selectedIds;
+    }
 }

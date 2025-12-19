@@ -320,7 +320,7 @@ $fs->mirror(\'/srv/app\', \'/srv/bar\', null, [\'copy_on_windows\' => true]);</c
                 'answers' => [
                     ['text' => '<code>{{ var|raw|upper }}</code>', 'correct' => true],
                     ['text' => '<code>{{ var|upper|raw }}</code>', 'correct' => false],
-                    ['text' => '<code>{{ var|raw~bar }}</code>', 'correct' => false],
+                    ['text' => '<code>{{ var|raw~bar }}</code>', 'correct' => true],
                 ],
             ],
             // Q15: HTTP Basic authentication

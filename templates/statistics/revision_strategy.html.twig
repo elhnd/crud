@@ -1,0 +1,481 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Stratégie de Révision - Certification Symfony{% endblock %}
+
+{% block body %}
+<div class="min-h-screen bg-gradient-to-br via-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">
+                        <i class="fas fa-graduation-cap text-indigo-600 mr-3"></i>
+                        Stratégie de Révision
+                    </h1>
+                    <p class="mt-2 text-gray-600">Plan personnalisé pour réussir la certification Symfony</p>
+                </div>
+                <a href="{{ path('quiz_start_form') }}" 
+                   class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
+                    <i class="fas fa-play mr-2"></i>
+                    Commencer un quiz
+                </a>
+            </div>
+        </div>
+
+        <!-- Readiness Score -->
+        <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-8">
+            <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white">
+                    <i class="fas fa-tachometer-alt mr-2"></i>
+                    Score de Préparation
+                </h2>
+            </div>
+            <div class="p-6">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <!-- Main Score -->
+                    <div class="text-center">
+                        <div class="relative inline-flex">
+                            <svg class="w-36 h-36">
+                                <circle cx="72" cy="72" r="60" stroke="#e5e7eb" stroke-width="12" fill="none"/>
+                                <circle cx="72" cy="72" r="60" 
+                                        stroke="{% if strategy.readinessScore.status == 'ready' %}#10B981{% elseif strategy.readinessScore.status == 'almost-ready' %}#F59E0B{% else %}#6366F1{% endif %}" 
+                                        stroke-width="12" 
+                                        fill="none"
+                                        stroke-linecap="round"
+                                        stroke-dasharray="{{ strategy.readinessScore.score * 3.77 }} 377"
+                                        transform="rotate(-90 72 72)"/>
+                            </svg>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <span class="text-3xl font-bold text-gray-800">{{ strategy.readinessScore.score }}%</span>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-lg font-semibold 
+                            {% if strategy.readinessScore.status == 'ready' %}text-green-600
+                            {% elseif strategy.readinessScore.status == 'almost-ready' %}text-amber-600
+                            {% else %}text-indigo-600{% endif %}">
+                            {{ strategy.readinessScore.message }}
+                        </p>
+                    </div>
+
+                    <!-- Score Breakdown -->
+                    <div class="flex-1 grid grid-cols-3 gap-4">
+                        <div class="text-center p-4 bg-blue-50 rounded-lg">
+                            <div class="text-2xl font-bold text-blue-600">{{ strategy.readinessScore.coverageScore }}%</div>
+                            <div class="text-sm text-gray-600">Couverture</div>
+                            <div class="text-xs text-gray-400">Questions uniques vues</div>
+                        </div>
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <div class="text-2xl font-bold text-green-600">{{ strategy.readinessScore.performanceScore|number_format(1) }}%</div>
+                            <div class="text-sm text-gray-600">Performance</div>
+                            <div class="text-xs text-gray-400">Taux de réussite</div>
+                        </div>
+                        <div class="text-center p-4 bg-purple-50 rounded-lg">
+                            <div class="text-2xl font-bold text-purple-600">{{ strategy.readinessScore.consistencyScore }}%</div>
+                            <div class="text-sm text-gray-600">Régularité</div>
+                            <div class="text-xs text-gray-400">Équilibre des sujets</div>
+                        </div>
+                    </div>
+
+                    <!-- Certification Stats -->
+                    <div class="text-center p-6 bg-gray-50 rounded-lg">
+                        <div class="text-4xl font-bold {% if strategy.overallStats.bestCertScore >= 70 %}text-green-600{% else %}text-gray-600{% endif %}">
+                            {{ strategy.overallStats.bestCertScore }}%
+                        </div>
+                        <div class="text-sm text-gray-600 mt-1">Meilleur score certif</div>
+                        <div class="text-xs text-gray-400 mt-2">
+                            {{ strategy.overallStats.certificationAttempts }} simulation(s)
+                        </div>
+                        <div class="mt-2 text-xs {% if strategy.overallStats.bestCertScore >= 70 %}text-green-600{% else %}text-amber-600{% endif %}">
+                            Seuil de passage : 70%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Overview -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-indigo-100 rounded-lg">
+                        <i class="fas fa-question-circle text-indigo-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-800">{{ strategy.practiceStats.questionsAttempted }}</div>
+                        <div class="text-sm text-gray-500">Questions répondues</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-green-100 rounded-lg">
+                        <i class="fas fa-eye text-green-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-800">{{ strategy.practiceStats.uniqueQuestionsAttempted }}</div>
+                        <div class="text-sm text-gray-500">Questions uniques</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-amber-100 rounded-lg">
+                        <i class="fas fa-database text-amber-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-800">{{ strategy.practiceStats.totalQuestionsInDb }}</div>
+                        <div class="text-sm text-gray-500">Questions disponibles</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow p-4">
+                <div class="flex items-center">
+                    <div class="p-3 bg-purple-100 rounded-lg">
+                        <i class="fas fa-percentage text-purple-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <div class="text-2xl font-bold text-gray-800">{{ strategy.practiceStats.coveragePercentage }}%</div>
+                        <div class="text-sm text-gray-500">Couverture</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Two Column Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            
+            <!-- Recommendations -->
+            <div class="bg-white rounded-xl shadow overflow-hidden">
+                <div class="bg-amber-50 px-6 py-4 border-b border-amber-100">
+                    <h2 class="text-xl font-bold text-amber-800">
+                        <i class="fas fa-lightbulb mr-2"></i>
+                        Recommandations Personnalisées
+                    </h2>
+                </div>
+                <div class="p-6">
+                    {% if strategy.recommendations|length > 0 %}
+                    <div class="space-y-4">
+                        {% for rec in strategy.recommendations %}
+                        <div class="flex items-start p-4 rounded-lg 
+                            {% if rec.priority == 'high' %}bg-red-50 border-l-4 border-red-500
+                            {% elseif rec.priority == 'medium' %}bg-amber-50 border-l-4 border-amber-500
+                            {% else %}bg-green-50 border-l-4 border-green-500{% endif %}">
+                            <div class="flex-shrink-0 mr-4">
+                                {% if rec.type == 'practice' %}
+                                <i class="fas fa-dumbbell text-2xl {% if rec.priority == 'high' %}text-red-500{% else %}text-gray-500{% endif %}"></i>
+                                {% elseif rec.type == 'focus' %}
+                                <i class="fas fa-crosshairs text-2xl {% if rec.priority == 'high' %}text-red-500{% else %}text-gray-500{% endif %}"></i>
+                                {% elseif rec.type == 'exam' %}
+                                <i class="fas fa-file-alt text-2xl text-amber-500"></i>
+                                {% elseif rec.type == 'study' %}
+                                <i class="fas fa-book text-2xl text-blue-500"></i>
+                                {% elseif rec.type == 'success' %}
+                                <i class="fas fa-trophy text-2xl text-green-500"></i>
+                                {% endif %}
+                            </div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold text-gray-800">{{ rec.title }}</h4>
+                                <p class="text-sm text-gray-600 mt-1">{{ rec.description }}</p>
+                                {% if rec.action %}
+                                <a href="{{ rec.actionUrl }}" 
+                                   class="inline-flex items-center mt-2 text-sm font-medium text-indigo-600 hover:text-indigo-800">
+                                    {{ rec.action }} <i class="fas fa-arrow-right ml-1"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-gray-500 text-center py-4">Commencez à pratiquer pour recevoir des recommandations personnalisées.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Daily Goals -->
+            <div class="bg-white rounded-xl shadow overflow-hidden">
+                <div class="bg-green-50 px-6 py-4 border-b border-green-100">
+                    <h2 class="text-xl font-bold text-green-800">
+                        <i class="fas fa-bullseye mr-2"></i>
+                        Objectifs Quotidiens
+                    </h2>
+                </div>
+                <div class="p-6">
+                    <div class="space-y-4">
+                        {% for goal in strategy.dailyGoals %}
+                        <div class="flex items-start p-4 bg-gray-50 rounded-lg">
+                            <div class="flex-shrink-0 w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                                <i class="fas fa-{{ goal.icon }} text-green-600 text-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">{{ goal.title }}</h4>
+                                <p class="text-indigo-600 font-medium">{{ goal.target }}</p>
+                                <p class="text-sm text-gray-500 mt-1">{{ goal.reason }}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Topic Analysis -->
+        <div class="bg-white rounded-xl shadow overflow-hidden mb-8">
+            <div class="bg-indigo-50 px-6 py-4 border-b border-indigo-100">
+                <h2 class="text-xl font-bold text-indigo-800">
+                    <i class="fas fa-chart-pie mr-2"></i>
+                    Analyse par Sujet de Certification
+                </h2>
+                <p class="text-sm text-indigo-600 mt-1">Basé sur les sujets officiels de l'examen Symfony</p>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    {% for topic, data in strategy.topicAnalysis %}
+                    <div class="border rounded-lg p-4 {% if data.status == 'weak' %}border-red-200 bg-red-50{% elseif data.status == 'moderate' %}border-amber-200 bg-amber-50{% elseif data.status == 'strong' %}border-green-200 bg-green-50{% else %}border-gray-200{% endif %}">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center">
+                                <span class="font-semibold text-gray-800">{{ topic }}</span>
+                                <span class="ml-2 px-2 py-0.5 text-xs rounded-full bg-indigo-100 text-indigo-700">{{ data.weight }}%</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <span class="text-sm {% if data.averageScore >= 80 %}text-green-600{% elseif data.averageScore >= 60 %}text-amber-600{% elseif data.averageScore > 0 %}text-red-600{% else %}text-gray-400{% endif %}">
+                                    {% if data.averageScore > 0 %}{{ data.averageScore }}%{% else %}-{% endif %}
+                                </span>
+                                <span class="px-2 py-1 text-xs rounded 
+                                    {% if data.status == 'strong' %}bg-green-100 text-green-700
+                                    {% elseif data.status == 'moderate' %}bg-amber-100 text-amber-700
+                                    {% elseif data.status == 'weak' %}bg-red-100 text-red-700
+                                    {% else %}bg-gray-100 text-gray-700{% endif %}">
+                                    {% if data.status == 'strong' %}Maîtrisé
+                                    {% elseif data.status == 'moderate' %}À renforcer
+                                    {% elseif data.status == 'weak' %}À travailler
+                                    {% else %}Non commencé{% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Progress bar for coverage -->
+                        <div class="mt-2">
+                            <div class="flex justify-between text-xs text-gray-500 mb-1">
+                                <span>Couverture</span>
+                                <span>{{ data.coverage }}%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="h-2 rounded-full {% if data.coverage >= 80 %}bg-green-500{% elseif data.coverage >= 50 %}bg-amber-500{% else %}bg-red-500{% endif %}" 
+                                     style="width: {{ data.coverage }}%"></div>
+                            </div>
+                        </div>
+                        <!-- Subtopics -->
+                        {% if data.subtopics|length > 0 %}
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            {% for subtopic in data.subtopics %}
+                            <span class="inline-flex items-center px-2 py-1 text-xs rounded-full
+                                {% if subtopic.successRate >= 80 %}bg-green-100 text-green-700
+                                {% elseif subtopic.successRate >= 60 %}bg-amber-100 text-amber-700
+                                {% elseif subtopic.attempted > 0 %}bg-red-100 text-red-700
+                                {% else %}bg-gray-100 text-gray-500{% endif %}">
+                                {{ subtopic.name }}
+                                {% if subtopic.attempted > 0 %}
+                                <span class="ml-1 font-medium">{{ subtopic.successRate }}%</span>
+                                {% endif %}
+                            </span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Weekly Plan -->
+        <div class="bg-white rounded-xl shadow overflow-hidden mb-8">
+            <div class="bg-purple-50 px-6 py-4 border-b border-purple-100">
+                <h2 class="text-xl font-bold text-purple-800">
+                    <i class="fas fa-calendar-week mr-2"></i>
+                    Plan de Révision Hebdomadaire
+                </h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-1 md:grid-cols-7 gap-4">
+                    {% for day in strategy.weeklyPlan %}
+                    <div class="bg-gray-50 rounded-lg p-4 {% if loop.index == 6 %}md:col-span-1 bg-indigo-50{% elseif loop.index == 7 %}md:col-span-1 bg-green-50{% endif %}">
+                        <div class="font-semibold text-gray-800 mb-2 text-center">{{ day.day }}</div>
+                        <div class="text-sm text-indigo-600 font-medium mb-3 text-center">{{ day.focus }}</div>
+                        <div class="space-y-2">
+                            {% for activity in day.activities %}
+                            <div class="flex items-center text-xs">
+                                {% if activity.type == 'study' %}
+                                <i class="fas fa-book text-blue-500 mr-2"></i>
+                                {% elseif activity.type == 'practice' %}
+                                <i class="fas fa-tasks text-green-500 mr-2"></i>
+                                {% elseif activity.type == 'review' %}
+                                <i class="fas fa-redo text-amber-500 mr-2"></i>
+                                {% elseif activity.type == 'exam' %}
+                                <i class="fas fa-file-alt text-purple-500 mr-2"></i>
+                                {% elseif activity.type == 'rest' %}
+                                <i class="fas fa-coffee text-gray-400 mr-2"></i>
+                                {% endif %}
+                                <span class="text-gray-600">
+                                    {% if activity.duration > 0 %}{{ activity.duration }}min{% endif %}
+                                </span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Priority Topics -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Weak Areas to Focus -->
+            <div class="bg-white rounded-xl shadow overflow-hidden">
+                <div class="bg-red-50 px-6 py-4 border-b border-red-100">
+                    <h2 class="text-xl font-bold text-red-800">
+                        <i class="fas fa-exclamation-triangle mr-2"></i>
+                        Zones à Améliorer en Priorité
+                    </h2>
+                </div>
+                <div class="p-6">
+                    {% if strategy.priorityTopics.weakAreas|length > 0 %}
+                    <div class="space-y-3">
+                        {% for area in strategy.priorityTopics.weakAreas|slice(0, 8) %}
+                        <div class="flex items-center justify-between p-3 bg-red-50 rounded-lg">
+                            <div class="flex-1">
+                                <span class="text-gray-800">{{ area.name }}</span>
+                                {% if area.documentationUrl %}
+                                <a href="{{ area.documentationUrl }}" target="_blank" rel="noopener noreferrer"
+                                   class="inline-flex items-center ml-2 text-xs text-indigo-600 hover:text-indigo-800">
+                                    <i class="fas fa-book mr-1"></i>Documentation
+                                    <i class="fas fa-external-link-alt ml-1 text-xs"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                            <span class="text-red-600 font-semibold">{{ area.averageScore|number_format(1) }}%</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-check-circle text-4xl text-green-500 mb-2"></i>
+                        <p>Aucune zone faible détectée ! Excellent travail !</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Not Yet Attempted -->
+            <div class="bg-white rounded-xl shadow overflow-hidden">
+                <div class="bg-blue-50 px-6 py-4 border-b border-blue-100">
+                    <h2 class="text-xl font-bold text-blue-800">
+                        <i class="fas fa-compass mr-2"></i>
+                        Sujets Non Explorés
+                    </h2>
+                </div>
+                <div class="p-6">
+                    {% if strategy.priorityTopics.notAttemptedSubcategories|length > 0 %}
+                    <div class="flex flex-wrap gap-2">
+                        {% for subcat in strategy.priorityTopics.notAttemptedSubcategories %}
+                        <div class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                            <a href="{{ path('quiz_start_form') }}?subcategory={{ subcat.id }}" 
+                               class="hover:text-blue-900 transition">
+                                {{ subcat.category }} - {{ subcat.name }}
+                                <i class="fas fa-arrow-right ml-1 text-xs"></i>
+                            </a>
+                            {% if subcat.documentationUrl %}
+                            <a href="{{ subcat.documentationUrl }}" target="_blank" rel="noopener noreferrer"
+                               class="ml-2 text-indigo-600 hover:text-indigo-800" title="Documentation">
+                                <i class="fas fa-book"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-trophy text-4xl text-amber-500 mb-2"></i>
+                        <p>Vous avez exploré tous les sujets !</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Most Failed Questions -->
+        {% if strategy.priorityTopics.mostFailedQuestions|length > 0 %}
+        <div class="bg-white rounded-xl shadow overflow-hidden mb-8">
+            <div class="bg-orange-50 px-6 py-4 border-b border-orange-100">
+                <h2 class="text-xl font-bold text-orange-800">
+                    <i class="fas fa-times-circle mr-2"></i>
+                    Questions les Plus Ratées
+                </h2>
+            </div>
+            <div class="p-6">
+                <div class="space-y-3">
+                    {% for q in strategy.priorityTopics.mostFailedQuestions|slice(0, 5) %}
+                    <div class="p-4 border border-orange-200 rounded-lg">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1 pr-4">
+                                <p class="text-gray-800">{{ q.questionText|striptags|slice(0, 150) }}{% if q.questionText|striptags|length > 150 %}...{% endif %}</p>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-red-600 font-bold">{{ q.failureRate|number_format(0) }}%</span>
+                                <div class="text-xs text-gray-500">d'erreurs</div>
+                                <div class="text-xs text-gray-400">({{ q.wrongCount }}/{{ q.totalAttempts }})</div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Quick Actions -->
+        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+            <h2 class="text-xl font-bold mb-4">
+                <i class="fas fa-bolt mr-2"></i>
+                Actions Rapides
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <a href="{{ path('quiz_start_form') }}" 
+                   class="flex items-center p-4 bg-white/10 rounded-lg hover:bg-white/20 transition">
+                    <i class="fas fa-play text-2xl mr-3"></i>
+                    <div>
+                        <div class="font-semibold">Quiz Standard</div>
+                        <div class="text-sm opacity-80">Entraînement libre</div>
+                    </div>
+                </a>
+                <a href="{{ path('quiz_start_form') }}?mode=certification" 
+                   class="flex items-center p-4 bg-white/10 rounded-lg hover:bg-white/20 transition">
+                    <i class="fas fa-certificate text-2xl mr-3"></i>
+                    <div>
+                        <div class="font-semibold">Examen Blanc</div>
+                        <div class="text-sm opacity-80">75 questions, 90 min</div>
+                    </div>
+                </a>
+                <a href="{{ path('statistics_weak_areas') }}" 
+                   class="flex items-center p-4 bg-white/10 rounded-lg hover:bg-white/20 transition">
+                    <i class="fas fa-exclamation-circle text-2xl mr-3"></i>
+                    <div>
+                        <div class="font-semibold">Zones Faibles</div>
+                        <div class="text-sm opacity-80">Analyse détaillée</div>
+                    </div>
+                </a>
+                <a href="{{ path('statistics_dashboard') }}" 
+                   class="flex items-center p-4 bg-white/10 rounded-lg hover:bg-white/20 transition">
+                    <i class="fas fa-chart-line text-2xl mr-3"></i>
+                    <div>
+                        <div class="font-semibold">Statistiques</div>
+                        <div class="text-sm opacity-80">Vue d'ensemble</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

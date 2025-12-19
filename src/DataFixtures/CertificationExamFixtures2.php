@@ -560,7 +560,7 @@ If all the code of the execute() method is just the $output->writeln(\'...\') sh
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
                 'explanation' => 'L\'option --profile active le profilage de la commande, mais cela nécessite que le Profiler soit actif. Le Profiler Symfony n\'est actif que lorsque l\'application est en "debug mode" (APP_DEBUG=1). En environnement de production (APP_DEBUG=0), le Profiler n\'est pas chargé, donc l\'option --profile n\'aura aucun effet.',
-                'resourceUrl' => 'https://symfony.com/doc/current/console.html',
+                'resourceUrl' => 'https://symfony.com/doc/current/console.html#profiling-commands',
                 'answers' => [
                     ['text' => 'Yes.', 'correct' => false],
                     ['text' => 'Yes, but only if the command is run in the dev environment.', 'correct' => false],

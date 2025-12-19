@@ -54,7 +54,7 @@ class QuizSessionRepository extends ServiceEntityRepository
 
     /**
      * Get overall statistics for a user
-     * @return array{totalSessions: int, totalQuestions: int, correctAnswers: int, averageScore: float}
+     * @return array{totalSessions: int, totalQuestions: int, correctAnswers: int, averageScore: float, successRate: float, totalQuizzes: int}
      */
     public function getOverallStats(User $user): array
     {
@@ -72,11 +72,17 @@ class QuizSessionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleResult();
 
+        $totalQuestions = (int)($result['totalQuestions'] ?? 0);
+        $correctAnswers = (int)($result['correctAnswers'] ?? 0);
+        $successRate = $totalQuestions > 0 ? ($correctAnswers / $totalQuestions) * 100 : 0;
+
         return [
             'totalSessions' => (int)($result['totalSessions'] ?? 0),
-            'totalQuestions' => (int)($result['totalQuestions'] ?? 0),
-            'correctAnswers' => (int)($result['correctAnswers'] ?? 0),
+            'totalQuizzes' => (int)($result['totalSessions'] ?? 0),
+            'totalQuestions' => $totalQuestions,
+            'correctAnswers' => $correctAnswers,
             'averageScore' => (float)($result['averageScore'] ?? 0),
+            'successRate' => round($successRate, 1),
         ];
     }
 
@@ -491,5 +497,24 @@ class QuizSessionRepository extends ServiceEntityRepository
             ->execute();
 
         return $deleted;
+    }
+
+    /**
+     * Find certification mode sessions for a user
+     * @return QuizSession[]
+     */
+    public function findCertificationSessionsByUser(User $user, int $limit = 20): array
+    {
+        return $this->createQueryBuilder('qs')
+            ->where('qs.user = :user')
+            ->andWhere('qs.mode = :mode')
+            ->andWhere('qs.status = :status')
+            ->setParameter('user', $user)
+            ->setParameter('mode', 'certification')
+            ->setParameter('status', QuizSession::STATUS_COMPLETED)
+            ->orderBy('qs.completedAt', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
     }
 }

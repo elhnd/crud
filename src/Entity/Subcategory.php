@@ -21,6 +21,9 @@ class Subcategory
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 500, nullable: true)]
+    private ?string $documentationUrl = null;
+
     #[ORM\ManyToOne(inversedBy: 'subcategories')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
@@ -114,5 +117,17 @@ class Subcategory
     public function getFullName(): string
     {
         return $this->category?->getName() . ' - ' . $this->name;
+    }
+
+    public function getDocumentationUrl(): ?string
+    {
+        return $this->documentationUrl;
+    }
+
+    public function setDocumentationUrl(?string $documentationUrl): static
+    {
+        $this->documentationUrl = $documentationUrl;
+
+        return $this;
     }
 }

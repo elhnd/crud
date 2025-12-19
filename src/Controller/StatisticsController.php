@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Repository\CategoryRepository;
+use App\Service\RevisionStrategyService;
 use App\Service\StatisticsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,6 +17,7 @@ class StatisticsController extends AbstractController
     public function __construct(
         private readonly StatisticsService $statisticsService,
         private readonly CategoryRepository $categoryRepository,
+        private readonly RevisionStrategyService $revisionStrategyService,
     ) {
     }
 
@@ -58,6 +60,16 @@ class StatisticsController extends AbstractController
     public function progress(): Response
     {
         return $this->render('statistics/progress.html.twig');
+    }
+
+    #[Route('/revision-strategy', name: 'statistics_revision_strategy')]
+    public function revisionStrategy(): Response
+    {
+        $strategy = $this->revisionStrategyService->getRevisionStrategy();
+
+        return $this->render('statistics/revision_strategy.html.twig', [
+            'strategy' => $strategy,
+        ]);
     }
 
     // API endpoints for charts

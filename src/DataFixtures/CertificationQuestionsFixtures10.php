@@ -217,8 +217,8 @@ Does the path <code>/blog/articles?page=1</code> display the page without error?
                 'explanation' => 'Oui, les paramètres de query string (?page=1) sont automatiquement injectés dans les paramètres du contrôleur si le type correspond. Symfony convertit "1" en int.',
                 'resourceUrl' => 'https://symfony.com/doc/current/routing.html',
                 'answers' => [
-                    ['text' => 'Yes', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
+                    ['text' => 'Yes', 'correct' => false],
+                    ['text' => 'No', 'correct' => true],
                 ],
             ],
             // Q11 - Console Cursor

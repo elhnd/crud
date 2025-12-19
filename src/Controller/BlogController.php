@@ -14,6 +14,12 @@ final class BlogController extends AbstractController
         private UrlGeneratorInterface $router,
     ) {}
 
+     #[Route("/blog/articles", name: "blog_articles")]
+    public function listArticles(int $page): Response
+    {
+        return new Response("Liste des articles de blog - page ");
+    }
+
     #[Route(
         '/blog/{page<\d+>?1}',
         // '/blog/{_locale}/search.{_format}',

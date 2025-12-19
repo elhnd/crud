@@ -140,7 +140,7 @@ class UserAnswerRepository extends ServiceEntityRepository
 
     /**
      * Get weak areas based on individual answers (only subcategories with low success rate)
-     * @return array<array{name: string, type: string, averageScore: float, totalAttempts: int}>
+     * @return array<array{name: string, type: string, averageScore: float, totalAttempts: int, documentationUrl: ?string}>
      */
     public function getWeakAreasByAnswers(User $user, float $threshold = 70.0): array
     {
@@ -154,6 +154,7 @@ class UserAnswerRepository extends ServiceEntityRepository
                 'IDENTITY(q.subcategory) as subcategoryId',
                 'c.name as categoryName',
                 's.name as subcategoryName',
+                's.documentationUrl as documentationUrl',
                 "'subcategory' as type",
                 '(SUM(CASE WHEN ua.isCorrect = true THEN 1 ELSE 0 END) * 100.0 / COUNT(ua.id)) as averageScore',
                 'COUNT(ua.id) as totalAttempts'
@@ -161,7 +162,7 @@ class UserAnswerRepository extends ServiceEntityRepository
             ->where('qs.user = :user')
             ->andWhere('q.subcategory IS NOT NULL')
             ->setParameter('user', $user)
-            ->groupBy('q.subcategory', 's.name', 'c.name')
+            ->groupBy('q.subcategory', 's.name', 'c.name', 's.documentationUrl')
             ->having('averageScore < :threshold')
             ->setParameter('threshold', $threshold)
             ->orderBy('averageScore', 'ASC')
@@ -175,6 +176,7 @@ class UserAnswerRepository extends ServiceEntityRepository
                 'type' => $row['type'],
                 'averageScore' => (float)$row['averageScore'],
                 'totalAttempts' => (int)$row['totalAttempts'],
+                'documentationUrl' => $row['documentationUrl'],
             ];
         }, $results);
     }
@@ -199,11 +201,20 @@ class UserAnswerRepository extends ServiceEntityRepository
             ->where('qs.user = :user')
             ->setParameter('user', $user)
             ->groupBy('q.category', 'c.name')
-            ->having('SUM(CASE WHEN ua.isCorrect = true THEN 1 ELSE 0 END) * 100.0 / COUNT(ua.id) >= :threshold')
-            ->setParameter('threshold', $threshold)
+            ->having('SUM(CASE WHEN ua.isCorrect = true THEN 1 ELSE 0 END) * 100.0 / COUNT(ua.id) >= ' . $threshold)
             ->orderBy('averageScore', 'DESC')
             ->getQuery()
             ->getResult();
+
+        // Map category results to proper format
+        $categoryResults = array_map(function ($row) {
+            return [
+                'name' => $row['name'],
+                'type' => 'category',
+                'averageScore' => (float)$row['averageScore'],
+                'totalAttempts' => (int)$row['totalAttempts'],
+            ];
+        }, $categoryResults);
 
         // Get strong subcategories based on individual answers
         $subcategoryResults = $this->createQueryBuilder('ua')
@@ -222,8 +233,7 @@ class UserAnswerRepository extends ServiceEntityRepository
             ->andWhere('q.subcategory IS NOT NULL')
             ->setParameter('user', $user)
             ->groupBy('q.subcategory', 's.name', 'c.name')
-            ->having('SUM(CASE WHEN ua.isCorrect = true THEN 1 ELSE 0 END) * 100.0 / COUNT(ua.id) >= :threshold')
-            ->setParameter('threshold', $threshold)
+            ->having('SUM(CASE WHEN ua.isCorrect = true THEN 1 ELSE 0 END) * 100.0 / COUNT(ua.id) >= ' . $threshold)
             ->orderBy('averageScore', 'DESC')
             ->getQuery()
             ->getResult();
@@ -231,7 +241,7 @@ class UserAnswerRepository extends ServiceEntityRepository
         $subcategoryResults = array_map(function ($row) {
             return [
                 'name' => $row['categoryName'] . ' - ' . $row['subcategoryName'],
-                'type' => $row['type'],
+                'type' => 'subcategory',
                 'averageScore' => (float)$row['averageScore'],
                 'totalAttempts' => (int)$row['totalAttempts'],
             ];
@@ -240,14 +250,7 @@ class UserAnswerRepository extends ServiceEntityRepository
         $results = array_merge($categoryResults, $subcategoryResults);
         usort($results, fn($a, $b) => (float)$b['averageScore'] <=> (float)$a['averageScore']);
 
-        return array_map(function ($row) {
-            return [
-                'name' => $row['name'],
-                'type' => $row['type'],
-                'averageScore' => (float)$row['averageScore'],
-                'totalAttempts' => (int)$row['totalAttempts'],
-            ];
-        }, $results);
+        return $results;
     }
 
     /**
@@ -278,5 +281,101 @@ class UserAnswerRepository extends ServiceEntityRepository
                 'mistakeCount' => (int)$row['mistakeCount'],
             ];
         }, $results);
+    }
+
+    /**
+     * Get all question IDs that the user has already seen/answered
+     * @return array<int>
+     */
+    public function getSeenQuestionIds(User $user): array
+    {
+        $results = $this->createQueryBuilder('ua')
+            ->leftJoin('ua.quizSession', 'qs')
+            ->select('DISTINCT IDENTITY(ua.question) as questionId')
+            ->where('qs.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+
+        return array_map(fn($row) => (int)$row['questionId'], $results);
+    }
+
+    /**
+     * Get count of unique questions seen per subcategory
+     * @return array<int, int> [subcategoryId => uniqueQuestionCount]
+     */
+    public function getUniqueQuestionsCountBySubcategory(User $user): array
+    {
+        $results = $this->createQueryBuilder('ua')
+            ->leftJoin('ua.quizSession', 'qs')
+            ->leftJoin('ua.question', 'q')
+            ->select(
+                'IDENTITY(q.subcategory) as subcategoryId',
+                'COUNT(DISTINCT ua.question) as uniqueCount'
+            )
+            ->where('qs.user = :user')
+            ->andWhere('q.subcategory IS NOT NULL')
+            ->setParameter('user', $user)
+            ->groupBy('q.subcategory')
+            ->getQuery()
+            ->getResult();
+
+        $counts = [];
+        foreach ($results as $row) {
+            $counts[(int)$row['subcategoryId']] = (int)$row['uniqueCount'];
+        }
+
+        return $counts;
+    }
+
+    /**
+     * Get question IDs with their failure rate for the user
+     * Returns questions ordered by failure rate (highest first)
+     * @return array<int, float> [questionId => failureRate]
+     */
+    public function getQuestionFailureRates(User $user): array
+    {
+        $results = $this->createQueryBuilder('ua')
+            ->leftJoin('ua.quizSession', 'qs')
+            ->select(
+                'IDENTITY(ua.question) as questionId',
+                'SUM(CASE WHEN ua.isCorrect = false THEN 1 ELSE 0 END) as wrongCount',
+                'COUNT(ua.id) as totalAttempts'
+            )
+            ->where('qs.user = :user')
+            ->setParameter('user', $user)
+            ->groupBy('ua.question')
+            ->getQuery()
+            ->getResult();
+
+        $failureRates = [];
+        foreach ($results as $row) {
+            $totalAttempts = (int)$row['totalAttempts'];
+            $wrongCount = (int)$row['wrongCount'];
+            $questionId = (int)$row['questionId'];
+            
+            if ($totalAttempts > 0) {
+                $failureRates[$questionId] = ($wrongCount / $totalAttempts) * 100;
+            }
+        }
+
+        // Sort by failure rate descending
+        arsort($failureRates);
+
+        return $failureRates;
+    }
+
+    /**
+     * Get question IDs that the user frequently gets wrong (above threshold)
+     * @return array<int>
+     */
+    public function getFrequentlyWrongQuestionIds(User $user, float $failureRateThreshold = 50.0): array
+    {
+        $failureRates = $this->getQuestionFailureRates($user);
+        
+        return array_keys(array_filter(
+            $failureRates,
+            fn($rate) => $rate >= $failureRateThreshold
+        ));
     }
 }

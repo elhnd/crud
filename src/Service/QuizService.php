@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\Entity\UserAnswer;
 use App\Repository\QuestionRepository;
 use App\Repository\QuizSessionRepository;
+use App\Repository\UserAnswerRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -27,12 +28,14 @@ class QuizService
         private readonly QuestionRepository $questionRepository,
         private readonly QuizSessionRepository $quizSessionRepository,
         private readonly UserRepository $userRepository,
+        private readonly UserAnswerRepository $userAnswerRepository,
         private readonly RequestStack $requestStack,
     ) {
     }
 
     /**
      * Start a new quiz session with optional multiple categories/subcategories
+     * Uses smart question selection prioritizing unseen questions and high failure rate
      * @param array<int>|null $categoryIds Optional array of category IDs to filter
      * @param array<int>|null $subcategoryIds Optional array of subcategory IDs to filter
      */
@@ -53,23 +56,37 @@ class QuizService
             $this->entityManager->flush();
         }
 
-        // Get random questions - support certification mode and multi-category/subcategory selection
+        // Get user's question history for smart selection
+        $seenQuestionIds = $this->userAnswerRepository->getSeenQuestionIds($user);
+        $questionFailureRates = $this->userAnswerRepository->getQuestionFailureRates($user);
+
+        // Get smart random questions - prioritize unseen and high failure rate
         if ($mode === 'certification') {
-            // Certification exam uses only certification questions
-            $questions = $this->questionRepository->findRandomCertificationQuestions($numberOfQuestions);
-        } elseif (!empty($subcategoryIds)) {
-            $questions = $this->questionRepository->findRandomQuestionsMultiSubcategory(
+            // Certification exam uses smart selection of certification questions
+            $questions = $this->questionRepository->findSmartRandomCertificationQuestions(
                 $numberOfQuestions,
-                $subcategoryIds
+                $seenQuestionIds,
+                $questionFailureRates
+            );
+        } elseif (!empty($subcategoryIds)) {
+            $questions = $this->questionRepository->findSmartRandomQuestionsMultiSubcategory(
+                $numberOfQuestions,
+                $subcategoryIds,
+                $seenQuestionIds,
+                $questionFailureRates
             );
         } elseif (!empty($categoryIds)) {
-            $questions = $this->questionRepository->findRandomQuestionsMultiCategory(
+            $questions = $this->questionRepository->findSmartRandomQuestionsMultiCategory(
                 $numberOfQuestions,
-                $categoryIds
+                $categoryIds,
+                $seenQuestionIds,
+                $questionFailureRates
             );
         } else {
-            $questions = $this->questionRepository->findRandomQuestions(
+            $questions = $this->questionRepository->findSmartRandomQuestions(
                 $numberOfQuestions,
+                $seenQuestionIds,
+                $questionFailureRates,
                 $category,
                 $subcategory
             );

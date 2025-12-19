@@ -27,7 +27,16 @@ class QuizController extends AbstractController
     public function startForm(Request $request): Response
     {
         $categories = $this->categoryRepository->findAllWithSubcategories();
-        $preSelectedSubcategories = $request->query->all('subcategory');
+        
+        // Handle both single value (?subcategory=123) and array (?subcategory[]=123&subcategory[]=456)
+        $subcategoryParam = $request->query->get('subcategory');
+        if (is_array($subcategoryParam)) {
+            $preSelectedSubcategories = $subcategoryParam;
+        } elseif ($subcategoryParam !== null) {
+            $preSelectedSubcategories = [$subcategoryParam];
+        } else {
+            $preSelectedSubcategories = [];
+        }
 
         return $this->render('quiz/start.html.twig', [
             'categories' => $categories,
