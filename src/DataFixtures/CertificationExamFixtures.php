@@ -732,10 +732,10 @@ In the child.html.twig template, which statement does ??? successfully replace t
                 'explanation' => 'Le filtre |rtrim (right trim) supprime les espaces blancs uniquement à droite d\'une chaîne.',
                 'resourceUrl' => 'https://twig.symfony.com/doc/3.x/filters/trim.html',
                 'answers' => [
-                    ['text' => '|rtrim', 'correct' => true],
+                    ['text' => '|rtrim', 'correct' => false],
                     ['text' => '|right_trim', 'correct' => false],
                     ['text' => '|trim', 'correct' => false],
-                    ['text' => '|trim(side = \'right\')', 'correct' => false],
+                    ['text' => '|trim(side = \'right\')', 'correct' => true],
                 ],
             ],
 

@@ -305,11 +305,11 @@ var_dump($language->compile(\'1 + 2\'));</code></pre>',
                 'resourceUrl' => 'https://symfony.com/blog/new-in-symfony-6-4-dx-improvements-part-2#maximum-retries-in-http-client',
                 'answers' => [
                     ['text' => '<code>$client = new RetryableHttpClient(HttpClient::create(), null, 4);</code>', 'correct' => true],
-                    ['text' => '<code>$client = new RetryableHttpClient(HttpClient::create(), null, [\'max_retries\' => 4]);</code>', 'correct' => true],
+                    ['text' => '<code>$client = new RetryableHttpClient(HttpClient::create(), null, [\'max_retries\' => 4]);</code>', 'correct' => false],
                     ['text' => '<code>$client = new RetryableHttpClient(HttpClient::create());
-                    $client = $client->withOptions([\'max_retries\' => 4]);</code>', 'correct' => false],
+                    $client = $client->withOptions([\'max_retries\' => 4]);</code>', 'correct' => true],
                     ['text' => '<code>$client = new RetryableHttpClient(HttpClient::create());
-                    $client->request(\'GET\', \'/url\', [\'max_retries\' => 4]);</code>', 'correct' => false],
+                    $client->request(\'GET\', \'/url\', [\'max_retries\' => 4]);</code>', 'correct' => true],
                 ],
             ],
             // Q14: Twig block names
