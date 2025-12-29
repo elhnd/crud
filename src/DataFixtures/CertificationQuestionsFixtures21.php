@@ -19,7 +19,7 @@ class CertificationQuestionsFixtures21 extends Fixture implements DependentFixtu
 
     public static function getGroups(): array
     {
-        return ['certification', 'questions'];
+        return ['questions'];
     }
 
     public function getDependencies(): array
@@ -195,25 +195,6 @@ EvaluatorInterface $evaluator An evaluator able to evaluate the function</code><
                 ],
             ],
 
-            // Q7 - PHP - echo print
-            [
-                'category' => $php,
-                'subcategory' => $subcategories['PHP:PHP Basics'],
-                'text' => 'Consider the following code snippet:
-<pre><code class="language-php">echo print(\'hello\');</code></pre>
-<p>What will be the output when running this script?</p>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'print() affiche "hello" et retourne 1, puis echo affiche ce 1. Résultat: "hello1".',
-                'resourceUrl' => 'http://php.net/print',
-                'answers' => [
-                    ['text' => '<pre><code>hello1</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code>hello</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code>hello5</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code>hello0</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code>hellotrue</code></pre>', 'correct' => false],
-                ],
-            ],
 
             // Q8 - Form - ChoiceType choice_loader
             [
@@ -263,25 +244,6 @@ EvaluatorInterface $evaluator An evaluator able to evaluate the function</code><
                     ['text' => 'Use <code>$client->cookies->set(new Cookie(...))</code>', 'correct' => false],
                     ['text' => 'Use <code>$client->getCookieJar()->set(new Cookie(...))</code>', 'correct' => false],
                     ['text' => 'Use <code>$client->setCookie(new Cookie(...))</code>', 'correct' => false],
-                ],
-            ],
-
-            // Q11 - Twig - Operator precedence highest
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'In Twig, which of the following operators has the <strong>highest</strong> precedence?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'L\'opérateur pipe (|) pour les filtres a la plus haute précédence parmi les options listées.',
-                'resourceUrl' => 'https://twig.symfony.com/doc/3.x/templates.html#expressions',
-                'answers' => [
-                    ['text' => '<code>|</code> (filters)', 'correct' => true],
-                    ['text' => '<code>or</code>', 'correct' => false],
-                    ['text' => '<code>==</code>', 'correct' => false],
-                    ['text' => '<code><=></code>', 'correct' => false],
-                    ['text' => '<code>in</code>', 'correct' => false],
-                    ['text' => '<code>and</code>', 'correct' => false],
                 ],
             ],
 
@@ -369,35 +331,6 @@ class TwitterClient
                 ],
             ],
 
-            // Q16 - ErrorHandler
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:ErrorHandler'] ?? $subcategories['Symfony:Services'],
-                'text' => 'Given the following code in a controller:
-<pre><code class="language-php">use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\ErrorHandler\ErrorHandler;
-
-class MyController
-{
-  public function displayContent(): Response
-  {
-    $content = ErrorHandler::call(\'file_get_content\', \'/my-inexistent-file.txt\');
-
-    return new Response($content);
-  }
-}</code></pre>
-<p>What will be displayed if <code>/my-inexistent-file.txt</code> doesn\'t exist?</p>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'ErrorHandler::call() convertit les erreurs PHP en exceptions. Si le fichier n\'existe pas, une exception sera lancée.',
-                'resourceUrl' => 'https://github.com/symfony/error-handler/blob/dc432104fe98d79edcdd305312e4494956ce47ad/ErrorHandler.php#L159',
-                'answers' => [
-                    ['text' => 'An exception will be thrown', 'correct' => true],
-                    ['text' => 'An empty page will be displayed and an exception will be visible in the profiler', 'correct' => false],
-                    ['text' => 'An empty page will be displayed', 'correct' => false],
-                ],
-            ],
-
             // Q17 - Twig - with tag
             [
                 'category' => $symfony,
@@ -427,56 +360,6 @@ class MyController
                 ],
             ],
 
-            // Q18 - DI - Tags
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Dependency Injection'],
-                'text' => 'Which mechanism allows to aggregate services by domain in the service container?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'Les tags permettent de regrouper des services par domaine fonctionnel et de les récupérer ensemble via un compiler pass.',
-                'resourceUrl' => 'https://symfony.com/doc/current/components/dependency_injection/tags.html',
-                'answers' => [
-                    ['text' => 'Tag', 'correct' => true],
-                    ['text' => 'Scope', 'correct' => false],
-                    ['text' => 'Abstraction', 'correct' => false],
-                    ['text' => 'Listener', 'correct' => false],
-                ],
-            ],
-
-            // Q19 - HttpFoundation - FlashBag clear
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpFoundation'],
-                'text' => 'Could a <code>FlashBag</code> be cleared?',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 1,
-                'explanation' => 'Oui, la méthode clear() permet de vider tous les messages du FlashBag.',
-                'resourceUrl' => 'https://github.com/symfony/symfony/blob/2.1/src/Symfony/Component/HttpFoundation/Session/Flash/FlashBag.php',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
-                ],
-            ],
-
-            // Q20 - HttpFoundation - getPathInfo
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpFoundation'],
-                'text' => 'For a request to <code>http://example.com/blog/index.php/post/hello-world</code>, what will be the value of <code>$pathInfo</code> in the following code?
-<pre><code class="language-php">$pathInfo = $request->getPathInfo();</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'getPathInfo() retourne la partie du chemin après le front controller (index.php), donc /post/hello-world.',
-                'resourceUrl' => 'http://symfony.com/doc/current/components/http_foundation.html#identifying-a-request',
-                'answers' => [
-                    ['text' => '<code>/post/hello-world</code>', 'correct' => true],
-                    ['text' => '<code>/blog/index.php/post/hello-world</code>', 'correct' => false],
-                    ['text' => '<code>/index.php/post/hello-world</code>', 'correct' => false],
-                    ['text' => '<code>example.com/blog/index.php/post/hello-world</code>', 'correct' => false],
-                ],
-            ],
-
             // Q21 - Validator - Constraint errorNames
             [
                 'category' => $symfony,
@@ -501,46 +384,6 @@ class MyController
                 'difficulty' => 2,
                 'explanation' => 'Oui, ContainerBuilder::willBeAvailable() permet de vérifier si une classe sera disponible même en mode --no-dev.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/5.3/src/Symfony/Component/DependencyInjection/ContainerBuilder.php#L1454',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
-                ],
-            ],
-
-            // Q23 - PHP - PHP_FLOAT_EPSILON
-            [
-                'category' => $php,
-                'subcategory' => $subcategories['PHP:Data Format & Types'] ?? $subcategories['PHP:PHP Basics'],
-                'text' => 'How is called the PHP constant representing the smallest possible number <code>n</code>, so that <code>1.0 + n != 1.0</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'PHP_FLOAT_EPSILON représente la plus petite valeur positive x telle que x + 1.0 != 1.0.',
-                'resourceUrl' => 'https://www.php.net/manual/en/reserved.constants.php',
-                'answers' => [
-                    ['text' => '<code>PHP_FLOAT_EPSILON</code>', 'correct' => true],
-                    ['text' => '<code>PHP_FLOAT_MIN</code>', 'correct' => false],
-                    ['text' => '<code>PHP_FLOAT_SMALLEST</code>', 'correct' => false],
-                    ['text' => '<code>PHP_FLOAT_DIG</code>', 'correct' => false],
-                ],
-            ],
-
-            // Q24 - Twig - FilesystemCache
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'Given the case where the opcache/APC cache for template need to be invalidated, is the following code valid?
-<pre><code class="language-php">&lt;?php
-
-// ...
-
-$twig = new Environment($loader, [
-    \'cache\' => new FilesystemCache(\'/some/cache/path\', 1),
-    // ...
-]);</code></pre>',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'Oui, le second paramètre de FilesystemCache permet de forcer l\'invalidation du cache opcache/APC.',
-                'resourceUrl' => 'https://twig.symfony.com/doc/1.x/recipes.html#refreshing-modified-templates-when-opcache-or-apc-is-enabled',
                 'answers' => [
                     ['text' => 'Yes', 'correct' => true],
                     ['text' => 'No', 'correct' => false],
@@ -578,57 +421,6 @@ $twig = new Environment($loader, [
                 ],
             ],
 
-            // Q27 - Routing - Extra parameters
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Routing'],
-                'text' => 'Given the following definition of the <code>book_list</code> route, what will be the value of the variable <code>$url</code>?
-<pre><code class="language-yaml"># app/config/routing.yml
-book_list:
-    path:     /books
-    defaults: { _controller: AppBundle:Default:list }
-    methods:  [POST]</code></pre>
-<pre><code class="language-php"> // src/AppBundle/Controller/HomeController.php
-
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
-class HomeController extends Controller {
-
-    public function indexAction() {
-        $url = $this->generateUrl(\'book_list\', [\'page\' => 1]);
-        // ...
-    }
-}</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Les paramètres supplémentaires non définis dans la route sont ajoutés comme query string.',
-                'resourceUrl' => 'https://symfony.com/doc/3.4/routing.html#generating-urls-with-query-strings',
-                'answers' => [
-                    ['text' => '/books?page=1', 'correct' => true],
-                    ['text' => 'https://example.com/books?_page=1', 'correct' => false],
-                    ['text' => 'Error: Parameter "page" is not defined.', 'correct' => false],
-                    ['text' => '/books?_page=1', 'correct' => false],
-                    ['text' => 'https://example.com/books?page=1', 'correct' => false],
-                ],
-            ],
-
-            // Q28 - Form - RepeatedType
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Forms'],
-                'text' => 'What solution can you use to ask the user to type his password twice in a form?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'RepeatedType crée deux champs qui doivent avoir la même valeur, parfait pour la confirmation de mot de passe.',
-                'resourceUrl' => 'https://symfony.com/doc/current/reference/forms/types/repeated.html',
-                'answers' => [
-                    ['text' => 'Use the <code>RepeatedType</code> form type.', 'correct' => true],
-                    ['text' => 'Use the <strong>Validation</strong> plugin of <strong>jQuery</strong>.', 'correct' => false],
-                    ['text' => 'Call the <code>render_widget</code> twig function twice on the password form type.', 'correct' => false],
-                    ['text' => 'Use the <code>ask_confirmation</code> option on the <code>PasswordType</code> form type.', 'correct' => false],
-                ],
-            ],
-
             // Q29 - VarDumper - Cloners
             [
                 'category' => $symfony,
@@ -644,21 +436,6 @@ class HomeController extends Controller {
                     ['text' => 'A cloner is used to create a <code>var_export</code> of any PHP variable.', 'correct' => false],
                     ['text' => 'A cloner is used to create an ReflectionClass of any PHP object.', 'correct' => false],
                     ['text' => 'A cloner is used to create an clone of any PHP object.', 'correct' => false],
-                ],
-            ],
-
-            // Q30 - HttpFoundation - FlashBag setAll
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpFoundation'],
-                'text' => 'Could all <code>FlashBag</code> messages be overridden?',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 1,
-                'explanation' => 'Oui, la méthode setAll() permet de remplacer tous les messages du FlashBag.',
-                'resourceUrl' => 'https://github.com/symfony/symfony/blob/2.1/src/Symfony/Component/HttpFoundation/Session/Flash/FlashBag.php#L127',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
                 ],
             ],
 

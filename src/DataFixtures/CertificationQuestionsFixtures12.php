@@ -19,7 +19,7 @@ class CertificationQuestionsFixtures12 extends Fixture implements DependentFixtu
 
     public static function getGroups(): array
     {
-        return ['certification', 'questions'];
+        return ['questions'];
     }
 
     public function getDependencies(): array

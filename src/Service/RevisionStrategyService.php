@@ -257,7 +257,7 @@ class RevisionStrategyService
      */
     private function generateWeeklyPlan(array $priorityTopics): array
     {
-        $days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
+        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
         $plan = [];
 
         // Mix weak areas with not attempted topics
@@ -276,30 +276,30 @@ class RevisionStrategyService
             if ($index < 5) { // Weekdays
                 if (isset($focusTopics[$index])) {
                     $topic = $focusTopics[$index];
-                    $dayPlan['focus'] = $topic['name'] ?? $topic['subcategoryName'] ?? 'Révision générale';
+                    $dayPlan['focus'] = $topic['name'] ?? $topic['subcategoryName'] ?? 'General revision';
                     $dayPlan['activities'] = [
-                        ['type' => 'study', 'duration' => 30, 'description' => 'Lecture de la documentation'],
-                        ['type' => 'practice', 'duration' => 30, 'description' => 'Quiz ciblé (15-20 questions)'],
-                        ['type' => 'review', 'duration' => 15, 'description' => 'Révision des erreurs'],
+                        ['type' => 'study', 'duration' => 30, 'description' => 'Reading documentation'],
+                        ['type' => 'practice', 'duration' => 30, 'description' => 'Targeted quiz (15-20 questions)'],
+                        ['type' => 'review', 'duration' => 15, 'description' => 'Review errors'],
                     ];
                 } else {
-                    $dayPlan['focus'] = 'Révision générale';
+                    $dayPlan['focus'] = 'General revision';
                     $dayPlan['activities'] = [
-                        ['type' => 'practice', 'duration' => 45, 'description' => 'Quiz mixte (25 questions)'],
-                        ['type' => 'review', 'duration' => 15, 'description' => 'Révision des concepts difficiles'],
+                        ['type' => 'practice', 'duration' => 45, 'description' => 'Mixed quiz (25 questions)'],
+                        ['type' => 'review', 'duration' => 15, 'description' => 'Review difficult concepts'],
                     ];
                 }
             } elseif ($index === 5) { // Saturday - Exam simulation
-                $dayPlan['focus'] = 'Simulation d\'examen';
+                $dayPlan['focus'] = 'Exam simulation';
                 $dayPlan['activities'] = [
-                    ['type' => 'exam', 'duration' => 90, 'description' => 'Examen blanc certification (75 questions)'],
-                    ['type' => 'review', 'duration' => 30, 'description' => 'Analyse détaillée des résultats'],
+                    ['type' => 'exam', 'duration' => 90, 'description' => 'Mock certification exam (75 questions)'],
+                    ['type' => 'review', 'duration' => 30, 'description' => 'Detailed results analysis'],
                 ];
             } else { // Sunday - Light revision
-                $dayPlan['focus'] = 'Révision légère';
+                $dayPlan['focus'] = 'Light revision';
                 $dayPlan['activities'] = [
-                    ['type' => 'review', 'duration' => 30, 'description' => 'Relecture des notes de la semaine'],
-                    ['type' => 'rest', 'duration' => 0, 'description' => 'Repos et détente'],
+                    ['type' => 'review', 'duration' => 30, 'description' => 'Re-reading weekly notes'],
+                    ['type' => 'rest', 'duration' => 0, 'description' => 'Rest and relaxation'],
                 ];
             }
 
@@ -323,49 +323,49 @@ class RevisionStrategyService
         if ($successRate < 50) {
             $goals[] = [
                 'icon' => 'book',
-                'title' => 'Étude approfondie',
-                'target' => '1-2 heures de lecture de documentation par jour',
-                'reason' => 'Renforcer les bases avant la pratique intensive',
+                'title' => 'In-depth study',
+                'target' => '1-2 hours of documentation reading per day',
+                'reason' => 'Strengthen fundamentals before intensive practice',
             ];
             $goals[] = [
                 'icon' => 'tasks',
-                'title' => 'Pratique modérée',
-                'target' => '20-30 questions par jour',
-                'reason' => 'Consolider les connaissances progressivement',
+                'title' => 'Moderate practice',
+                'target' => '20-30 questions per day',
+                'reason' => 'Gradually consolidate knowledge',
             ];
         } elseif ($successRate < 70) {
             $goals[] = [
                 'icon' => 'tasks',
-                'title' => 'Pratique régulière',
-                'target' => '40-50 questions par jour',
-                'reason' => 'Améliorer le taux de réussite vers 70%+',
+                'title' => 'Regular practice',
+                'target' => '40-50 questions per day',
+                'reason' => 'Improve success rate to 70%+',
             ];
             $goals[] = [
                 'icon' => 'exclamation-triangle',
-                'title' => 'Focus sur les erreurs',
-                'target' => 'Revoir chaque question ratée',
-                'reason' => 'Identifier et corriger les lacunes',
+                'title' => 'Focus on errors',
+                'target' => 'Review each failed question',
+                'reason' => 'Identify and correct gaps',
             ];
         } else {
             $goals[] = [
                 'icon' => 'tasks',
-                'title' => 'Maintien du niveau',
-                'target' => '30-40 questions par jour',
-                'reason' => 'Maintenir la préparation sans surmenage',
+                'title' => 'Maintain level',
+                'target' => '30-40 questions per day',
+                'reason' => 'Maintain preparation without burnout',
             ];
             $goals[] = [
                 'icon' => 'certificate',
-                'title' => 'Simulations régulières',
-                'target' => '2-3 examens blancs par semaine',
-                'reason' => 'Se préparer aux conditions réelles',
+                'title' => 'Regular simulations',
+                'target' => '2-3 mock exams per week',
+                'reason' => 'Prepare for real exam conditions',
             ];
         }
 
         $goals[] = [
             'icon' => 'clock',
-            'title' => 'Gestion du temps',
-            'target' => 'Moins de 1 minute par question',
-            'reason' => 'L\'examen dure 90 min pour 75 questions',
+            'title' => 'Time management',
+            'target' => 'Less than 1 minute per question',
+            'reason' => 'The exam is 90 min for 75 questions',
         ];
 
         return $goals;
@@ -437,17 +437,17 @@ class RevisionStrategyService
         $finalScore = ($coverageScore * 0.2) + ($performanceScore * 0.6) + ($consistencyScore * 0.2);
 
         $status = 'not-ready';
-        $message = 'Continuez à pratiquer régulièrement.';
+        $message = 'Keep practicing regularly.';
 
         if ($finalScore >= 85) {
             $status = 'ready';
-            $message = 'Vous êtes prêt pour la certification !';
+            $message = 'You are ready for the certification!';
         } elseif ($finalScore >= 70) {
             $status = 'almost-ready';
-            $message = 'Encore quelques efforts et vous serez prêt.';
+            $message = 'A few more efforts and you will be ready.';
         } elseif ($finalScore >= 50) {
             $status = 'in-progress';
-            $message = 'Bonne progression, continuez ainsi.';
+            $message = 'Good progress, keep it up.';
         }
 
         return [
@@ -476,9 +476,9 @@ class RevisionStrategyService
             $recommendations[] = [
                 'type' => 'practice',
                 'priority' => 'high',
-                'title' => 'Plus de pratique nécessaire',
-                'description' => 'Vous n\'avez répondu qu\'à ' . $totalQuestions . ' questions. Visez au moins 500 questions pour une bonne préparation.',
-                'action' => 'Commencez un quiz maintenant',
+                'title' => 'More practice needed',
+                'description' => 'You have only answered ' . $totalQuestions . ' questions. Aim for at least 500 questions for good preparation.',
+                'action' => 'Start a quiz now',
                 'actionUrl' => '/quiz/start',
             ];
         }
@@ -489,9 +489,9 @@ class RevisionStrategyService
             $recommendations[] = [
                 'type' => 'focus',
                 'priority' => 'high',
-                'title' => 'Zones à améliorer',
-                'description' => 'Concentrez-vous sur : ' . implode(', ', $weakNames),
-                'action' => 'Voir les zones faibles',
+                'title' => 'Areas to improve',
+                'description' => 'Focus on: ' . implode(', ', $weakNames),
+                'action' => 'View weak areas',
                 'actionUrl' => '/statistics/weak-areas',
             ];
         }
@@ -502,9 +502,9 @@ class RevisionStrategyService
             $recommendations[] = [
                 'type' => 'exam',
                 'priority' => 'medium',
-                'title' => 'Essayez le mode certification',
-                'description' => 'Les simulations d\'examen sont essentielles pour se préparer aux conditions réelles.',
-                'action' => 'Lancer un examen blanc',
+                'title' => 'Try certification mode',
+                'description' => 'Exam simulations are essential to prepare for real conditions.',
+                'action' => 'Start a mock exam',
                 'actionUrl' => '/quiz/start?mode=certification',
             ];
         }
@@ -515,9 +515,9 @@ class RevisionStrategyService
             $recommendations[] = [
                 'type' => 'study',
                 'priority' => 'high',
-                'title' => 'Renforcez vos connaissances',
-                'description' => 'Votre taux de réussite est de ' . round($successRate, 1) . '%. Étudiez la documentation Symfony pour améliorer ce score.',
-                'action' => 'Documentation Symfony',
+                'title' => 'Strengthen your knowledge',
+                'description' => 'Your success rate is ' . round($successRate, 1) . '%. Study the Symfony documentation to improve this score.',
+                'action' => 'Symfony Documentation',
                 'actionUrl' => 'https://symfony.com/doc/current/index.html',
             ];
         }
@@ -527,8 +527,8 @@ class RevisionStrategyService
             $recommendations[] = [
                 'type' => 'success',
                 'priority' => 'low',
-                'title' => 'Excellent travail !',
-                'description' => 'Vous maîtrisez ' . count($strongAreas) . ' sujets avec plus de 80% de réussite. Continuez ainsi !',
+                'title' => 'Excellent work!',
+                'description' => 'You have mastered ' . count($strongAreas) . ' topics with over 80% success rate. Keep it up!',
                 'action' => null,
                 'actionUrl' => null,
             ];

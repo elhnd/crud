@@ -22,7 +22,7 @@ class CertificationQuestionsFixtures18 extends Fixture implements FixtureGroupIn
 
     public static function getGroups(): array
     {
-        return ['certification'];
+        return ['questions'];
     }
 
     public function load(ObjectManager $manager): void

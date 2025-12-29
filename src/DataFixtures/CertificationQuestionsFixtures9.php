@@ -21,7 +21,7 @@ class CertificationQuestionsFixtures9 extends Fixture implements DependentFixtur
 
     public static function getGroups(): array
     {
-        return ['certification', 'questions'];
+        return ['questions'];
     }
 
     public function getDependencies(): array
@@ -405,12 +405,12 @@ class CertificationQuestionsFixtures9 extends Fixture implements DependentFixtur
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 3,
                 'explanation' => 'The defined processor only checks if the env var exists, regardless of its value.',
-                'resourceUrl' => 'https://symfony.com/doc/6.4/configuration/env_var_processors.html',
+                'resourceUrl' => 'https://symfony.com/doc/6.4/configuration/env_var_processors.html, https://github.com/symfony/symfony/blob/6.4/src/Symfony/Component/DependencyInjection/EnvVarProcessor.php#L107',
                 'answers' => [
                     ['text' => "When the FOO environment variable doesn't exist", 'correct' => true],
-                    ['text' => 'When FOO is an empty string', 'correct' => false],
+                    ['text' => 'When FOO is an empty string', 'correct' => true],
                     ['text' => 'When FOO equals to "false"', 'correct' => false],
-                    ['text' => 'When FOO is null', 'correct' => false],
+                    ['text' => 'When FOO is null', 'correct' => true],
                     ['text' => 'When FOO contains only spaces', 'correct' => false],
                 ],
             ],

@@ -19,7 +19,7 @@ class CertificationExamFixtures2 extends Fixture implements FixtureGroupInterfac
     use UpsertQuestionTrait;
     public static function getGroups(): array
     {
-        return ['certification', 'certification2'];
+        return ['exam'];
     }
 
     public function load(ObjectManager $manager): void

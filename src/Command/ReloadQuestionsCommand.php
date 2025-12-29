@@ -14,7 +14,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:reload-questions',
-    description: 'Recharge les fixtures de questions sans effacer les autres données (statistiques, sessions, etc.)',
+    description: 'Reload question fixtures without erasing other data (statistics, sessions, etc.)',
 )]
 class ReloadQuestionsCommand extends Command
 {
@@ -27,8 +27,8 @@ class ReloadQuestionsCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'Groupe de fixtures à charger', 'questions')
-            ->addOption('migrate-identifiers', null, InputOption::VALUE_NONE, 'Génère les identifiants pour les questions existantes qui n\'en ont pas')
+            ->addOption('group', 'g', InputOption::VALUE_REQUIRED, 'Fixture group to load', 'questions')
+            ->addOption('migrate-identifiers', null, InputOption::VALUE_NONE, 'Generate identifiers for existing questions that do not have one')
         ;
     }
 
@@ -42,12 +42,12 @@ class ReloadQuestionsCommand extends Command
             $this->migrateExistingQuestions($io);
         }
 
-        $io->section(sprintf('Chargement des fixtures du groupe "%s"...', $group));
+        $io->section(sprintf('Loading fixtures from group "%s"...', $group));
 
         // Charger les fixtures avec --append
         $application = $this->getApplication();
         if (!$application) {
-            $io->error('Application non disponible');
+            $io->error('Application not available');
             return Command::FAILURE;
         }
 
@@ -61,27 +61,27 @@ class ReloadQuestionsCommand extends Command
         $returnCode = $fixturesCommand->run($fixturesInput, $output);
 
         if ($returnCode === Command::SUCCESS) {
-            $io->success('Les fixtures ont été rechargées avec succès !');
-            $io->note('Les IDs des questions existantes ont été préservés.');
+            $io->success('Fixtures have been reloaded successfully!');
+            $io->note('Existing question IDs have been preserved.');
         } else {
-            $io->error('Erreur lors du chargement des fixtures');
+            $io->error('Error loading fixtures');
         }
 
         return $returnCode;
     }
 
     /**
-     * Génère les identifiants pour les questions existantes qui n'en ont pas
+     * Generate identifiers for existing questions that do not have one
      */
     private function migrateExistingQuestions(SymfonyStyle $io): void
     {
-        $io->section('Migration des identifiants des questions existantes...');
+        $io->section('Migrating identifiers for existing questions...');
 
         $questionRepo = $this->entityManager->getRepository(Question::class);
         $questions = $questionRepo->findBy(['identifier' => null]);
 
         if (empty($questions)) {
-            $io->info('Toutes les questions ont déjà un identifiant.');
+            $io->info('All questions already have an identifier.');
             return;
         }
 
@@ -120,6 +120,6 @@ class ReloadQuestionsCommand extends Command
         }
 
         $this->entityManager->flush();
-        $io->success(sprintf('%d questions ont reçu un identifiant (%d doublons détectés).', $count, $duplicates));
+        $io->success(sprintf('%d questions received an identifier (%d duplicates detected).', $count, $duplicates));
     }
 }

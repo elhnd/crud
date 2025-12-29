@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Stratégie de Révision - Certification Symfony{% endblock %}
+{% block title %}Revision Strategy - Symfony Certification{% endblock %}
 
 {% block body %}
 <div class="min-h-screen bg-gradient-to-br via-white">
@@ -12,14 +12,14 @@
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900">
                         <i class="fas fa-graduation-cap text-indigo-600 mr-3"></i>
-                        Stratégie de Révision
+                        Revision Strategy
                     </h1>
-                    <p class="mt-2 text-gray-600">Plan personnalisé pour réussir la certification Symfony</p>
+                    <p class="mt-2 text-gray-600">Personalized plan to pass the Symfony certification</p>
                 </div>
                 <a href="{{ path('quiz_start_form') }}" 
                    class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
                     <i class="fas fa-play mr-2"></i>
-                    Commencer un quiz
+                    Start a Quiz
                 </a>
             </div>
         </div>
@@ -29,7 +29,7 @@
             <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
                 <h2 class="text-xl font-bold text-white">
                     <i class="fas fa-tachometer-alt mr-2"></i>
-                    Score de Préparation
+                    Readiness Score
                 </h2>
             </div>
             <div class="p-6">
@@ -63,18 +63,18 @@
                     <div class="flex-1 grid grid-cols-3 gap-4">
                         <div class="text-center p-4 bg-blue-50 rounded-lg">
                             <div class="text-2xl font-bold text-blue-600">{{ strategy.readinessScore.coverageScore }}%</div>
-                            <div class="text-sm text-gray-600">Couverture</div>
-                            <div class="text-xs text-gray-400">Questions uniques vues</div>
+                            <div class="text-sm text-gray-600">Coverage</div>
+                            <div class="text-xs text-gray-400">Unique questions seen</div>
                         </div>
                         <div class="text-center p-4 bg-green-50 rounded-lg">
                             <div class="text-2xl font-bold text-green-600">{{ strategy.readinessScore.performanceScore|number_format(1) }}%</div>
                             <div class="text-sm text-gray-600">Performance</div>
-                            <div class="text-xs text-gray-400">Taux de réussite</div>
+                            <div class="text-xs text-gray-400">Success rate</div>
                         </div>
                         <div class="text-center p-4 bg-purple-50 rounded-lg">
                             <div class="text-2xl font-bold text-purple-600">{{ strategy.readinessScore.consistencyScore }}%</div>
-                            <div class="text-sm text-gray-600">Régularité</div>
-                            <div class="text-xs text-gray-400">Équilibre des sujets</div>
+                            <div class="text-sm text-gray-600">Consistency</div>
+                            <div class="text-xs text-gray-400">Topic balance</div>
                         </div>
                     </div>
 
@@ -83,12 +83,12 @@
                         <div class="text-4xl font-bold {% if strategy.overallStats.bestCertScore >= 70 %}text-green-600{% else %}text-gray-600{% endif %}">
                             {{ strategy.overallStats.bestCertScore }}%
                         </div>
-                        <div class="text-sm text-gray-600 mt-1">Meilleur score certif</div>
+                        <div class="text-sm text-gray-600 mt-1">Best cert score</div>
                         <div class="text-xs text-gray-400 mt-2">
                             {{ strategy.overallStats.certificationAttempts }} simulation(s)
                         </div>
                         <div class="mt-2 text-xs {% if strategy.overallStats.bestCertScore >= 70 %}text-green-600{% else %}text-amber-600{% endif %}">
-                            Seuil de passage : 70%
+                            Passing threshold: 70%
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                     </div>
                     <div class="ml-4">
                         <div class="text-2xl font-bold text-gray-800">{{ strategy.practiceStats.questionsAttempted }}</div>
-                        <div class="text-sm text-gray-500">Questions répondues</div>
+                        <div class="text-sm text-gray-500">Questions answered</div>
                     </div>
                 </div>
             </div>
@@ -115,7 +115,7 @@
                     </div>
                     <div class="ml-4">
                         <div class="text-2xl font-bold text-gray-800">{{ strategy.practiceStats.uniqueQuestionsAttempted }}</div>
-                        <div class="text-sm text-gray-500">Questions uniques</div>
+                        <div class="text-sm text-gray-500">Unique questions</div>
                     </div>
                 </div>
             </div>
@@ -126,7 +126,7 @@
                     </div>
                     <div class="ml-4">
                         <div class="text-2xl font-bold text-gray-800">{{ strategy.practiceStats.totalQuestionsInDb }}</div>
-                        <div class="text-sm text-gray-500">Questions disponibles</div>
+                        <div class="text-sm text-gray-500">Available questions</div>
                     </div>
                 </div>
             </div>
@@ -137,7 +137,7 @@
                     </div>
                     <div class="ml-4">
                         <div class="text-2xl font-bold text-gray-800">{{ strategy.practiceStats.coveragePercentage }}%</div>
-                        <div class="text-sm text-gray-500">Couverture</div>
+                        <div class="text-sm text-gray-500">Coverage</div>
                     </div>
                 </div>
             </div>
@@ -151,7 +151,7 @@
                 <div class="bg-amber-50 px-6 py-4 border-b border-amber-100">
                     <h2 class="text-xl font-bold text-amber-800">
                         <i class="fas fa-lightbulb mr-2"></i>
-                        Recommandations Personnalisées
+                        Personalized Recommendations
                     </h2>
                 </div>
                 <div class="p-6">
@@ -189,7 +189,7 @@
                         {% endfor %}
                     </div>
                     {% else %}
-                    <p class="text-gray-500 text-center py-4">Commencez à pratiquer pour recevoir des recommandations personnalisées.</p>
+                    <p class="text-gray-500 text-center py-4">Start practicing to receive personalized recommendations.</p>
                     {% endif %}
                 </div>
             </div>
@@ -199,7 +199,7 @@
                 <div class="bg-green-50 px-6 py-4 border-b border-green-100">
                     <h2 class="text-xl font-bold text-green-800">
                         <i class="fas fa-bullseye mr-2"></i>
-                        Objectifs Quotidiens
+                        Daily Goals
                     </h2>
                 </div>
                 <div class="p-6">
@@ -226,9 +226,9 @@
             <div class="bg-indigo-50 px-6 py-4 border-b border-indigo-100">
                 <h2 class="text-xl font-bold text-indigo-800">
                     <i class="fas fa-chart-pie mr-2"></i>
-                    Analyse par Sujet de Certification
+                    Topic Analysis by Certification Subject
                 </h2>
-                <p class="text-sm text-indigo-600 mt-1">Basé sur les sujets officiels de l'examen Symfony</p>
+                <p class="text-sm text-indigo-600 mt-1">Based on official Symfony exam topics</p>
             </div>
             <div class="p-6">
                 <div class="space-y-4">
@@ -248,17 +248,17 @@
                                     {% elseif data.status == 'moderate' %}bg-amber-100 text-amber-700
                                     {% elseif data.status == 'weak' %}bg-red-100 text-red-700
                                     {% else %}bg-gray-100 text-gray-700{% endif %}">
-                                    {% if data.status == 'strong' %}Maîtrisé
-                                    {% elseif data.status == 'moderate' %}À renforcer
-                                    {% elseif data.status == 'weak' %}À travailler
-                                    {% else %}Non commencé{% endif %}
+                                    {% if data.status == 'strong' %}Mastered
+                                    {% elseif data.status == 'moderate' %}Needs Review
+                                    {% elseif data.status == 'weak' %}Needs Work
+                                    {% else %}Not Started{% endif %}
                                 </span>
                             </div>
                         </div>
                         <!-- Progress bar for coverage -->
                         <div class="mt-2">
                             <div class="flex justify-between text-xs text-gray-500 mb-1">
-                                <span>Couverture</span>
+                                <span>Coverage</span>
                                 <span>{{ data.coverage }}%</span>
                             </div>
                             <div class="w-full bg-gray-200 rounded-full h-2">
@@ -294,7 +294,7 @@
             <div class="bg-purple-50 px-6 py-4 border-b border-purple-100">
                 <h2 class="text-xl font-bold text-purple-800">
                     <i class="fas fa-calendar-week mr-2"></i>
-                    Plan de Révision Hebdomadaire
+                    Weekly Revision Plan
                 </h2>
             </div>
             <div class="p-6">
@@ -336,7 +336,7 @@
                 <div class="bg-red-50 px-6 py-4 border-b border-red-100">
                     <h2 class="text-xl font-bold text-red-800">
                         <i class="fas fa-exclamation-triangle mr-2"></i>
-                        Zones à Améliorer en Priorité
+                        Priority Areas to Improve
                     </h2>
                 </div>
                 <div class="p-6">
@@ -361,7 +361,7 @@
                     {% else %}
                     <div class="text-center py-8 text-gray-500">
                         <i class="fas fa-check-circle text-4xl text-green-500 mb-2"></i>
-                        <p>Aucune zone faible détectée ! Excellent travail !</p>
+                        <p>No weak areas detected! Excellent work!</p>
                     </div>
                     {% endif %}
                 </div>
@@ -372,7 +372,7 @@
                 <div class="bg-blue-50 px-6 py-4 border-b border-blue-100">
                     <h2 class="text-xl font-bold text-blue-800">
                         <i class="fas fa-compass mr-2"></i>
-                        Sujets Non Explorés
+                        Unexplored Topics
                     </h2>
                 </div>
                 <div class="p-6">
@@ -397,7 +397,7 @@
                     {% else %}
                     <div class="text-center py-8 text-gray-500">
                         <i class="fas fa-trophy text-4xl text-amber-500 mb-2"></i>
-                        <p>Vous avez exploré tous les sujets !</p>
+                        <p>You've explored all topics!</p>
                     </div>
                     {% endif %}
                 </div>
@@ -410,7 +410,7 @@
             <div class="bg-orange-50 px-6 py-4 border-b border-orange-100">
                 <h2 class="text-xl font-bold text-orange-800">
                     <i class="fas fa-times-circle mr-2"></i>
-                    Questions les Plus Ratées
+                    Most Failed Questions
                 </h2>
             </div>
             <div class="p-6">
@@ -423,7 +423,7 @@
                             </div>
                             <div class="text-right">
                                 <span class="text-red-600 font-bold">{{ q.failureRate|number_format(0) }}%</span>
-                                <div class="text-xs text-gray-500">d'erreurs</div>
+                                <div class="text-xs text-gray-500">failure rate</div>
                                 <div class="text-xs text-gray-400">({{ q.wrongCount }}/{{ q.totalAttempts }})</div>
                             </div>
                         </div>
@@ -438,22 +438,22 @@
         <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg p-6 text-white">
             <h2 class="text-xl font-bold mb-4">
                 <i class="fas fa-bolt mr-2"></i>
-                Actions Rapides
+                Quick Actions
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <a href="{{ path('quiz_start_form') }}" 
                    class="flex items-center p-4 bg-white/10 rounded-lg hover:bg-white/20 transition">
                     <i class="fas fa-play text-2xl mr-3"></i>
                     <div>
-                        <div class="font-semibold">Quiz Standard</div>
-                        <div class="text-sm opacity-80">Entraînement libre</div>
+                        <div class="font-semibold">Standard Quiz</div>
+                        <div class="text-sm opacity-80">Free practice</div>
                     </div>
                 </a>
                 <a href="{{ path('quiz_start_form') }}?mode=certification" 
                    class="flex items-center p-4 bg-white/10 rounded-lg hover:bg-white/20 transition">
                     <i class="fas fa-certificate text-2xl mr-3"></i>
                     <div>
-                        <div class="font-semibold">Examen Blanc</div>
+                        <div class="font-semibold">Mock Exam</div>
                         <div class="text-sm opacity-80">75 questions, 90 min</div>
                     </div>
                 </a>
@@ -461,16 +461,16 @@
                    class="flex items-center p-4 bg-white/10 rounded-lg hover:bg-white/20 transition">
                     <i class="fas fa-exclamation-circle text-2xl mr-3"></i>
                     <div>
-                        <div class="font-semibold">Zones Faibles</div>
-                        <div class="text-sm opacity-80">Analyse détaillée</div>
+                        <div class="font-semibold">Weak Areas</div>
+                        <div class="text-sm opacity-80">Detailed analysis</div>
                     </div>
                 </a>
                 <a href="{{ path('statistics_dashboard') }}" 
                    class="flex items-center p-4 bg-white/10 rounded-lg hover:bg-white/20 transition">
                     <i class="fas fa-chart-line text-2xl mr-3"></i>
                     <div>
-                        <div class="font-semibold">Statistiques</div>
-                        <div class="text-sm opacity-80">Vue d'ensemble</div>
+                        <div class="font-semibold">Statistics</div>
+                        <div class="text-sm opacity-80">Overview</div>
                     </div>
                 </a>
             </div>

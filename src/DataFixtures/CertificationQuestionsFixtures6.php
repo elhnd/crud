@@ -21,7 +21,7 @@ class CertificationQuestionsFixtures6 extends Fixture implements DependentFixtur
 
     public static function getGroups(): array
     {
-        return ['certification', 'questions'];
+        return ['questions'];
     }
 
     public function getDependencies(): array

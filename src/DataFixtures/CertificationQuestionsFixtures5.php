@@ -20,7 +20,7 @@ class CertificationQuestionsFixtures5 extends Fixture implements DependentFixtur
     use UpsertQuestionTrait;
     public static function getGroups(): array
     {
-        return ['certification', 'questions'];
+        return ['questions'];
     }
 
     public function getDependencies(): array
