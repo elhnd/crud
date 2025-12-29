@@ -41,6 +41,7 @@ class QuestionAdminController extends AbstractController
         $difficultyParam = $request->query->get('difficulty');
         $difficulty = $difficultyParam !== null && $difficultyParam !== '' ? (int) $difficultyParam : null;
         $certification = $request->query->get('certification');
+        $active = $request->query->get('active');
 
         $result = $this->questionService->findPaginated(
             $page,
@@ -50,7 +51,8 @@ class QuestionAdminController extends AbstractController
             $subcategoryId,
             $type,
             $difficulty,
-            $certification
+            $certification,
+            $active
         );
 
         $stats = $this->questionService->getStatistics();
@@ -70,6 +72,7 @@ class QuestionAdminController extends AbstractController
                 'type' => $type,
                 'difficulty' => $difficulty,
                 'certification' => $certification,
+                'active' => $active,
             ],
             'pagination' => [
                 'page' => $page,

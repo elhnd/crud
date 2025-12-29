@@ -155,6 +155,15 @@
                     </select>
                 </div>
 
+                <div>
+                    <label class="block text-xs font-medium text-gray-500 mb-1">Status</label>
+                    <select name="active" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                        <option value="">All</option>
+                        <option value="1" {{ filters.active == '1' ? 'selected' : '' }}>Active Only</option>
+                        <option value="0" {{ filters.active == '0' ? 'selected' : '' }}>Inactive Only</option>
+                    </select>
+                </div>
+
                 <div class="flex gap-2">
                     <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700 transition">
                         <i class="fas fa-filter mr-1"></i> Filter
@@ -201,13 +210,18 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     {% for question in questions %}
-                    <tr class="hover:bg-gray-50">
+                    <tr class="hover:bg-gray-50 {{ not question.isActive ? 'opacity-60' : '' }}">
                         <td class="px-4 py-3">
                             <input type="checkbox" name="question_id" value="{{ question.id }}" class="question-checkbox rounded text-indigo-600">
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-600 font-mono">#{{ question.id }}</td>
                         <td class="px-4 py-3">
                             <div class="flex items-start gap-2">
+                                {% if not question.isActive %}
+                                    <span class="bg-red-100 text-red-700 px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0" title="Inactive">
+                                        <i class="fas fa-eye-slash"></i>
+                                    </span>
+                                {% endif %}
                                 {% if question.isCertification %}
                                     <span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0">
                                         <i class="fas fa-certificate"></i>
@@ -249,9 +263,14 @@
                         </td>
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-1">
+                                <button type="button" onclick="toggleQuestionActive({{ question.id }}, this)" 
+                                   class="p-1.5 {{ question.isActive ? 'text-green-600 hover:text-red-600 hover:bg-red-50' : 'text-red-600 hover:text-green-600 hover:bg-green-50' }} rounded transition" 
+                                   title="{{ question.isActive ? 'Click to deactivate' : 'Click to activate' }}">
+                                    <i class="fas {{ question.isActive ? 'fa-eye' : 'fa-eye-slash' }}"></i>
+                                </button>
                                 <a href="{{ path('admin_question_show', {id: question.id}) }}" 
                                    class="p-1.5 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded" title="View">
-                                    <i class="fas fa-eye"></i>
+                                    <i class="fas fa-search"></i>
                                 </a>
                                 <a href="{{ path('admin_question_edit', {id: question.id}) }}" 
                                    class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded" title="Edit">
@@ -387,6 +406,53 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+async function toggleQuestionActive(questionId, button) {
+    try {
+        const response = await fetch(`/api/question/${questionId}/toggle-active`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const icon = button.querySelector('i');
+            
+            if (data.isActive) {
+                button.classList.remove('text-red-600', 'hover:text-green-600', 'hover:bg-green-50');
+                button.classList.add('text-green-600', 'hover:text-red-600', 'hover:bg-red-50');
+                button.title = 'Click to deactivate';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                button.classList.remove('text-green-600', 'hover:text-red-600', 'hover:bg-red-50');
+                button.classList.add('text-red-600', 'hover:text-green-600', 'hover:bg-green-50');
+                button.title = 'Click to activate';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+            
+            showNotification(data.message, 'success');
+        } else {
+            showNotification('Failed to toggle question status', 'error');
+        }
+    } catch (error) {
+        showNotification('Error toggling question status', 'error');
+        console.error(error);
+    }
+}
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 text-white font-medium ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+    notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>${message}`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
 </script>
 {% endblock %}
 {% endblock %}

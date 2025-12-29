@@ -64,11 +64,18 @@
                         <h3 class="text-xl font-semibold text-gray-800 mb-2 question-text flex-1">
                             {{ answer.question.text|format_code }}
                         </h3>
-                        <button type="button" onclick="openEditModal({{ answer.question.id }})" 
-                                class="ml-4 text-gray-400 hover:text-indigo-600 transition"
-                                title="Edit question or answers">
-                            <i class="fas fa-edit text-lg"></i>
-                        </button>
+                        <div class="flex items-center space-x-2 ml-4">
+                            <button type="button" onclick="toggleQuestionActive({{ answer.question.id }}, this)" 
+                                    class="toggle-active-btn {{ answer.question.isActive ? 'text-green-600 hover:text-red-600' : 'text-red-600 hover:text-green-600' }} transition"
+                                    title="{{ answer.question.isActive ? 'Click to deactivate this question' : 'Click to activate this question' }}">
+                                <i class="fas {{ answer.question.isActive ? 'fa-eye' : 'fa-eye-slash' }} text-lg"></i>
+                            </button>
+                            <button type="button" onclick="openEditModal({{ answer.question.id }})" 
+                                    class="text-gray-400 hover:text-indigo-600 transition"
+                                    title="Edit question or answers">
+                                <i class="fas fa-edit text-lg"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="flex items-center space-x-3 text-sm text-gray-500">
                         <span class="bg-gray-100 px-2 py-1 rounded">
@@ -85,6 +92,10 @@
                             {% else %}
                                 <i class="fas fa-toggle-on mr-1"></i> True/False
                             {% endif %}
+                        </span>
+                        <span class="toggle-status-text {{ answer.question.isActive ? 'text-green-600' : 'text-red-600' }}">
+                            <i class="fas {{ answer.question.isActive ? 'fa-check-circle' : 'fa-times-circle' }} mr-1"></i>
+                            {{ answer.question.isActive ? 'Active' : 'Inactive' }}
                         </span>
                     </div>
                 </div>
@@ -397,6 +408,57 @@ function showNotification(message, type) {
     setTimeout(() => {
         notification.remove();
     }, 3000);
+}
+
+async function toggleQuestionActive(questionId, button) {
+    try {
+        const response = await fetch(`/api/question/${questionId}/toggle-active`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const icon = button.querySelector('i');
+            
+            if (data.isActive) {
+                button.classList.remove('text-red-600', 'hover:text-green-600');
+                button.classList.add('text-green-600', 'hover:text-red-600');
+                button.title = 'Click to deactivate this question';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                button.classList.remove('text-green-600', 'hover:text-red-600');
+                button.classList.add('text-red-600', 'hover:text-green-600');
+                button.title = 'Click to activate this question';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+            
+            // Update the status text in the same question block
+            const questionBlock = button.closest('.bg-white');
+            const statusText = questionBlock.querySelector('.toggle-status-text');
+            if (statusText) {
+                if (data.isActive) {
+                    statusText.classList.remove('text-red-600');
+                    statusText.classList.add('text-green-600');
+                    statusText.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Active';
+                } else {
+                    statusText.classList.remove('text-green-600');
+                    statusText.classList.add('text-red-600');
+                    statusText.innerHTML = '<i class="fas fa-times-circle mr-1"></i> Inactive';
+                }
+            }
+            
+            showNotification(data.message, 'success');
+        } else {
+            showNotification('Failed to toggle question status', 'error');
+        }
+    } catch (error) {
+        showNotification('Error toggling question status', 'error');
+        console.error(error);
+    }
 }
 </script>
 {% endblock %}

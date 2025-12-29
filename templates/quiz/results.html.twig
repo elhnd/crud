@@ -166,6 +166,12 @@
                         <span class="text-gray-500">
                             <i class="fas fa-stopwatch mr-1"></i> {{ answer.timeSpentSeconds }}s
                         </span>
+                        <button type="button" onclick="toggleQuestionActive({{ answer.question.id }}, this)" 
+                                class="toggle-active-btn {{ answer.question.isActive ? 'text-green-600 hover:text-red-600' : 'text-red-600 hover:text-green-600' }} transition"
+                                title="{{ answer.question.isActive ? 'Click to deactivate this question' : 'Click to activate this question' }}">
+                            <i class="fas {{ answer.question.isActive ? 'fa-eye' : 'fa-eye-slash' }} mr-1"></i>
+                            {{ answer.question.isActive ? 'Active' : 'Inactive' }}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -173,4 +179,57 @@
         </div>
     </div>
 </div>
+
+{% block javascripts %}
+<script>
+async function toggleQuestionActive(questionId, button) {
+    try {
+        const response = await fetch(`/api/question/${questionId}/toggle-active`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const icon = button.querySelector('i');
+            
+            if (data.isActive) {
+                button.classList.remove('text-red-600', 'hover:text-green-600');
+                button.classList.add('text-green-600', 'hover:text-red-600');
+                button.title = 'Click to deactivate this question';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+                button.innerHTML = '<i class="fas fa-eye mr-1"></i> Active';
+            } else {
+                button.classList.remove('text-green-600', 'hover:text-red-600');
+                button.classList.add('text-red-600', 'hover:text-green-600');
+                button.title = 'Click to activate this question';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+                button.innerHTML = '<i class="fas fa-eye-slash mr-1"></i> Inactive';
+            }
+            
+            showNotification(data.message, 'success');
+        } else {
+            showNotification('Failed to toggle question status', 'error');
+        }
+    } catch (error) {
+        showNotification('Error toggling question status', 'error');
+        console.error(error);
+    }
+}
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 text-white font-medium ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
+    notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>${message}`;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+</script>
+{% endblock %}
 {% endblock %}

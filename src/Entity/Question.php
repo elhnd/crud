@@ -66,6 +66,9 @@ class Question
     #[ORM\Column(options: ['default' => false])]
     private bool $isCertification = false;
 
+    #[ORM\Column(options: ['default' => true])]
+    private bool $isActive = true;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -335,6 +338,18 @@ class Question
     public function setIsCertification(bool $isCertification): static
     {
         $this->isCertification = $isCertification;
+
+        return $this;
+    }
+
+    public function isActive(): bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(bool $isActive): static
+    {
+        $this->isActive = $isActive;
 
         return $this;
     }

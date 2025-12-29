@@ -348,22 +348,6 @@ book_list:
                     ['text' => 'Define a new tag', 'correct' => false],
                 ],
             ],
-            // Question 17: Twig - Template inheritance error
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'Which of the following templates will throw an error "A template that extends another one cannot have a body"?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'A template that extends another cannot have content outside of blocks. Using {{ }} outside a block throws this error.',
-                'resourceUrl' => 'https://twig.symfony.com/doc/3.x/tags/extends.html',
-                'answers' => [
-                    ['text' => '{% extends \'base.html.twig\' %}\n\n{{ \'f\' ~ \'oo\' }}', 'correct' => true],
-                    ['text' => '{% extends \'base.html.twig\' %}\n\n{% block body %}\n    foo\n{% endblock %}', 'correct' => false],
-                    ['text' => '{% extends \'base.html.twig\' %}\n\n{% block body \'foo\' %}', 'correct' => false],
-                    ['text' => '{% extends \'base.html.twig\' %}\n\n{% block foo \'foo\' %}\n{% block body block(\'foo\') %}', 'correct' => false],
-                ],
-            ],
             // Question 18: Console - Events with CommandTester
             [
                 'category' => $symfony,

@@ -286,21 +286,6 @@ class SomeCommand extends Command
                 ],
             ],
 
-            // Q10 - DI - ReverseContainer
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Dependency Injection'] ?? $subcategories['Symfony:Services'],
-                'text' => 'Could a service identifier be returned from a <code>ReverseContainer</code> if the service is not tagged as <code>container.reversible</code> and defined as <code>private</code>?',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 3,
-                'explanation' => 'Non, le ReverseContainer ne peut retourner l\'identifiant que pour les services publics ou ceux tagués avec container.reversible. Un service privé sans ce tag ne sera pas trouvé.',
-                'resourceUrl' => 'https://github.com/symfony/symfony/blob/4.3/src/Symfony/Component/DependencyInjection/ReverseContainer.php',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => false],
-                    ['text' => 'No', 'correct' => true],
-                ],
-            ],
-
             // Q11 - Routing - generateUrl with query string
             [
                 'category' => $symfony,

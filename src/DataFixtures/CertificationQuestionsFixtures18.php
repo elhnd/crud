@@ -62,19 +62,20 @@ class CertificationQuestionsFixtures18 extends Fixture implements FixtureGroupIn
 
         // Create additional subcategories if needed
         $additionalSubcategories = [
-            'Symfony' => ['Assets', 'AssetMapper', 'Frontend'],
+            'Symfony' => ['Assets' => '', 'AssetMapper' => ''],
         ];
 
         foreach ($additionalSubcategories as $catName => $subs) {
             $category = $catName === 'Symfony' ? $symfony : null;
             if (!$category) continue;
 
-            foreach ($subs as $subName) {
+            foreach ($subs as $subName => $description) {
                 $key = $catName . ':' . $subName;
                 if (!isset($subcategories[$key])) {
                     $sub = new Subcategory();
                     $sub->setName($subName);
                     $sub->setCategory($category);
+                    $sub->setDescription($description);
                     $manager->persist($sub);
                     $subcategories[$key] = $sub;
                 }
@@ -168,19 +169,18 @@ Assuming the file is located at assets/duck.js:',
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:AssetMapper'],
-                'text' => 'Which of the following statements are true about importing CSS files in AssetMapper?
+                'text' => 'In AssetMapper, you can import CSS files directly from JavaScript using the following syntax:
 <pre><code class="language-javascript">// assets/app.js
-import \'./styles/app.css\';</code></pre>',
-                'type' => QuestionType::MULTIPLE_CHOICE,
+import \'./styles/app.css\';</code></pre>
+
+Is this statement true?',
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
-                'explanation' => 'AssetMapper permet d\'importer des fichiers CSS depuis JavaScript. Ce n\'est pas natif au navigateur, mais AssetMapper crée des entrées spéciales dans l\'importmap et ajoute automatiquement des balises <link> pour charger le CSS.',
+                'explanation' => 'Vrai. AssetMapper permet d\'importer des fichiers CSS depuis JavaScript. Ce n\'est pas natif au navigateur, mais AssetMapper crée des entrées spéciales dans l\'importmap et ajoute automatiquement des balises <link> pour charger le CSS.',
                 'resourceUrl' => 'https://symfony.com/doc/7.0/frontend/asset_mapper.html#handling-css',
                 'answers' => [
-                    ['text' => 'This syntax is valid in AssetMapper', 'correct' => true],
-                    ['text' => 'AssetMapper automatically adds <link> tags for imported CSS files', 'correct' => true],
-                    ['text' => 'This is a native browser feature', 'correct' => false],
-                    ['text' => 'You must use require() instead of import for CSS files', 'correct' => false],
-                    ['text' => 'The CSS file must be compiled to JavaScript first', 'correct' => false],
+                    ['text' => 'True', 'correct' => true],
+                    ['text' => 'False', 'correct' => false],
                 ],
             ],
 
@@ -229,17 +229,16 @@ import \'./styles/app.css\';</code></pre>',
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Assets'],
-                'text' => 'Which of the following are valid version strategies in Symfony\'s Asset component?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
+                'text' => 'Which of the following is NOT a valid version strategy in Symfony\'s Asset component?',
+                'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le composant Asset de Symfony fournit plusieurs stratégies: EmptyVersionStrategy (pas de version), StaticVersionStrategy (version statique), et JsonManifestVersionStrategy (utilise un fichier JSON de mapping).',
+                'explanation' => 'Le composant Asset de Symfony fournit trois stratégies principales: EmptyVersionStrategy, StaticVersionStrategy, et JsonManifestVersionStrategy. TimestampVersionStrategy n\'existe pas dans Symfony.',
                 'resourceUrl' => 'https://symfony.com/doc/7.0/components/asset.html#versioned-assets',
                 'answers' => [
-                    ['text' => 'EmptyVersionStrategy', 'correct' => true],
-                    ['text' => 'StaticVersionStrategy', 'correct' => true],
-                    ['text' => 'JsonManifestVersionStrategy', 'correct' => true],
-                    ['text' => 'DynamicVersionStrategy', 'correct' => false],
-                    ['text' => 'TimestampVersionStrategy', 'correct' => false],
+                    ['text' => 'EmptyVersionStrategy', 'correct' => false],
+                    ['text' => 'StaticVersionStrategy', 'correct' => false],
+                    ['text' => 'JsonManifestVersionStrategy', 'correct' => false],
+                    ['text' => 'TimestampVersionStrategy', 'correct' => true],
                 ],
             ],
 
@@ -321,19 +320,16 @@ What will happen when the same asset is requested twice?',
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:AssetMapper'],
-                'text' => 'Which of the following are valid AssetMapper console commands in Symfony?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
+                'text' => 'Which of the following is NOT a valid AssetMapper console command in Symfony?',
+                'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Les commandes AssetMapper disponibles incluent: importmap:require (ajouter packages), importmap:install (télécharger dépendances), importmap:update (mettre à jour), importmap:audit (vérifier vulnérabilités), asset-map:compile (compiler pour prod), debug:asset-map (déboguer).',
+                'explanation' => 'AssetMapper ne fournit pas de commande importmap:minify. La minification n\'est pas gérée par AssetMapper et doit être effectuée par le serveur web (gzip/brotli) ou des outils externes.',
                 'resourceUrl' => 'https://symfony.com/doc/7.0/frontend/asset_mapper.html',
                 'answers' => [
-                    ['text' => 'php bin/console importmap:require', 'correct' => true],
-                    ['text' => 'php bin/console importmap:install', 'correct' => true],
-                    ['text' => 'php bin/console importmap:update', 'correct' => true],
-                    ['text' => 'php bin/console asset-map:compile', 'correct' => true],
-                    ['text' => 'php bin/console importmap:audit', 'correct' => true],
-                    ['text' => 'php bin/console debug:asset-map', 'correct' => true],
-                    ['text' => 'php bin/console importmap:minify', 'correct' => false],
+                    ['text' => 'php bin/console importmap:require', 'correct' => false],
+                    ['text' => 'php bin/console asset-map:compile', 'correct' => false],
+                    ['text' => 'php bin/console importmap:minify', 'correct' => true],
+                    ['text' => 'php bin/console debug:asset-map', 'correct' => false],
                 ],
             ],
 

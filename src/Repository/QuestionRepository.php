@@ -28,15 +28,17 @@ class QuestionRepository extends ServiceEntityRepository
         ?Category $category = null,
         ?Subcategory $subcategory = null
     ): array {
-        // First, get all matching question IDs
+        // First, get all matching question IDs (only active questions)
         $qb = $this->createQueryBuilder('q')
-            ->select('q.id');
+            ->select('q.id')
+            ->andWhere('q.isActive = :isActive')
+            ->setParameter('isActive', true);
 
         if ($subcategory) {
-            $qb->where('q.subcategory = :subcategory')
+            $qb->andWhere('q.subcategory = :subcategory')
                 ->setParameter('subcategory', $subcategory);
         } elseif ($category) {
-            $qb->where('q.category = :category')
+            $qb->andWhere('q.category = :category')
                 ->setParameter('category', $category);
         }
 
@@ -178,7 +180,9 @@ class QuestionRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('q')
             ->select('q.id')
             ->where('q.category IN (:categoryIds)')
-            ->setParameter('categoryIds', $categoryIds);
+            ->andWhere('q.isActive = :isActive')
+            ->setParameter('categoryIds', $categoryIds)
+            ->setParameter('isActive', true);
 
         $ids = array_column($qb->getQuery()->getArrayResult(), 'id');
         
@@ -213,7 +217,9 @@ class QuestionRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('q')
             ->select('q.id')
             ->where('q.subcategory IN (:subcategoryIds)')
-            ->setParameter('subcategoryIds', $subcategoryIds);
+            ->andWhere('q.isActive = :isActive')
+            ->setParameter('subcategoryIds', $subcategoryIds)
+            ->setParameter('isActive', true);
 
         $ids = array_column($qb->getQuery()->getArrayResult(), 'id');
         
@@ -243,7 +249,9 @@ class QuestionRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('q')
             ->select('q.id')
             ->where('q.isCertification = :isCert')
-            ->setParameter('isCert', true);
+            ->andWhere('q.isActive = :isActive')
+            ->setParameter('isCert', true)
+            ->setParameter('isActive', true);
 
         $ids = array_column($qb->getQuery()->getArrayResult(), 'id');
         
@@ -276,6 +284,7 @@ class QuestionRepository extends ServiceEntityRepository
         ?string $type = null,
         ?int $difficulty = null,
         ?string $certification = null,
+        ?string $active = null,
     ): array {
         $qb = $this->createQueryBuilder('q')
             ->leftJoin('q.category', 'c')
@@ -310,6 +319,11 @@ class QuestionRepository extends ServiceEntityRepository
         if ($certification !== null && $certification !== '') {
             $qb->andWhere('q.isCertification = :certification')
                 ->setParameter('certification', $certification === '1');
+        }
+
+        if ($active !== null && $active !== '') {
+            $qb->andWhere('q.isActive = :isActive')
+                ->setParameter('isActive', $active === '1');
         }
 
         // Count total
@@ -427,15 +441,17 @@ class QuestionRepository extends ServiceEntityRepository
         ?Category $category = null,
         ?Subcategory $subcategory = null
     ): array {
-        // Get all matching question IDs
+        // Get all matching question IDs (only active questions)
         $qb = $this->createQueryBuilder('q')
-            ->select('q.id');
+            ->select('q.id')
+            ->andWhere('q.isActive = :isActive')
+            ->setParameter('isActive', true);
 
         if ($subcategory) {
-            $qb->where('q.subcategory = :subcategory')
+            $qb->andWhere('q.subcategory = :subcategory')
                 ->setParameter('subcategory', $subcategory);
         } elseif ($category) {
-            $qb->where('q.category = :category')
+            $qb->andWhere('q.category = :category')
                 ->setParameter('category', $category);
         }
 
@@ -487,7 +503,9 @@ class QuestionRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('q')
             ->select('q.id')
             ->where('q.category IN (:categoryIds)')
-            ->setParameter('categoryIds', $categoryIds);
+            ->andWhere('q.isActive = :isActive')
+            ->setParameter('categoryIds', $categoryIds)
+            ->setParameter('isActive', true);
 
         $allIds = array_column($qb->getQuery()->getArrayResult(), 'id');
         
@@ -531,7 +549,9 @@ class QuestionRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('q')
             ->select('q.id')
             ->where('q.subcategory IN (:subcategoryIds)')
-            ->setParameter('subcategoryIds', $subcategoryIds);
+            ->andWhere('q.isActive = :isActive')
+            ->setParameter('subcategoryIds', $subcategoryIds)
+            ->setParameter('isActive', true);
 
         $allIds = array_column($qb->getQuery()->getArrayResult(), 'id');
         
@@ -569,7 +589,9 @@ class QuestionRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('q')
             ->select('q.id')
             ->where('q.isCertification = :isCert')
-            ->setParameter('isCert', true);
+            ->andWhere('q.isActive = :isActive')
+            ->setParameter('isCert', true)
+            ->setParameter('isActive', true);
 
         $allIds = array_column($qb->getQuery()->getArrayResult(), 'id');
         

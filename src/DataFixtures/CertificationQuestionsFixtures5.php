@@ -752,21 +752,6 @@ $dumper->setTheme(\'light\');</code></pre>',
                     ['text' => 'No', 'correct' => false],
                 ],
             ],
-            // Twig template inheritance error
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'Which of the following templates will throw an error <code>A template that extends another one cannot have a body</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'Templates extending another cannot have content outside blocks. {{ \'f\' ~ \'oo\' }} outputs content directly.',
-                'resourceUrl' => 'http://twig.symfony.com/doc/tags/extends.html',
-                'answers' => [
-                    ['text' => '<pre><code class="language-twig">{% extends \'base.html.twig\' %}\n\n{{ \'f\' ~ \'oo\' }}</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-twig">{% extends \'base.html.twig\' %}\n\n{% block body \'foo\' %}</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code class="language-twig">{% extends \'base.html.twig\' %}\n\n{% block body %}\n    foo\n{% endblock %}</code></pre>', 'correct' => false],
-                ],
-            ],
             // Filesystem mkdir return
             [
                 'category' => $symfony,

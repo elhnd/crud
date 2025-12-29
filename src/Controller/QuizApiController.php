@@ -99,7 +99,21 @@ class QuizApiController extends AbstractController
             'difficulty' => $question->getDifficulty(),
             'explanation' => $question->getExplanation(),
             'resourceUrl' => $question->getResourceUrl(),
+            'isActive' => $question->isActive(),
             'answers' => $answers,
+        ]);
+    }
+
+    #[Route('/question/{id}/toggle-active', name: 'api_question_toggle_active', methods: ['POST'])]
+    public function toggleActive(Question $question): JsonResponse
+    {
+        $question->setIsActive(!$question->isActive());
+        $this->entityManager->flush();
+        
+        return $this->json([
+            'success' => true,
+            'isActive' => $question->isActive(),
+            'message' => $question->isActive() ? 'Question activated' : 'Question deactivated',
         ]);
     }
 }

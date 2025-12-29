@@ -81,6 +81,13 @@
                     {% endif %}
                 </span>
                 <div class="flex items-center space-x-3">
+                    <button type="button" onclick="toggleQuestionActive({{ question.id }})" 
+                            id="toggle-active-btn"
+                            class="{{ question.isActive ? 'bg-green-500/80 hover:bg-red-500/80' : 'bg-red-500/80 hover:bg-green-500/80' }} px-3 py-1 rounded-full text-sm transition"
+                            title="{{ question.isActive ? 'Click to deactivate this question' : 'Click to activate this question' }}">
+                        <i class="fas {{ question.isActive ? 'fa-eye' : 'fa-eye-slash' }} mr-1" id="toggle-active-icon"></i>
+                        <span id="toggle-active-text">{{ question.isActive ? 'Active' : 'Inactive' }}</span>
+                    </button>
                     <button type="button" onclick="openEditModal()" 
                             class="bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full text-sm transition"
                             title="Edit question or answers">
@@ -386,6 +393,46 @@ function showNotification(message, type) {
     setTimeout(() => {
         notification.remove();
     }, 3000);
+}
+
+async function toggleQuestionActive(questionId) {
+    try {
+        const response = await fetch(`/api/question/${questionId}/toggle-active`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const btn = document.getElementById('toggle-active-btn');
+            const icon = document.getElementById('toggle-active-icon');
+            const text = document.getElementById('toggle-active-text');
+            
+            if (data.isActive) {
+                btn.classList.remove('bg-red-500/80', 'hover:bg-green-500/80');
+                btn.classList.add('bg-green-500/80', 'hover:bg-red-500/80');
+                btn.title = 'Click to deactivate this question';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+                text.textContent = 'Active';
+            } else {
+                btn.classList.remove('bg-green-500/80', 'hover:bg-red-500/80');
+                btn.classList.add('bg-red-500/80', 'hover:bg-green-500/80');
+                btn.title = 'Click to activate this question';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+                text.textContent = 'Inactive';
+            }
+            
+            showNotification(data.message, 'success');
+        } else {
+            showNotification('Failed to toggle question status', 'error');
+        }
+    } catch (error) {
+        showNotification('Error toggling question status', 'error');
+        console.error(error);
+    }
 }
 </script>
 {% endblock %}

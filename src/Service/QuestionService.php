@@ -32,6 +32,7 @@ class QuestionService
         ?string $type = null,
         ?int $difficulty = null,
         ?string $certification = null,
+        ?string $active = null,
     ): array {
         $offset = ($page - 1) * $limit;
 
@@ -43,7 +44,8 @@ class QuestionService
             $subcategoryId,
             $type,
             $difficulty,
-            $certification
+            $certification,
+            $active
         );
 
         return [
