@@ -151,35 +151,40 @@ trait UpsertQuestionTrait
     }
 
     /**
-     * Récupère ou crée une sous-catégorie
+     * Charge toutes les sous-catégories existantes depuis la base de données.
+     * Les sous-catégories doivent être créées par AppFixtures au préalable.
+     * 
+     * @return array<string, Subcategory> Tableau indexé par "Category:Subcategory"
      */
-    protected function getOrCreateSubcategory(
-        ObjectManager $manager,
-        string $name,
-        Category $category,
-        ?string $description = null,
-        array &$cache = []
-    ): Subcategory {
-        $key = $category->getName() . ':' . $name;
+    protected function loadSubcategories(ObjectManager $manager): array
+    {
+        $subcategoryRepo = $manager->getRepository(Subcategory::class);
+        $subcategories = [];
 
-        if (isset($cache[$key])) {
-            return $cache[$key];
+        foreach ($subcategoryRepo->findAll() as $sub) {
+            $key = $sub->getCategory()->getName() . ':' . $sub->getName();
+            $subcategories[$key] = $sub;
         }
 
-        $subcategory = $manager->getRepository(Subcategory::class)->findOneBy([
-            'name' => $name,
-            'category' => $category,
-        ]);
+        return $subcategories;
+    }
 
-        if (!$subcategory) {
-            $subcategory = new Subcategory();
-            $subcategory->setName($name);
-            $subcategory->setDescription($description ?? $name);
-            $subcategory->setCategory($category);
-            $manager->persist($subcategory);
+    /**
+     * Récupère une sous-catégorie par sa clé.
+     * Lève une exception si la sous-catégorie n'existe pas.
+     * 
+     * @param array<string, Subcategory> $subcategories
+     * @throws \RuntimeException Si la sous-catégorie n'existe pas
+     */
+    protected function getSubcategory(array $subcategories, string $key): Subcategory
+    {
+        if (!isset($subcategories[$key])) {
+            throw new \RuntimeException(sprintf(
+                'Subcategory "%s" not found. Make sure AppFixtures is run first and defines this subcategory.',
+                $key
+            ));
         }
 
-        $cache[$key] = $subcategory;
-        return $subcategory;
+        return $subcategories[$key];
     }
 }

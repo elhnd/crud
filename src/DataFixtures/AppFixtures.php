@@ -56,17 +56,76 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
             $manager->persist($php);
         }
 
-        // Symfony Subcategories
+        // Symfony Subcategories - Centralized for all fixtures
         $symfonySubcategories = [
+            // Core components
             'Dependency Injection' => 'Service Container and DI concepts',
             'HttpKernel' => 'Request lifecycle and HTTP handling',
-            'Security' => 'Authentication, authorization, and security features',
-            'Forms' => 'Form building, validation, and handling',
+            'HttpFoundation' => 'Request, Response, and HTTP abstractions',
             'Event Dispatcher' => 'Event-driven architecture',
-            'Console' => 'CLI commands and console components',
-            'Twig' => 'Templating engine features',
             'Routing' => 'URL routing and parameter handling',
-            'Validation' => 'Data validation constraints',
+            'Controllers' => 'Symfony Controllers and AbstractController',
+            'Services' => 'Dependency Injection and Service Container',
+            
+            // Security & Validation
+            'Security' => 'Authentication, authorization, and security features',
+            'Validation' => 'Data validation constraints and validators',
+            'Validator' => 'Symfony Validator component',
+            'PasswordHasher' => 'Password hashing utilities',
+            
+            // Forms & Templating
+            'Forms' => 'Form building, validation, and handling',
+            'Twig' => 'Templating engine features',
+            'OptionsResolver' => 'Options configuration and validation',
+            
+            // HTTP & Caching
+            'HTTP' => 'HTTP specification and status codes',
+            'Cache' => 'HTTP caching and ESI',
+            'HttpCache' => 'HTTP caching component',
+            'Session' => 'HTTP Session handling',
+            'HttpClient' => 'HTTP Client component',
+            
+            // Console & CLI
+            'Console' => 'CLI commands and console components',
+            
+            // Assets & Frontend
+            'Assets' => 'Asset management and versioning',
+            'AssetMapper' => 'Modern JavaScript and CSS management',
+            'CssSelector' => 'CSS selector to XPath conversion',
+            
+            // Serialization & Data
+            'Serializer' => 'Symfony Serializer component',
+            'Messenger' => 'Message handling and async processing',
+            'Yaml' => 'YAML parsing and dumping',
+            'PropertyAccess' => 'Property accessor component',
+            'VarDumper' => 'Variable dumping utilities',
+            'VarExporter' => 'Variable exporting utilities',
+            
+            // Testing
+            'Testing' => 'Testing with PHPUnit and Symfony',
+            'BrowserKit' => 'Browser simulation for testing',
+            
+            // Other components
+            'Filesystem' => 'Filesystem component utilities',
+            'Finder' => 'File and directory finder',
+            'Expression Language' => 'Expression Language component',
+            'FrameworkBundle' => 'FrameworkBundle configuration',
+            'Process' => 'Process execution component',
+            'Lock' => 'Lock component for concurrency',
+            'Mailer' => 'Email sending component',
+            'Mime' => 'MIME types handling',
+            'Translation' => 'Internationalization and translation',
+            'Intl' => 'Internationalization utilities',
+            'Inflector' => 'String inflection utilities',
+            'Dotenv' => 'Environment variable loading',
+            'Runtime' => 'Runtime component',
+            'Clock' => 'Clock component for time handling',
+            'ErrorHandler' => 'Error handling component',
+            
+            // Architecture & Config
+            'Architecture' => 'Symfony architecture and best practices',
+            'Configuration' => 'Symfony configuration and environment',
+            'Miscellaneous' => 'Other Symfony components and features',
         ];
 
         $subcategoryRepo = $manager->getRepository(Subcategory::class);
@@ -83,16 +142,32 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
             $symfonySubcategoryEntities[$name] = $sub;
         }
 
-        // PHP Subcategories
+        // PHP Subcategories - Centralized for all fixtures
         $phpSubcategories = [
+            // OOP
             'OOP' => 'Object-Oriented Programming concepts',
             'Interfaces & Traits' => 'Interfaces, traits, and abstract classes',
-            'Exceptions' => 'Error handling and exceptions',
+            
+            // Core PHP
             'PHP Basics' => 'PHP basics and syntax',
+            'Functions' => 'Functions, closures, and callbacks',
+            'Closures' => 'Anonymous functions and closures',
+            'Exceptions' => 'Error handling and exceptions',
+            
+            // Types & Data
             'Typing & Strict Types' => 'Type declarations and strict mode',
             'Arrays & Collections' => 'Arrays, array functions and manipulation',
-            'Functions' => 'Functions, closures, and callbacks',
+            'Data Format & Types' => 'Data formats and type handling',
+            'Strings' => 'String manipulation functions',
+            'JSON' => 'JSON encoding and decoding',
+            'XML' => 'XML parsing and manipulation',
+            'DOM' => 'DOM manipulation',
+            
+            // Organization
             'Namespaces' => 'Namespace organization and autoloading',
+            'PSR' => 'PHP Standards Recommendations',
+            'SPL' => 'Standard PHP Library',
+            'I/O' => 'Input/Output operations',
         ];
 
         $phpSubcategoryEntities = [];

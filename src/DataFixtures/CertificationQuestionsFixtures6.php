@@ -2,10 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Answer;
 use App\Entity\Category;
-use App\Entity\Question;
-use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -35,33 +32,8 @@ class CertificationQuestionsFixtures6 extends Fixture implements DependentFixtur
         $symfony = $symfonyRepo->findOneBy(['name' => 'Symfony']);
         $php = $symfonyRepo->findOneBy(['name' => 'PHP']);
 
-        $subcategoryRepo = $manager->getRepository(Subcategory::class);
-        $subcategories = [];
-
-        // Load existing subcategories
-        foreach ($subcategoryRepo->findAll() as $sub) {
-            $key = $sub->getCategory()->getName() . ':' . $sub->getName();
-            $subcategories[$key] = $sub;
-        }
-
-        // Create new subcategories if needed
-        $newSubcategories = [
-            ['Filesystem', $symfony],
-            ['Mime', $symfony],
-        ];
-
-        foreach ($newSubcategories as [$name, $category]) {
-            $key = $category->getName() . ':' . $name;
-            if (!isset($subcategories[$key])) {
-                $subcategory = new Subcategory();
-                $subcategory->setName($name);
-                $subcategory->setCategory($category);
-                $manager->persist($subcategory);
-                $subcategories[$key] = $subcategory;
-            }
-        }
-
-        $manager->flush();
+        // Load existing subcategories from AppFixtures
+        $subcategories = $this->loadSubcategories($manager);
 
         $questions = [
             // Security - Built-in roles (Symfony 6.0+)

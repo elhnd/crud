@@ -2,10 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Answer;
 use App\Entity\Category;
-use App\Entity\Question;
-use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -38,52 +35,8 @@ class CertificationQuestionsFixtures3 extends Fixture implements DependentFixtur
             throw new \RuntimeException('Categories not found.');
         }
 
-        // Create additional subcategories
-        $newSubcategories = [
-            'Symfony' => [
-                'PropertyAccess' => 'PropertyAccess component for reading/writing object properties',
-                'Filesystem' => 'Filesystem component for file operations',
-                'Mailer' => 'Mailer component for sending emails',
-            ],
-            'PHP' => [
-                'I/O' => 'File input/output operations',
-            ],
-        ];
-
-        $subcategories = [];
-
-        // Get all existing subcategories
-        $subcategoryRepo = $manager->getRepository(Subcategory::class);
-        foreach ($subcategoryRepo->findAll() as $sub) {
-            $subcategories[$sub->getCategory()->getName() . ':' . $sub->getName()] = $sub;
-        }
-
-        // Create new subcategories
-        foreach ($newSubcategories['Symfony'] as $name => $description) {
-            $key = 'Symfony:' . $name;
-            if (!isset($subcategories[$key])) {
-                $sub = new Subcategory();
-                $sub->setName($name);
-                $sub->setDescription($description);
-                $sub->setCategory($symfony);
-                $manager->persist($sub);
-                $subcategories[$key] = $sub;
-            }
-        }
-
-        foreach ($newSubcategories['PHP'] as $name => $description) {
-            $key = 'PHP:' . $name;
-            if (!isset($subcategories[$key])) {
-                $sub = new Subcategory();
-                $sub->setName($name);
-                $sub->setDescription($description);
-                $sub->setCategory($php);
-                $manager->persist($sub);
-                $subcategories[$key] = $sub;
-            }
-        }
-
-        $manager->flush();
+        // Load existing subcategories from AppFixtures
+        $subcategories = $this->loadSubcategories($manager);
 
         $questions = [
             // Q1: PSR-0 and PSR-4

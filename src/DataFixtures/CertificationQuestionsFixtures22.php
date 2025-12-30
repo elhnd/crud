@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
-use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -37,7 +36,8 @@ class CertificationQuestionsFixtures22 extends Fixture implements DependentFixtu
             throw new \RuntimeException('Required categories not found. Please load CertificationExamFixtures first.');
         }
 
-        $subcategories = $this->getSubcategories($manager, $symfony, $php);
+        // Load existing subcategories from AppFixtures
+        $subcategories = $this->loadSubcategories($manager);
         $questions = $this->getCertificationQuestions($symfony, $php, $subcategories);
 
         foreach ($questions as $q) {
@@ -45,38 +45,6 @@ class CertificationQuestionsFixtures22 extends Fixture implements DependentFixtu
         }
 
         $manager->flush();
-    }
-
-    private function getSubcategories(ObjectManager $manager, Category $symfony, Category $php): array
-    {
-        $subcategoryRepo = $manager->getRepository(Subcategory::class);
-        $subcategories = [];
-
-        foreach ($subcategoryRepo->findAll() as $sub) {
-            $subcategories[$sub->getCategory()->getName() . ':' . $sub->getName()] = $sub;
-        }
-
-        $additional = [
-            'Symfony' => ['Twig', 'Serializer', 'HttpFoundation', 'Dependency Injection', 'Messenger', 'Yaml', 'Filesystem', 'Security', 'Expression Language', 'FrameworkBundle', 'Validator', 'HttpKernel', 'Console'],
-            'PHP' => ['PHP Basics', 'Arrays'],
-        ];
-
-        foreach ($additional as $catName => $subs) {
-            $category = $catName === 'Symfony' ? $symfony : $php;
-            foreach ($subs as $subName) {
-                $key = $catName . ':' . $subName;
-                if (!isset($subcategories[$key])) {
-                    $sub = new Subcategory();
-                    $sub->setName($subName);
-                    $sub->setCategory($category);
-                    $manager->persist($sub);
-                    $subcategories[$key] = $sub;
-                }
-            }
-        }
-
-        $manager->flush();
-        return $subcategories;
     }
 
     private function getCertificationQuestions(Category $symfony, Category $php, array $subcategories): array
@@ -343,7 +311,7 @@ $apple->variety = \'Honeycrisp\';</code></pre>',
             // Q17 - PHP Arrays - array_reduce
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays'],
+                'subcategory' => $subcategories['PHP:Arrays & Collections'],
                 'text' => 'What is the output of the following script?
 <pre><code class="language-php">&lt;?php
 

@@ -624,7 +624,7 @@ class QuestionRepository extends ServiceEntityRepository
      * @param array<int> $allIds All available question IDs
      * @param array<int> $seenQuestionIds Questions already seen by user
      * @param array<int, float> $questionFailureRates Map of questionId => failureRate
-     * @param int $limit Number of questions to select
+     * @param int $limit Number of questions to select (0 = all questions)
      * @return array<int>
      */
     private function selectSmartQuestionIds(
@@ -633,8 +633,13 @@ class QuestionRepository extends ServiceEntityRepository
         array $questionFailureRates,
         int $limit
     ): array {
-        if (empty($allIds) || $limit <= 0) {
+        if (empty($allIds)) {
             return [];
+        }
+
+        // If limit is 0 or negative, return all questions
+        if ($limit <= 0) {
+            return $allIds;
         }
 
         // Separate unseen from seen questions

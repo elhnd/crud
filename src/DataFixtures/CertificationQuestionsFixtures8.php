@@ -2,10 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Answer;
 use App\Entity\Category;
-use App\Entity\Question;
-use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -35,32 +32,8 @@ class CertificationQuestionsFixtures8 extends Fixture implements DependentFixtur
         $symfony = $symfonyRepo->findOneBy(['name' => 'Symfony']);
         $php = $symfonyRepo->findOneBy(['name' => 'PHP']);
 
-        $subcategoryRepo = $manager->getRepository(Subcategory::class);
-        $subcategories = [];
-
-        // Load existing subcategories
-        foreach ($subcategoryRepo->findAll() as $sub) {
-            $key = $sub->getCategory()->getName() . ':' . $sub->getName();
-            $subcategories[$key] = $sub;
-        }
-
-        // Create new subcategories if needed
-        $newSubcategories = [
-            ['Data Format & Types', $php],
-        ];
-
-        foreach ($newSubcategories as [$name, $category]) {
-            $key = $category->getName() . ':' . $name;
-            if (!isset($subcategories[$key])) {
-                $subcategory = new Subcategory();
-                $subcategory->setName($name);
-                $subcategory->setCategory($category);
-                $manager->persist($subcategory);
-                $subcategories[$key] = $subcategory;
-            }
-        }
-
-        $manager->flush();
+        // Load existing subcategories from AppFixtures
+        $subcategories = $this->loadSubcategories($manager);
 
         $questions = [
             // Event Dispatcher - ImmutableEventDispatcher
@@ -194,23 +167,6 @@ class CertificationQuestionsFixtures8 extends Fixture implements DependentFixtur
                     ['text' => 'ChainLoader', 'correct' => true],
                     ['text' => 'DoctrineLoader', 'correct' => false],
                     ['text' => 'CacheLoader', 'correct' => false],
-                ],
-            ],
-            // Console - Non built-in events
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Console'],
-                'text' => 'Which of these events are NOT built-in Console events?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Console has COMMAND, TERMINATE, ERROR, and SIGNAL events. VIEW and HANDLE_COMMAND do not exist.',
-                'resourceUrl' => 'https://symfony.com/doc/4.0/components/console/events.html',
-                'answers' => [
-                    ['text' => '<code>Symfony\\Component\\Console\\ConsoleEvents::VIEW</code>', 'correct' => true],
-                    ['text' => '<code>Symfony\\Component\\Console\\ConsoleEvents::HANDLE_COMMAND</code>', 'correct' => true],
-                    ['text' => '<code>Symfony\\Component\\Console\\ConsoleEvents::COMMAND</code>', 'correct' => false],
-                    ['text' => '<code>Symfony\\Component\\Console\\ConsoleEvents::TERMINATE</code>', 'correct' => false],
-                    ['text' => '<code>Symfony\\Component\\Console\\ConsoleEvents::ERROR</code>', 'correct' => false],
                 ],
             ],
             // Validator - validate() return type

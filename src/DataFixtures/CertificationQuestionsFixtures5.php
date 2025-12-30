@@ -2,10 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Answer;
 use App\Entity\Category;
-use App\Entity\Question;
-use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -34,40 +31,8 @@ class CertificationQuestionsFixtures5 extends Fixture implements DependentFixtur
         $symfony = $symfonyRepo->findOneBy(['name' => 'Symfony']);
         $php = $symfonyRepo->findOneBy(['name' => 'PHP']);
 
-        $subcategoryRepo = $manager->getRepository(Subcategory::class);
-        $subcategories = [];
-
-        // Load existing subcategories
-        foreach ($subcategoryRepo->findAll() as $sub) {
-            $key = $sub->getCategory()->getName() . ':' . $sub->getName();
-            $subcategories[$key] = $sub;
-        }
-
-        // Create new subcategories if needed
-        $newSubcategories = [
-            ['HttpClient', $symfony],
-            ['OptionsResolver', $symfony],
-            ['VarDumper', $symfony],
-            ['Console', $symfony],
-            ['PasswordHasher', $symfony],
-            ['Runtime', $symfony],
-            ['CssSelector', $symfony],
-            ['PSR', $php],
-            ['PHP Basics', $php],
-        ];
-
-        foreach ($newSubcategories as [$name, $category]) {
-            $key = $category->getName() . ':' . $name;
-            if (!isset($subcategories[$key])) {
-                $sub = new Subcategory();
-                $sub->setName($name);
-                $sub->setCategory($category);
-                $manager->persist($sub);
-                $subcategories[$key] = $sub;
-            }
-        }
-
-        $manager->flush();
+        // Load existing subcategories from AppFixtures
+        $subcategories = $this->loadSubcategories($manager);
 
         $questions = [
             // MockHttpClient request count
@@ -649,21 +614,6 @@ $dumper->setTheme(\'light\');</code></pre>',
                 'answers' => [
                     ['text' => 'Yes', 'correct' => true],
                     ['text' => 'No', 'correct' => false],
-                ],
-            ],
-            // Console setCode method
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Console'],
-                'text' => 'What can be said about <code>$event->getCommand()->setCode(232)</code> in a ConsoleEvents::TERMINATE listener?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'setCode() expects a callable, not an integer. This code will result in an error.',
-                'resourceUrl' => 'https://github.com/symfony/symfony/blob/2.3/src/Symfony/Component/Console/Command/Command.php#L252',
-                'answers' => [
-                    ['text' => 'The code above will result in an error', 'correct' => true],
-                    ['text' => 'The code above will change the command exit status code to 232', 'correct' => false],
-                    ['text' => 'This method doesn\'t exist', 'correct' => false],
                 ],
             ],
             // PHP sessions without cookies

@@ -81,7 +81,8 @@
                 {% if mostFailedQuestions|length > 0 %}
                 <div class="space-y-4">
                     {% for question in mostFailedQuestions %}
-                    <div class="p-4 bg-orange-50 rounded-lg border border-orange-100">
+                    <a href="{{ path('statistics_question_detail', {id: question.questionId}) }}" 
+                       class="block p-4 bg-orange-50 rounded-lg border border-orange-100 hover:bg-orange-100 hover:border-orange-200 transition-colors">
                         <div class="text-gray-800 font-medium mb-2 question-text">
                             {{ question.questionText|truncate_question(20000) }}
                         </div>
@@ -91,12 +92,15 @@
                                 Failed {{ question.wrongCount }} / {{ question.totalAttempts }} times
                                 ({{ question.failureRate|number_format(0) }}%)
                             </span>
+                            <span class="text-orange-500">
+                                <i class="fas fa-chevron-right"></i>
+                            </span>
                         </div>
                         <!-- Failure rate bar -->
                         <div class="mt-2 w-full bg-orange-200 rounded-full h-2">
                             <div class="bg-orange-500 h-2 rounded-full" style="width: {{ question.failureRate }}%"></div>
                         </div>
-                    </div>
+                    </a>
                     {% endfor %}
                 </div>
                 {% else %}

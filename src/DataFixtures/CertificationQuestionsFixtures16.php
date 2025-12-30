@@ -3,7 +3,6 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
-use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -37,7 +36,8 @@ class CertificationQuestionsFixtures16 extends Fixture implements DependentFixtu
             throw new \RuntimeException('Categories not found. Run AppFixtures first.');
         }
 
-        $subcategories = $this->getSubcategories($manager, $symfony, $php);
+        // Load existing subcategories from AppFixtures
+        $subcategories = $this->loadSubcategories($manager);
         $questions = $this->getCertificationQuestions($symfony, $php, $subcategories);
 
         foreach ($questions as $q) {
@@ -45,46 +45,6 @@ class CertificationQuestionsFixtures16 extends Fixture implements DependentFixtu
         }
 
         $manager->flush();
-    }
-
-    private function getSubcategories(ObjectManager $manager, Category $symfony, Category $php): array
-    {
-        $subcategoryRepo = $manager->getRepository(Subcategory::class);
-        $subcategories = [];
-
-        foreach ($subcategoryRepo->findAll() as $sub) {
-            $subcategories[$sub->getCategory()->getName() . ':' . $sub->getName()] = $sub;
-        }
-
-        $additional = [
-            'Symfony' => [
-                'Serializer' => 'Serializer component for object serialization',
-                'Runtime' => 'Runtime component for application bootstrapping',
-                'Inflector' => 'Inflector component (deprecated)',
-                'Intl' => 'Internationalization component',
-                'Yaml' => 'Yaml component for parsing and dumping YAML',
-                'Finder' => 'Finder component for file and directory searching',
-                'Cache' => 'Cache component for caching data',
-            ],
-        ];
-
-        foreach ($additional as $catName => $subs) {
-            $category = $catName === 'Symfony' ? $symfony : $php;
-            foreach ($subs as $name => $description) {
-                $key = $catName . ':' . $name;
-                if (!isset($subcategories[$key])) {
-                    $subcategory = new Subcategory();
-                    $subcategory->setName($name);
-                    $subcategory->setDescription($description);
-                    $subcategory->setCategory($category);
-                    $manager->persist($subcategory);
-                    $subcategories[$key] = $subcategory;
-                }
-            }
-        }
-
-        $manager->flush();
-        return $subcategories;
     }
 
     private function getCertificationQuestions(Category $symfony, Category $php, array $subcategories): array

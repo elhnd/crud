@@ -3,11 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Question;
 use App\Repository\CategoryRepository;
+use App\Repository\UserAnswerRepository;
+use App\Service\ClaudeAIService;
 use App\Service\RevisionStrategyService;
 use App\Service\StatisticsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -18,6 +22,8 @@ class StatisticsController extends AbstractController
         private readonly StatisticsService $statisticsService,
         private readonly CategoryRepository $categoryRepository,
         private readonly RevisionStrategyService $revisionStrategyService,
+        private readonly UserAnswerRepository $userAnswerRepository,
+        private readonly ClaudeAIService $claudeAIService,
     ) {
     }
 
@@ -54,6 +60,43 @@ class StatisticsController extends AbstractController
             'weakAreas' => $stats['weakAreas'],
             'mostFailedQuestions' => $mostFailed,
         ]);
+    }
+
+    #[Route('/question/{id}', name: 'statistics_question_detail')]
+    public function questionDetail(Question $question): Response
+    {
+        $questionStats = $this->userAnswerRepository->getQuestionStats($question);
+        $aiExplanation = $this->claudeAIService->getExplanation($question);
+
+        return $this->render('statistics/question_detail.html.twig', [
+            'question' => $question,
+            'stats' => $questionStats,
+            'aiExplanation' => $aiExplanation,
+        ]);
+    }
+
+    #[Route('/question/{id}/generate-explanation', name: 'statistics_generate_explanation', methods: ['POST'])]
+    public function generateExplanation(Question $question, Request $request): Response
+    {
+        $locale = $request->request->get('locale', 'en');
+        $forceRegenerate = $request->request->getBoolean('regenerate', false);
+
+        // Check API connectivity first
+        if (!$this->claudeAIService->isApiReachable()) {
+            $this->addFlash('error', 'Cannot connect to Claude API. Please check your network connection or try again later.');
+            return $this->redirectToRoute('statistics_question_detail', ['id' => $question->getId()]);
+        }
+
+        $explanation = $this->claudeAIService->generateExplanation($question, $locale, $forceRegenerate);
+
+        if ($explanation === null) {
+            $error = $this->claudeAIService->getLastError() ?? 'Unknown error';
+            $this->addFlash('error', 'Failed to generate explanation: ' . $error);
+        } else {
+            $this->addFlash('success', 'Explanation generated successfully!');
+        }
+
+        return $this->redirectToRoute('statistics_question_detail', ['id' => $question->getId()]);
     }
 
     #[Route('/progress', name: 'statistics_progress')]

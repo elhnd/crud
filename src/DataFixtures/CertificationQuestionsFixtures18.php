@@ -2,10 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Answer;
 use App\Entity\Category;
-use App\Entity\Question;
-use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -35,8 +32,8 @@ class CertificationQuestionsFixtures18 extends Fixture implements FixtureGroupIn
             throw new \Exception('Symfony category must exist. Run AppFixtures first.');
         }
 
-        // Get/create subcategories
-        $subcategories = $this->getOrCreateSubcategories($manager, $symfony);
+        // Load existing subcategories from AppFixtures
+        $subcategories = $this->loadSubcategories($manager);
 
         // Define certification exam questions
         $questions = $this->getCertificationQuestions($symfony, $subcategories);
@@ -47,43 +44,6 @@ class CertificationQuestionsFixtures18 extends Fixture implements FixtureGroupIn
         }
 
         $manager->flush();
-    }
-
-    private function getOrCreateSubcategories(ObjectManager $manager, Category $symfony): array
-    {
-        $subcategoryRepo = $manager->getRepository(Subcategory::class);
-        $subcategories = [];
-
-        // Get existing subcategories
-        foreach ($subcategoryRepo->findAll() as $sub) {
-            $key = $sub->getCategory()->getName() . ':' . $sub->getName();
-            $subcategories[$key] = $sub;
-        }
-
-        // Create additional subcategories if needed
-        $additionalSubcategories = [
-            'Symfony' => ['Assets' => '', 'AssetMapper' => ''],
-        ];
-
-        foreach ($additionalSubcategories as $catName => $subs) {
-            $category = $catName === 'Symfony' ? $symfony : null;
-            if (!$category) continue;
-
-            foreach ($subs as $subName => $description) {
-                $key = $catName . ':' . $subName;
-                if (!isset($subcategories[$key])) {
-                    $sub = new Subcategory();
-                    $sub->setName($subName);
-                    $sub->setCategory($category);
-                    $sub->setDescription($description);
-                    $manager->persist($sub);
-                    $subcategories[$key] = $sub;
-                }
-            }
-        }
-
-        $manager->flush();
-        return $subcategories;
     }
 
     private function getCertificationQuestions(Category $symfony, array $subcategories): array

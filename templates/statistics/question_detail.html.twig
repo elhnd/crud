@@ -1,0 +1,286 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Question Details - Statistics{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="mb-6">
+        <div class="flex items-center gap-4 mb-4">
+            <a href="{{ path('statistics_weak_areas') }}" class="text-gray-500 hover:text-gray-700 transition">
+                <i class="fas fa-arrow-left text-xl"></i>
+            </a>
+            <h1 class="text-3xl font-bold text-gray-800">
+                <i class="fas fa-question-circle text-purple-500 mr-3"></i>
+                Question Details
+            </h1>
+        </div>
+        
+        <!-- Breadcrumb -->
+        <div class="flex items-center text-sm text-gray-500">
+            <a href="{{ path('statistics_dashboard') }}" class="hover:text-purple-600">Statistics</a>
+            <i class="fas fa-chevron-right mx-2 text-xs"></i>
+            <a href="{{ path('statistics_weak_areas') }}" class="hover:text-purple-600">Weak Areas</a>
+            <i class="fas fa-chevron-right mx-2 text-xs"></i>
+            <span class="text-gray-700">Question #{{ question.id }}</span>
+        </div>
+    </div>
+
+    <!-- Question Card -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden mb-6">
+        <!-- Category & Subcategory Badge -->
+        <div class="bg-gradient-to-r from-purple-500 to-indigo-600 px-6 py-4">
+            <div class="flex items-center gap-3 text-white">
+                <span class="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
+                    {{ question.category.name }}
+                </span>
+                <i class="fas fa-chevron-right text-xs opacity-60"></i>
+                <span class="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
+                    {{ question.subcategory.name }}
+                </span>
+            </div>
+        </div>
+
+        <!-- Question Text -->
+        <div class="p-6">
+            <div class="prose max-w-none question-text text-lg text-gray-800">
+                {{ question.text|raw }}
+            </div>
+
+            <!-- Question Metadata -->
+            <div class="flex flex-wrap gap-4 mt-6 pt-4 border-t border-gray-100">
+                <div class="flex items-center text-sm text-gray-500">
+                    <i class="fas fa-layer-group mr-2 text-purple-400"></i>
+                    <span>Type: <strong class="text-gray-700">{{ question.type }}</strong></span>
+                </div>
+                <div class="flex items-center text-sm text-gray-500">
+                    <i class="fas fa-signal mr-2 text-purple-400"></i>
+                    <span>Difficulty: 
+                        <strong class="text-gray-700">
+                            {% for i in 1..3 %}
+                                {% if i <= question.difficulty %}
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                {% else %}
+                                    <i class="far fa-star text-gray-300"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </strong>
+                    </span>
+                </div>
+                {% if question.isCertification %}
+                <div class="flex items-center text-sm">
+                    <i class="fas fa-certificate mr-2 text-green-500"></i>
+                    <span class="text-green-600 font-medium">Certification Question</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Generated Explanation Section -->
+    <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
+        <div class="bg-gradient-to-r from-violet-500 to-purple-600 px-6 py-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-white">
+                    <i class="fas fa-robot mr-2"></i> AI Documentation Explanation
+                </h2>
+                {% if aiExplanation %}
+                <span class="text-xs text-white/80 bg-white/20 px-2 py-1 rounded-full">
+                    <i class="fas fa-clock mr-1"></i>
+                    Generated {{ aiExplanation.generatedAt|date('M d, Y') }}
+                    {% if aiExplanation.locale == 'fr' %}🇫🇷{% else %}🇬🇧{% endif %}
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="p-6">
+            {% if aiExplanation %}
+                <!-- Display existing explanation -->
+                <div class="prose prose-lg max-w-none ai-content">
+                    {{ aiExplanation.content|markdown }}
+                </div>
+                
+                <!-- Regenerate options -->
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <div class="flex flex-wrap items-center gap-4">
+                        <span class="text-sm text-gray-500">
+                            <i class="fas fa-sync-alt mr-1"></i> Regenerate in:
+                        </span>
+                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline">
+                            <input type="hidden" name="locale" value="en">
+                            <input type="hidden" name="regenerate" value="1">
+                            <button type="submit" class="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+                                🇬🇧 English
+                            </button>
+                        </form>
+                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline">
+                            <input type="hidden" name="locale" value="fr">
+                            <input type="hidden" name="regenerate" value="1">
+                            <button type="submit" class="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+                                🇫🇷 Français
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <!-- No explanation yet - show generation options -->
+                <div class="text-center py-12">
+                    <i class="fas fa-robot text-purple-300 text-6xl mb-6"></i>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3">No AI Explanation Yet</h3>
+                    <p class="text-gray-500 mb-8 max-w-md mx-auto">
+                        Generate an explanation based on official Symfony documentation with code examples.
+                    </p>
+                    
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline">
+                            <input type="hidden" name="locale" value="en">
+                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium">
+                                <i class="fas fa-magic mr-2"></i>
+                                Generate in English 🇬🇧
+                            </button>
+                        </form>
+                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline">
+                            <input type="hidden" name="locale" value="fr">
+                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium">
+                                <i class="fas fa-magic mr-2"></i>
+                                Générer en Français 🇫🇷
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Answers Section (Collapsible) -->
+    <details class="bg-white rounded-xl shadow overflow-hidden mb-6">
+        <summary class="bg-gray-50 px-6 py-4 border-b border-gray-100 cursor-pointer hover:bg-gray-100 transition">
+            <h2 class="text-xl font-bold text-gray-800 inline">
+                <i class="fas fa-list-ul mr-2 text-indigo-500"></i> Show Answers ({{ question.answers|length }})
+            </h2>
+        </summary>
+        <div class="p-6 space-y-3">
+            {% for answer in question.answers %}
+            <div class="flex items-start p-4 rounded-lg {{ answer.isCorrect ? 'bg-green-50 border border-green-200' : 'bg-gray-50 border border-gray-200' }}">
+                <div class="flex-shrink-0 mr-4">
+                    {% if answer.isCorrect %}
+                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                    {% else %}
+                        <i class="fas fa-circle text-gray-300 text-xl"></i>
+                    {% endif %}
+                </div>
+                <div class="flex-grow question-text">
+                    {{ answer.text|raw }}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </details>
+
+    <!-- Original Explanation Section (if exists) -->
+    {% if question.explanation %}
+    <details class="bg-white rounded-xl shadow overflow-hidden mb-6">
+        <summary class="bg-blue-50 px-6 py-4 border-b border-blue-100 cursor-pointer hover:bg-blue-100 transition">
+            <h2 class="text-xl font-bold text-blue-800 inline">
+                <i class="fas fa-lightbulb mr-2 text-yellow-500"></i> Original Explanation
+            </h2>
+        </summary>
+        <div class="p-6">
+            <div class="prose max-w-none text-gray-700 question-text">
+                {{ question.explanation|raw }}
+            </div>
+        </div>
+    </details>
+    {% endif %}
+
+    <!-- Resource URL -->
+    {% if question.resourceUrl %}
+    <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
+        <div class="bg-indigo-50 px-6 py-4 border-b border-indigo-100">
+            <h2 class="text-xl font-bold text-indigo-800">
+                <i class="fas fa-book mr-2"></i> Documentation
+            </h2>
+        </div>
+        <div class="p-6">
+            <a href="{{ question.resourceUrl }}" target="_blank" rel="noopener noreferrer" 
+               class="inline-flex items-center text-indigo-600 hover:text-indigo-800 transition">
+                <i class="fas fa-external-link-alt mr-2"></i>
+                {{ question.resourceUrl }}
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Your Statistics -->
+    <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
+        <div class="bg-orange-50 px-6 py-4 border-b border-orange-100">
+            <h2 class="text-xl font-bold text-orange-800">
+                <i class="fas fa-chart-bar mr-2"></i> Your Performance
+            </h2>
+        </div>
+        <div class="p-6">
+            {% if stats.totalAttempts > 0 %}
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div class="text-center p-4 bg-gray-50 rounded-lg">
+                    <div class="text-3xl font-bold text-gray-800">{{ stats.totalAttempts }}</div>
+                    <div class="text-sm text-gray-500">Total Attempts</div>
+                </div>
+                <div class="text-center p-4 bg-green-50 rounded-lg">
+                    <div class="text-3xl font-bold text-green-600">{{ stats.correctCount }}</div>
+                    <div class="text-sm text-green-600">Correct</div>
+                </div>
+                <div class="text-center p-4 bg-red-50 rounded-lg">
+                    <div class="text-3xl font-bold text-red-600">{{ stats.wrongCount }}</div>
+                    <div class="text-sm text-red-600">Wrong</div>
+                </div>
+                <div class="text-center p-4 {{ stats.successRate >= 50 ? 'bg-green-50' : 'bg-red-50' }} rounded-lg">
+                    <div class="text-3xl font-bold {{ stats.successRate >= 50 ? 'text-green-600' : 'text-red-600' }}">
+                        {{ stats.successRate|number_format(0) }}%
+                    </div>
+                    <div class="text-sm {{ stats.successRate >= 50 ? 'text-green-600' : 'text-red-600' }}">Success Rate</div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="mb-4">
+                <div class="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Success Rate</span>
+                    <span>{{ stats.successRate|number_format(1) }}%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div class="h-4 rounded-full transition-all duration-500 {{ stats.successRate >= 70 ? 'bg-green-500' : (stats.successRate >= 40 ? 'bg-yellow-500' : 'bg-red-500') }}" 
+                         style="width: {{ stats.successRate }}%"></div>
+                </div>
+            </div>
+
+            {% if stats.lastAttemptAt %}
+            <div class="text-sm text-gray-500 mt-4">
+                <i class="fas fa-clock mr-2"></i>
+                Last attempted: {{ stats.lastAttemptAt|date('M d, Y \\a\\t H:i') }}
+            </div>
+            {% endif %}
+            {% else %}
+            <div class="text-center py-8">
+                <i class="fas fa-question-circle text-gray-300 text-5xl mb-4"></i>
+                <h3 class="text-xl font-semibold text-gray-600 mb-2">Not Yet Attempted</h3>
+                <p class="text-gray-500">You haven't answered this question yet.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex flex-wrap gap-4 justify-center">
+        <a href="{{ path('statistics_weak_areas') }}" 
+           class="inline-flex items-center px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition font-medium">
+            <i class="fas fa-arrow-left mr-2"></i>
+            Back to Weak Areas
+        </a>
+        <a href="{{ path('quiz_by_subcategory', {id: question.subcategory.id}) }}" 
+           class="inline-flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium">
+            <i class="fas fa-play mr-2"></i>
+            Practice {{ question.subcategory.name }}
+        </a>
+    </div>
+</div>
+{% endblock %}

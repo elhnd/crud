@@ -2,10 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Answer;
 use App\Entity\Category;
-use App\Entity\Question;
-use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -35,8 +32,8 @@ class CertificationExamFixtures extends Fixture implements FixtureGroupInterface
             throw new \RuntimeException('Categories not found. Run AppFixtures first.');
         }
 
-        // Get/create subcategories
-        $subcategories = $this->getOrCreateSubcategories($manager, $symfony, $php);
+        // Load existing subcategories from AppFixtures
+        $subcategories = $this->loadSubcategories($manager);
 
         // Define certification exam questions
         $questions = $this->getCertificationQuestions($symfony, $php, $subcategories);
@@ -48,53 +45,6 @@ class CertificationExamFixtures extends Fixture implements FixtureGroupInterface
         }
 
         $manager->flush();
-    }
-
-    private function getOrCreateSubcategories(ObjectManager $manager, Category $symfony, Category $php): array
-    {
-        $subcategoryRepo = $manager->getRepository(Subcategory::class);
-        $subcategories = [];
-
-        // Get existing subcategories
-        foreach ($subcategoryRepo->findAll() as $sub) {
-            $subcategories[$sub->getCategory()->getName() . ':' . $sub->getName()] = $sub;
-        }
-
-        // Create additional subcategories if needed
-        $additionalSubcategories = [
-            'Symfony' => [
-                'Controllers' => 'Symfony Controllers and AbstractController',
-                'Routing' => 'URL routing and route generation',
-                'Services' => 'Dependency Injection and Service Container',
-                'Twig' => 'Twig templating engine',
-                'Forms' => 'Symfony Form component',
-                'Validation' => 'Validation constraints and validators',
-                'Session' => 'HTTP Session handling',
-                'Assets' => 'Asset management and versioning',
-            ],
-            'PHP' => [
-                'OOP' => 'Object-Oriented Programming',
-                'Functions' => 'PHP functions and syntax',
-            ],
-        ];
-
-        foreach ($additionalSubcategories as $catName => $subs) {
-            $category = $catName === 'Symfony' ? $symfony : $php;
-            foreach ($subs as $name => $description) {
-                $key = $catName . ':' . $name;
-                if (!isset($subcategories[$key])) {
-                    $sub = new Subcategory();
-                    $sub->setName($name);
-                    $sub->setDescription($description);
-                    $sub->setCategory($category);
-                    $manager->persist($sub);
-                    $subcategories[$key] = $sub;
-                }
-            }
-        }
-
-        $manager->flush();
-        return $subcategories;
     }
 
     private function getCertificationQuestions(Category $symfony, Category $php, array $subcategories): array

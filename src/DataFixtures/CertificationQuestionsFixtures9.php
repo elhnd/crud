@@ -2,10 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Answer;
 use App\Entity\Category;
-use App\Entity\Question;
-use App\Entity\Subcategory;
 use App\Enum\QuestionType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
@@ -35,33 +32,8 @@ class CertificationQuestionsFixtures9 extends Fixture implements DependentFixtur
         $symfony = $symfonyRepo->findOneBy(['name' => 'Symfony']);
         $php = $symfonyRepo->findOneBy(['name' => 'PHP']);
 
-        $subcategoryRepo = $manager->getRepository(Subcategory::class);
-        $subcategories = [];
-
-        // Load existing subcategories
-        foreach ($subcategoryRepo->findAll() as $sub) {
-            $key = $sub->getCategory()->getName() . ':' . $sub->getName();
-            $subcategories[$key] = $sub;
-        }
-
-        // Create new subcategories if needed
-        $newSubcategories = [
-            ['PSR', $php],
-            ['Expression Language', $symfony],
-        ];
-
-        foreach ($newSubcategories as [$name, $category]) {
-            $key = $category->getName() . ':' . $name;
-            if (!isset($subcategories[$key])) {
-                $subcategory = new Subcategory();
-                $subcategory->setName($name);
-                $subcategory->setCategory($category);
-                $manager->persist($subcategory);
-                $subcategories[$key] = $subcategory;
-            }
-        }
-
-        $manager->flush();
+        // Load existing subcategories from AppFixtures
+        $subcategories = $this->loadSubcategories($manager);
 
         $questions = [
             // Question 1 - Console - Cursor usage
@@ -332,22 +304,6 @@ class CertificationQuestionsFixtures9 extends Fixture implements DependentFixtur
                     ['text' => '$options will automatically be casted to a nullable array', 'correct' => false],
                     ['text' => 'A fatal error is thrown because of the lack of type-hint', 'correct' => false],
                     ['text' => 'Nothing special', 'correct' => false],
-                ],
-            ],
-            // Question 24 - Routing - Route matching with defaults
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Routing'],
-                'text' => "Given the following two routes, what controller will be executed for the URL <code>/book/123</code>?\n<pre><code># config/routes.yaml\nbook_detail_section:\n    path:       /book/{id}/{section}\n    controller: 'App\\Controller\\BookController::detailSection'\n    defaults:   { section: home }\nbook_detail:\n    path:      /book/{id}\n    controller: 'App\\Controller\\BookController::detail'</code></pre>",
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'Routes are matched in order. The first route matches because section has a default value, making {section} optional.',
-                'resourceUrl' => 'https://symfony.com/doc/current/routing.html#priority-parameter',
-                'answers' => [
-                    ['text' => 'Error: The routing file contains unsupported keys for "defaults"', 'correct' => false],
-                    ['text' => 'Error: No route found', 'correct' => false],
-                    ['text' => 'App\\Controller\\BookController::detail', 'correct' => false],
-                    ['text' => 'App\\Controller\\BookController::detailSection', 'correct' => true],
                 ],
             ],
             // Question 25 - Process - mustRun() return value

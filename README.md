@@ -43,9 +43,8 @@ Cette commande :
 
 | Groupe | Description |
 |--------|-------------|
-| `base` | Catégories, sous-catégories et utilisateur par défaut |
 | `questions` | Toutes les questions d'entraînement |
-| `certification` | Questions de l'examen de certification |
+| `exam` | Questions de l'examen de certification |
 
 ### Exemples
 
@@ -54,7 +53,7 @@ Cette commande :
 php bin/console app:reload-questions --group=questions
 
 # Recharger les questions de certification
-php bin/console app:reload-questions --group=certification
+php bin/console app:reload-questions --group=exam
 
 # Migrer les identifiants (première utilisation après mise à jour)
 php bin/console app:reload-questions --migrate-identifiers

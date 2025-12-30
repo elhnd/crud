@@ -69,6 +69,9 @@ class Question
     #[ORM\Column(options: ['default' => true])]
     private bool $isActive = true;
 
+    #[ORM\OneToOne(mappedBy: 'question', targetEntity: QuestionExplanation::class, cascade: ['persist', 'remove'])]
+    private ?QuestionExplanation $aiExplanation = null;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
@@ -350,6 +353,23 @@ class Question
     public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getAiExplanation(): ?QuestionExplanation
+    {
+        return $this->aiExplanation;
+    }
+
+    public function setAiExplanation(?QuestionExplanation $aiExplanation): static
+    {
+        // Set the owning side of the relation if necessary
+        if ($aiExplanation !== null && $aiExplanation->getQuestion() !== $this) {
+            $aiExplanation->setQuestion($this);
+        }
+
+        $this->aiExplanation = $aiExplanation;
 
         return $this;
     }

@@ -378,4 +378,36 @@ class UserAnswerRepository extends ServiceEntityRepository
             fn($rate) => $rate >= $failureRateThreshold
         ));
     }
+
+    /**
+     * Get statistics for a specific question
+     * @return array{totalAttempts: int, correctCount: int, wrongCount: int, successRate: float, failureRate: float, lastAttemptAt: ?\DateTimeImmutable}
+     */
+    public function getQuestionStats(Question $question): array
+    {
+        $result = $this->createQueryBuilder('ua')
+            ->select(
+                'COUNT(ua.id) as totalAttempts',
+                'SUM(CASE WHEN ua.isCorrect = true THEN 1 ELSE 0 END) as correctCount',
+                'SUM(CASE WHEN ua.isCorrect = false THEN 1 ELSE 0 END) as wrongCount',
+                'MAX(ua.answeredAt) as lastAttemptAt'
+            )
+            ->where('ua.question = :question')
+            ->setParameter('question', $question)
+            ->getQuery()
+            ->getSingleResult();
+
+        $totalAttempts = (int)($result['totalAttempts'] ?? 0);
+        $correctCount = (int)($result['correctCount'] ?? 0);
+        $wrongCount = (int)($result['wrongCount'] ?? 0);
+
+        return [
+            'totalAttempts' => $totalAttempts,
+            'correctCount' => $correctCount,
+            'wrongCount' => $wrongCount,
+            'successRate' => $totalAttempts > 0 ? ($correctCount / $totalAttempts) * 100 : 0,
+            'failureRate' => $totalAttempts > 0 ? ($wrongCount / $totalAttempts) * 100 : 0,
+            'lastAttemptAt' => $result['lastAttemptAt'] ? new \DateTimeImmutable($result['lastAttemptAt']) : null,
+        ];
+    }
 }
