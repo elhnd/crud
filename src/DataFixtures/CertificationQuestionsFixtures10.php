@@ -262,21 +262,6 @@ Does the path <code>/blog/articles?page=1</code> display the page without error?
                 ],
             ],
 
-            // Q16 - Twig functions at runtime
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'Could functions and filters be defined at runtime without any overhead?',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'Oui, Twig permet de définir des fonctions et filtres à la volée en utilisant registerUndefinedFunctionCallback et registerUndefinedFilterCallback.',
-                'resourceUrl' => 'https://twig.symfony.com/doc/3.x/recipes.html',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
-                ],
-            ],
-
             // Q17 - Twig escaping with raw then escape
             [
                 'category' => $symfony,
