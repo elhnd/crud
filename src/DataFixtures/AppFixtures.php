@@ -129,6 +129,8 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
             'Architecture' => 'Symfony architecture and best practices',
             'Configuration' => 'Symfony configuration and environment',
             'Miscellaneous' => 'Other Symfony components and features',
+
+            'DomCrawler' => 'DOM Crawler component for HTML/XML parsing',
         ];
 
         $subcategoryRepo = $manager->getRepository(Subcategory::class);

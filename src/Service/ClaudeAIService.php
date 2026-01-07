@@ -13,7 +13,7 @@ class ClaudeAIService
 {
     private const API_URL = 'https://api.anthropic.com/v1/messages';
     private const MODEL = 'claude-sonnet-4-20250514';
-    private const MAX_TOKENS = 4096;
+    private const MAX_TOKENS = 1500;
     private const TIMEOUT = 60; // seconds
 
     private ?string $lastError = null;
@@ -93,50 +93,34 @@ class ClaudeAIService
 
     private function buildPrompt(Question $question, string $locale): string
     {
-        $languageInstruction = $locale === 'fr' 
-            ? 'Réponds en français.' 
-            : 'Respond in English.';
+        $lang = $locale === 'fr' ? 'French' : 'English';
 
-        $categoryContext = sprintf(
-            "Category: %s\nSubcategory: %s",
-            $question->getCategory()->getName(),
-            $question->getSubcategory()->getName()
-        );
-
-        // Build answers context
-        $answersContext = "Possible answers:\n";
+        // Collect correct answers
+        $correctAnswers = [];
         foreach ($question->getAnswers() as $answer) {
-            $marker = $answer->isCorrect() ? '✓' : '✗';
-            $answersContext .= sprintf("  %s %s\n", $marker, strip_tags($answer->getText()));
+            if ($answer->isCorrect()) {
+                $correctAnswers[] = strip_tags($answer->getText());
+            }
         }
+        $correctList = implode(' | ', $correctAnswers);
 
         $prompt = <<<PROMPT
-You are an expert Symfony and PHP developer. Your task is to explain a certification exam question by providing educational content based on the official Symfony documentation.
+Explain this Symfony certification question in {$lang}.
 
-{$languageInstruction}
+**Category:** {$question->getCategory()->getName()} > {$question->getSubcategory()->getName()}
+**Question:** {$question->getText()}
+**Correct answer(s):** {$correctList}
 
-**Question Context:**
-{$categoryContext}
+**MANDATORY requirement:** Base your explanation EXCLUSIVELY on official documentation (Symfony: https://symfony.com/doc or PHP: https://www.php.net/manual). You MUST include at least one documentation link.
 
-**Question:**
-{$question->getText()}
+**Strict requirements:**
+- Clear concept summary (3-5 sentences max)
+- Why the correct answer is right (1-2 sentences)
+- ONE short code example ONLY if truly necessary (5-10 lines max), otherwise none
+- One practical tip or common pitfall (1 sentence)
+- **Documentation source:** Provide 1-2 relevant doc links from Symfony or PHP manual (format: [Topic](url))
 
-{$answersContext}
-
-**Your task:**
-1. Explain the underlying concept being tested in this question
-2. Reference the relevant Symfony documentation and best practices
-3. Provide practical code examples that illustrate the concept
-4. Explain why the correct answer(s) are correct
-5. Explain common pitfalls or misconceptions related to this topic
-
-**Format your response using Markdown with:**
-- Clear section headers
-- Code blocks with proper syntax highlighting (use ```php for PHP code, ```yaml for YAML, ```twig for Twig)
-- Bullet points for lists
-- Bold text for important concepts
-
-**Important:** Focus on teaching the concept, not just explaining the answer. Help the learner understand the "why" behind the correct answer.
+**Format:** Concise Markdown. No introduction, no conclusion, no question repetition.
 PROMPT;
 
         return $prompt;
