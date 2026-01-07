@@ -54,7 +54,7 @@ class CertificationQuestionsFixtures22 extends Fixture implements DependentFixtu
             // Q2 - Serializer - Serialization Context
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Serializer'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Serializer'],
                 'text' => 'Is the following code valid?
 <pre><code class="language-php">#[Serializer\Context(
     normalizationContext: [DateTimeNormalizer::FORMAT_KEY => \DateTime::RFC3339],
@@ -241,7 +241,7 @@ $apple->variety = \'Honeycrisp\';</code></pre>',
             // Q12 - FrameworkBundle - Controllers isGranted
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:FrameworkBundle'] ?? $subcategories['Symfony:Security'],
+                'subcategory' => $subcategories['Symfony:FrameworkBundle'],
                 'text' => 'Up to Symfony 4, where was defined the <code>isGranted()</code> method available for any controller?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,

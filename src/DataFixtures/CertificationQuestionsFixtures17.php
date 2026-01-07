@@ -53,7 +53,7 @@ class CertificationQuestionsFixtures17 extends Fixture implements DependentFixtu
             // Q1 - Expression Language - ExpressionLanguage usage
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Expression Language'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Expression Language'],
                 'text' => 'Is the following code valid?
 <pre><code class="language-php">&lt;?php
 
@@ -77,7 +77,7 @@ $expressionLanguage->evaluate(\'product.price <= .99\', [\'product\' => new clas
             // Q2 - PropertyAccess - Magic __call() Method
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:PropertyAccess'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:PropertyAccess'],
                 'text' => 'What is the way to enable magic __call method?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -101,7 +101,7 @@ $expressionLanguage->evaluate(\'product.price <= .99\', [\'product\' => new clas
             // Q3 - Filesystem - Path utilities
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Filesystem'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Filesystem'],
                 'text' => 'Given the following code, what will be displayed?
 <pre><code class="language-php">&lt;?php
 
@@ -235,7 +235,7 @@ if (class_exists(\'\Exception\', true)) {
             // Q15 - Filesystem - Default directory mode
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Filesystem'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Filesystem'],
                 'text' => 'What is the default value of the directory mode argument of the <code>Symfony\Component\Filesystem\Filesystem::mkdir</code> method ?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,

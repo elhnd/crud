@@ -76,7 +76,7 @@ class CertificationQuestionsFixtures23 extends Fixture implements DependentFixtu
             // Q2 - FrameworkBundle - Container debug command
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:FrameworkBundle'] ?? $subcategories['Symfony:Dependency Injection'],
+                'subcategory' => $subcategories['Symfony:FrameworkBundle'],
                 'text' => 'What is the command to display the debug information of the container?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
@@ -94,7 +94,7 @@ class CertificationQuestionsFixtures23 extends Fixture implements DependentFixtu
             // Q3 - PHP - Exceptions with finally block
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Exceptions'] ?? $subcategories['PHP:PHP Basics'],
+                'subcategory' => $subcategories['PHP:Exceptions'],
                 'text' => 'Consider the following code snippet:
 <pre><code class="language-php">try {
     try {
@@ -216,7 +216,7 @@ class HomeController
             // Q8 - HttpClient - Debug info
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpClient'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:HttpClient'],
                 'text' => 'Which method call allows to retrieve detailed logs about the requests and the responses of an http transaction?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -265,7 +265,7 @@ class HomeController
             // Q11 - Expression Language - AST dump
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Expression Language'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Expression Language'],
                 'text' => 'Could the AST be dumped?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -308,7 +308,7 @@ $yaml = Yaml::parse(\'1983-07-01\');</code></pre>',
             // Q13 - Best Practices - Entities mapping format
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Architecture'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Architecture'],
                 'text' => 'According to the official Symfony <em>Best Practices Guide</em>, which format do you need to use to define the mapping information of the Doctrine entities?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -326,7 +326,7 @@ $yaml = Yaml::parse(\'1983-07-01\');</code></pre>',
             // Q15 - PHP Arrays - asort SORT_FLAG_CASE
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'] ?? $subcategories['PHP:PHP Basics'],
+                'subcategory' => $subcategories['PHP:Arrays & Collections'],
                 'text' => 'Given the following code, what will be displayed?
 <pre><code class="language-php">&lt;?php
 
@@ -415,7 +415,7 @@ public function list(int $page): Response
             // Q20 - PHP OOP - ArrayAccess interface
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:OOP'] ?? $subcategories['PHP:PHP Basics'],
+                'subcategory' => $subcategories['PHP:OOP'],
                 'text' => 'Which interface should an object implement to use brackets notation as an array?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -552,7 +552,7 @@ What can be said about the <code>setCode</code> command method?',
             // Q30 - Validator - Validation constraints locations
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Validator'] ?? $subcategories['Symfony:Validation'],
+                'subcategory' => $subcategories['Symfony:Validator'],
                 'text' => 'Which of the following elements can contain validation constraints?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,

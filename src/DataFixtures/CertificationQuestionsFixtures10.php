@@ -53,7 +53,7 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
             // Q1 - PHP Named arguments as array
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:PHP Basics'] ?? $subcategories['PHP:OOP'],
+                'subcategory' => $subcategories['PHP:PHP Basics'],
                 'text' => 'Is the following code correct?
 <pre><code class="language-php">class Foo
 {
@@ -85,7 +85,7 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
             // Q2 - PHP list() construct
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'] ?? $subcategories['PHP:OOP'],
+                'subcategory' => $subcategories['PHP:Arrays & Collections'],
                 'text' => 'The <code>___________</code> language construct is particularly useful to assign your own variable names to values within an array.',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
@@ -102,7 +102,7 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
             // Q4 - SSI render_ssi
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpCache'] ?? $subcategories['Symfony:Cache'],
+                'subcategory' => $subcategories['Symfony:HttpCache'],
                 'text' => 'Is the following code valid when using <code>Server Side Includes</code>?
 <pre><code class="language-twig">{{ render_ssi(controller(\'App\\Controller\\ProfileController::gdpr\')) }}</code></pre>',
                 'type' => QuestionType::TRUE_FALSE,
@@ -234,7 +234,7 @@ Does the path <code>/blog/articles?page=1</code> display the page without error?
             // Q14 - VarDumper destination
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:VarDumper'] ?? $subcategories['Symfony:Console'],
+                'subcategory' => $subcategories['Symfony:VarDumper'],
                 'text' => 'Could the destination of the dump be customized?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
@@ -249,7 +249,7 @@ Does the path <code>/blog/articles?page=1</code> display the page without error?
             // Q15 - Process waitUntil
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Process'] ?? $subcategories['Symfony:Console'],
+                'subcategory' => $subcategories['Symfony:Process'],
                 'text' => 'What does the <code>waitUntil</code> method allow you to do in the Process component?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,

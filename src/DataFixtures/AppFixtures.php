@@ -66,6 +66,7 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
             'Routing' => 'URL routing and parameter handling',
             'Controllers' => 'Symfony Controllers and AbstractController',
             'Services' => 'Dependency Injection and Service Container',
+            'FrameworkBundle' => 'FrameworkBundle configuration and features',
             
             // Security & Validation
             'Security' => 'Authentication, authorization, and security features',
@@ -78,6 +79,8 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
             'Twig' => 'Templating engine features',
             'OptionsResolver' => 'Options configuration and validation',
             
+            // Database & Doctrine
+            'Doctrine' => 'Doctrine ORM and database interactions',
             // HTTP & Caching
             'HTTP' => 'HTTP specification and status codes',
             'Cache' => 'HTTP caching and ESI',

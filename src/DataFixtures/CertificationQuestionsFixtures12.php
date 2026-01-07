@@ -53,7 +53,7 @@ class CertificationQuestionsFixtures12 extends Fixture implements DependentFixtu
             // Q1 - DI - Container dump
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Dependency Injection'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'text' => 'Could the container be dumped into a single file?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -86,7 +86,7 @@ class CertificationQuestionsFixtures12 extends Fixture implements DependentFixtu
             // Q3 - DI - Environment variables file processor
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Dependency Injection'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'text' => 'Is the following code valid?
 <pre><code class="language-yaml"># config/packages/framework.yaml
 parameters:
@@ -128,7 +128,7 @@ My name is Amanda.</code></pre>
             // Q5 - PHP Arrays - range function
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'] ?? $subcategories['PHP:PHP Basics'],
+                'subcategory' => $subcategories['PHP:Arrays & Collections'],
                 'text' => 'What PHP function is used to create a new array pre-filled with a sequential series of values?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
@@ -160,7 +160,7 @@ My name is Amanda.</code></pre>
             // Q7 - Validator - Constraints scopes
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Validator'] ?? $subcategories['Symfony:Forms'],
+                'subcategory' => $subcategories['Symfony:Validator'],
                 'text' => 'Which of the following are valid targets when adding new validation constraints to a PHP object?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
@@ -288,7 +288,7 @@ class HomeController extends Controller {
             // Q12 - Runtime - HttpFoundation integration
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Runtime'] ?? $subcategories['Symfony:HttpKernel'],
+                'subcategory' => $subcategories['Symfony:Runtime'],
                 'text' => 'Is the following code valid?
 <pre><code class="language-php">use Symfony\Component\HttpFoundation\Response;
 
@@ -326,7 +326,7 @@ return function (): Response {
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Cache'],
-                'text' => 'How does a cache differ from a key / value store?',
+                'text' => 'How does a cache differ from a key/value store?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
                 'explanation' => 'Un cache ne doit pas être utilisé pour persister des données car il peut être vidé à tout moment sans impacter le fonctionnement de l\'application.',
@@ -341,7 +341,7 @@ return function (): Response {
             // Q15 - Intl - languages support
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Intl'] ?? $subcategories['Symfony:Translation'],
+                'subcategory' => $subcategories['Symfony:Intl'],
                 'text' => 'What do you have to do to enjoy the full power of the Intl component, in many dozens of languages?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,

@@ -53,7 +53,7 @@ class CertificationQuestionsFixtures15 extends Fixture implements DependentFixtu
             // Q2 - VarExporter - SplObjectStorage instantiation
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:VarExporter'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:VarExporter'],
                 'text' => 'How can you instantiate a <code>SplObjectStorage</code> with VarExporter?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 3,
@@ -79,7 +79,7 @@ class CertificationQuestionsFixtures15 extends Fixture implements DependentFixtu
             // Q3 - Expression Language - Logical Operators
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Expression Language'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Expression Language'],
                 'text' => 'What will be displayed by the following code?
 <pre><code class="language-php">var_dump($language->evaluate(
     \'life < universe or life < everything\',
@@ -174,7 +174,7 @@ $user = "\"admin\"";</code></pre>', 'correct' => false],
             // Q9 - Expression Language - Arithmetic Operators
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Expression Language'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Expression Language'],
                 'text' => 'What will be displayed by the following code?
 <pre><code class="language-php">var_dump($expressionLanguage->evaluate(
     \'life + universe * everything\',
@@ -219,7 +219,7 @@ $user = "\"admin\"";</code></pre>', 'correct' => false],
             // Q13 - PasswordHasher - needsRehash
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:PasswordHasher'] ?? $subcategories['Symfony:Security'],
+                'subcategory' => $subcategories['Symfony:PasswordHasher'],
                 'text' => 'Could a hasher determine if a password needs to be rehashed?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -270,7 +270,7 @@ $user = "\"admin\"";</code></pre>', 'correct' => false],
             // Q17 - BrowserKit - Cookies support
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:BrowserKit'] ?? $subcategories['Symfony:HttpFoundation'],
+                'subcategory' => $subcategories['Symfony:BrowserKit'],
                 'text' => 'How to configure the Client provided by the Symfony <code>BrowserKit</code> component to save a Cookie between requests?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,

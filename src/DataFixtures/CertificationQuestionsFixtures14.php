@@ -53,7 +53,7 @@ class CertificationQuestionsFixtures14 extends Fixture implements DependentFixtu
             // Q1 - DI - Compiler Passes priority
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Dependency Injection'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'text' => 'Could a priority be set when adding a new compiler pass?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -101,7 +101,7 @@ class CertificationQuestionsFixtures14 extends Fixture implements DependentFixtu
             // Q6 - Cache - saveDeferred
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Cache'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Cache'],
                 'text' => 'Sometimes you may prefer to not save the objects immediately in order to increase the application performance. Which method would you call to mark cache items as "ready to be persisted" and then call to <code>commit()</code> method when you are ready to persist them all?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -118,7 +118,7 @@ class CertificationQuestionsFixtures14 extends Fixture implements DependentFixtu
             // Q7 - DI - Service Alias
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Dependency Injection'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'text' => 'With the following service definition how is it possible to create an alias of the <code>foo</code> service?
 <pre><code class="language-yaml">services:
     foo:
@@ -156,7 +156,7 @@ class CertificationQuestionsFixtures14 extends Fixture implements DependentFixtu
             // Q8 - Translation - LocaleSwitcher
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Translation'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Translation'],
                 'text' => 'Is the following code valid?
 <pre><code class="language-php">&lt;?php
 
@@ -190,7 +190,7 @@ class SomeClass
             // Q9 - ErrorHandler
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:ErrorHandler'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:ErrorHandler'],
                 'text' => 'What is the purpose of <code>Symfony\Component\ErrorHandler\ErrorHandler</code> class?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -207,7 +207,7 @@ class SomeClass
             // Q10 - Finder - Methods
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Finder'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Finder'],
                 'text' => 'Which methods belong to <code>Symfony\Component\Finder\Finder</code> class?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
@@ -228,7 +228,7 @@ class SomeClass
             // Q11 - HttpKernel - ESI
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpKernel'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'Which sentence about page fragments caching methods is true?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -245,7 +245,7 @@ class SomeClass
             // Q12 - Finder - SplFileInfo getMTime
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Finder'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Finder'],
                 'text' => 'Is the following code valid?
 <pre><code class="language-php">&lt;?php
 
