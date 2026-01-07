@@ -144,6 +144,7 @@ PROMPT;
 
     private function callClaudeAPI(string $prompt): ?array
     {
+        set_time_limit(60);
         if (empty($this->claudeApiKey)) {
             $this->logger->error('Claude API key is not configured');
             return null;

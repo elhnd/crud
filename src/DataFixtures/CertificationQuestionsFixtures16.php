@@ -53,7 +53,7 @@ class CertificationQuestionsFixtures16 extends Fixture implements DependentFixtu
             // Q1 - Serializer - Handling Arrays
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Serializer'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Serializer'],
                 'text' => 'With the following code:
 <pre><code class="language-php">use Acme\Person;
 
@@ -165,7 +165,7 @@ $persons = $serializer->deserialize($data, \'Acme\Person[]\', \'json\', \'array\
             // Q5 - Runtime - Composer plugin
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Runtime'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Runtime'],
                 'text' => 'Which event is listened by the Composer plugin of the Runtime component?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -182,7 +182,7 @@ $persons = $serializer->deserialize($data, \'Acme\Person[]\', \'json\', \'array\
             // Q6 - Inflector - Usage
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Inflector'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Inflector'],
                 'text' => 'Is the <code>Inflector</code> component still available in Symfony 6.0?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -256,7 +256,7 @@ if ($foo instanceof Baz) { echo \'Baz \'; }</code></pre>',
             // Q11 - Intl - Emojis
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Intl'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Intl'],
                 'text' => 'What is true about the emoji stripping functionality in the Intl component?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 3,
@@ -267,22 +267,6 @@ if ($foo instanceof Baz) { echo \'Baz \'; }</code></pre>',
                     ['text' => 'It uses replace rules based on the entire unicode emojis catalogue', 'correct' => true],
                     ['text' => 'It leverages the <code>Emoji</code> component', 'correct' => false],
                     ['text' => 'It uses regex to match emojis', 'correct' => false],
-                ],
-            ],
-
-            // Q12 - Cache - Key / value store
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Cache'] ?? $subcategories['Symfony:Services'],
-                'text' => 'How does a cache differ from a key/value store?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Un cache peut être supprimé sans faire crasher l\'application (les données seront régénérées) et ne doit pas être utilisé pour persister des données importantes. Un key/value store est conçu pour la persistance sécurisée des données.',
-                'resourceUrl' => 'http://www.aerospike.com/what-is-a-key-value-store/',
-                'answers' => [
-                    ['text' => 'It can be deleted without making the application crash.', 'correct' => true],
-                    ['text' => 'It should not be used to persist data.', 'correct' => true],
-                    ['text' => 'It is safe to store data in it.', 'correct' => false],
                 ],
             ],
 
@@ -304,7 +288,7 @@ if ($foo instanceof Baz) { echo \'Baz \'; }</code></pre>',
             // Q15 - Yaml - Dumping Multi-line Literal Blocks
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Yaml'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Yaml'],
                 'text' => 'What will be the output of the following code?
 <pre><code class="language-php">$string = array("string" => "Multiple
 Line
@@ -333,7 +317,7 @@ String"</code></pre>', 'correct' => false],
             // Q16 - Serializer - Serialization Groups
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Serializer'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Serializer'],
                 'text' => 'Given the following code:
 <pre><code class="language-php">// src/Dto/Product.php
 class Product 

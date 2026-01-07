@@ -68,7 +68,7 @@ class CertificationQuestionsFixtures19 extends Fixture implements DependentFixtu
             // Q2 - Expression Language - Parser configuration
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Expression Language'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Expression Language'],
                 'text' => 'Could the parser cache be changed?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -136,7 +136,7 @@ echo $o->/* ... */;</code></pre>',
             // Q6 - Messenger - Handlers configuration
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Messenger'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Messenger'],
                 'text' => 'Could handlers be restricted per bus?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -332,7 +332,7 @@ $container->register(\'app.lock\')->addTag(\'auto_alias\', [
             // Q19 - HttpClient - Response
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpClient'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:HttpClient'],
                 'text' => 'Could you emulate chunked responses and/or timeouts in mocked responses?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -395,7 +395,7 @@ foreach (xrange(1000) as $i) {
             // Q24 - Runtime - Configuration
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Runtime'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Runtime'],
                 'text' => 'Is it possible to define environment variables only for the <code>prod</code> environment?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -458,7 +458,7 @@ foreach (xrange(1000) as $i) {
             // Q33 - PropertyAccess - Reading from Arrays
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:PropertyAccess'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:PropertyAccess'],
                 'text' => 'What is the way to get the value of the <code>first_name</code> index of the <code>$person</code> array?
 <pre><code class="language-php">$person = array(
     \'first_name\' => \'Wouter\',
@@ -497,7 +497,7 @@ foreach (xrange(1000) as $i) {
             // Q38 - OptionsResolver - setAllowedTypes for null
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:OptionsResolver'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:OptionsResolver'],
                 'text' => 'When using the <code>OptionsResolver</code>, what is the correct call to <code>setAllowedTypes</code> to allow the value <code>null</code> for the option named <code>my_option</code>?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
@@ -514,7 +514,7 @@ foreach (xrange(1000) as $i) {
             // Q39 - Expression Language - contains operator
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Expression Language'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Expression Language'],
                 'text' => 'Is the following code valid?
 <pre><code class="language-php">&lt;?php
 
@@ -583,7 +583,7 @@ $expressionLanguage->evaluate(\'url contains "example.com"\', [
             // Q43 - Dotenv - Dotenv overriding
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Dotenv'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Dotenv'],
                 'text' => 'Given you have an already register env var <code>MYVAR=foo</code> in your shell and you load <code>MYVAR=bar</code> from a <code>.env</code> file via the Dotenv component. What will happen?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 3,

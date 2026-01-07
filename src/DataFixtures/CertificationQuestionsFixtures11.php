@@ -68,7 +68,7 @@ class CertificationQuestionsFixtures11 extends Fixture implements DependentFixtu
             // Q2 - Finder - Service ID
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Finder'] ?? $subcategories['Symfony:Console'],
+                'subcategory' => $subcategories['Symfony:Finder'],
                 'text' => 'What is the finder service id?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -135,7 +135,7 @@ class CertificationQuestionsFixtures11 extends Fixture implements DependentFixtu
             // Q6 - XPath query
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:XML'] ?? $subcategories['PHP:PHP Basics'],
+                'subcategory' => $subcategories['PHP:XML'],
                 'text' => 'Considering the following HTML structure:
 <pre><code class="language-html">&lt;!DOCTYPE html&gt;
 &lt;html&gt;
@@ -202,7 +202,7 @@ echo $nodes-&gt;item(0)-&gt;getAttributeNode(\'bgcolor\')-&gt;value;</code></pre
             // Q9 - Messenger Doctrine transaction
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Messenger'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Messenger'],
                 'text' => 'Given the context where the doctrine transport is used, could all the handlers be wrapped in a single transaction?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -217,7 +217,7 @@ echo $nodes-&gt;item(0)-&gt;getAttributeNode(\'bgcolor\')-&gt;value;</code></pre
             // Q10 - CssSelector :is pseudo-class
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:CssSelector'] ?? $subcategories['Symfony:Console'],
+                'subcategory' => $subcategories['Symfony:CssSelector'],
                 'text' => 'Could the <code>*:is</code> selector be used?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -250,7 +250,7 @@ echo $nodes-&gt;item(0)-&gt;getAttributeNode(\'bgcolor\')-&gt;value;</code></pre
             // Q12 - Process isSuccessful
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Process'] ?? $subcategories['Symfony:Console'],
+                'subcategory' => $subcategories['Symfony:Process'],
                 'text' => 'How is determined the fact that a process terminated successfully, internally by <code>Process::isSuccessful()</code>?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -282,7 +282,7 @@ echo $nodes-&gt;item(0)-&gt;getAttributeNode(\'bgcolor\')-&gt;value;</code></pre
             // Q15 - HttpKernel Fragment renderer
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpKernel'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'Could a custom fragment renderer strategy be created?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,

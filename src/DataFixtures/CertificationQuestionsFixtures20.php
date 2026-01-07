@@ -243,7 +243,7 @@ if (0 !== count($violations)) {
             // Q19 - BrowserKit - HttpBrowser lifecycle
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:BrowserKit'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:BrowserKit'],
                 'text' => 'Once started, could the <code>HttpBrowser</code> be restarted?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -329,7 +329,7 @@ echo $closure(1);</code></pre>',
             // Q27 - Runtime - Closure execution
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Runtime'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Runtime'],
                 'text' => 'Could a <code>Closure</code> be executed?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -359,7 +359,7 @@ echo $closure(1);</code></pre>',
             // Q30 - Clock - Usage
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Clock'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Clock'],
                 'text' => 'Could a <code>ClockInterface</code> implementation specify a timezone as a <code>DateTimeZone</code>?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -374,7 +374,7 @@ echo $closure(1);</code></pre>',
             // Q31 - PropertyAccess - Writing to Arrays
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:PropertyAccess'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:PropertyAccess'],
                 'text' => 'Is it possible to set values of an array with a <code>PropertyAccessor</code>?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,

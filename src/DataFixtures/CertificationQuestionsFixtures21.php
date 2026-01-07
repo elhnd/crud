@@ -70,7 +70,7 @@ class CertificationQuestionsFixtures21 extends Fixture implements DependentFixtu
             // Q2 - Expression Language - Registering Functions
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Expression Language'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Expression Language'],
                 'text' => 'What are the arguments of the <code>register()</code> method used to register a function?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -124,7 +124,7 @@ EvaluatorInterface $evaluator An evaluator able to evaluate the function</code><
             // Q5 - PHP - PSR Coding style
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:PSR'] ?? $subcategories['PHP:PHP Basics'],
+                'subcategory' => $subcategories['PHP:PSR'],
                 'text' => 'Which PSRs define coding guidelines to keep consistent coding styles across projects?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
@@ -192,7 +192,7 @@ EvaluatorInterface $evaluator An evaluator able to evaluate the function</code><
             // Q10 - HttpClient - cookies support
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpClient'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:HttpClient'],
                 'text' => 'How to configure the HTTP Client provided by the Symfony <code>HttpClient</code> component to save a Cookie between requests?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -209,7 +209,7 @@ EvaluatorInterface $evaluator An evaluator able to evaluate the function</code><
             // Q12 - Process - PhpProcess
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Process'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Process'],
                 'text' => 'It is possible to run a PHP script in an independent process?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
@@ -226,7 +226,7 @@ EvaluatorInterface $evaluator An evaluator able to evaluate the function</code><
             // Q13 - Lock - TTL refresh
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Lock'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:Lock'],
                 'text' => 'Given a lock set to be released after 60 seconds, is there any way to refresh this TTL?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
@@ -383,7 +383,7 @@ class TwitterClient
             // Q29 - VarDumper - Cloners
             [
                 'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:VarDumper'] ?? $subcategories['Symfony:Services'],
+                'subcategory' => $subcategories['Symfony:VarDumper'],
                 'text' => 'What is a <strong>Cloner</strong>?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,

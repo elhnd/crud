@@ -123,20 +123,6 @@ class CertificationQuestionsFixtures8 extends Fixture implements DependentFixtur
                     ['text' => '<code>Clock</code>', 'correct' => false],
                 ],
             ],
-            // HttpClient - MockHttpClient request count
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpClient'],
-                'text' => 'Could the amount of requests processed by <code>MockHttpClient</code> be accessed?',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 1,
-                'explanation' => 'Yes, MockHttpClient provides getRequestsCount() method to access the number of requests made.',
-                'resourceUrl' => 'https://symfony.com/doc/5.1/http_client.html#testing-http-clients-and-responses',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
-                ],
-            ],
             // Messenger - Handler result retrieval
             [
                 'category' => $symfony,
