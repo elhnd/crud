@@ -372,7 +372,7 @@ private $number;</code></pre>',
                 'resourceUrl' => 'https://symfony.com/doc/2.6/components/expression_language/extending.html, https://github.com/symfony/symfony/blob/2.6/src/Symfony/Component/ExpressionLanguage/ExpressionLanguage.php',
                 'answers' => [
                     ['text' => 'By calling the <code>setFunctions()</code> method.', 'correct' => false],
-                    ['text' => 'By calling the <code>addFunction()</code> method.', 'correct' => false],
+                    ['text' => 'By calling the <code>addFunction()</code> method.', 'correct' => true],
                     ['text' => 'By calling the <code>createFunction()</code> method.', 'correct' => false],
                     ['text' => 'By calling the <code>registerProvider()</code> method.', 'correct' => true],
                     ['text' => 'By calling the <code>register()</code> method.', 'correct' => true],
