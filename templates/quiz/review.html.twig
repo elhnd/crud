@@ -181,6 +181,25 @@
                     </div>
                 </div>
                 {% endif %}
+
+                <!-- AI Explanation Link -->
+                <div class="mt-4 p-4 bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200 rounded-xl">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="fas fa-robot text-cyan-600 text-xl mr-3"></i>
+                            <div>
+                                <h4 class="font-semibold text-cyan-800">AI-Powered Deep Explanation</h4>
+                                <p class="text-cyan-600 text-sm">Get a detailed AI explanation with examples and best practices</p>
+                            </div>
+                        </div>
+                        <a href="{{ path('statistics_question_detail', {id: answer.question.id}) }}" 
+                           class="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:from-cyan-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center space-x-2">
+                            <i class="fas fa-brain"></i>
+                            <span>View AI Explanation</span>
+                            <i class="fas fa-arrow-right text-sm"></i>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         {% endfor %}
