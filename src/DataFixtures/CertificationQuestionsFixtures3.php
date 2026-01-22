@@ -246,21 +246,6 @@ $fs->mirror(\'/srv/app\', \'/srv/bar\', null, [\'copy_on_windows\' => true]);</c
                     ['text' => 'No', 'correct' => false],
                 ],
             ],
-            // Q13: Constraint class purpose
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Validation'],
-                'text' => 'In validation, what is the purpose of the Constraint classes?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'Constraint classes define the rules to validate (e.g., NotBlank, Length). The actual validation logic is in ConstraintValidator classes.',
-                'resourceUrl' => 'https://symfony.com/doc/2.x/validation/custom_constraint.html',
-                'answers' => [
-                    ['text' => 'To define the rules to validate.', 'correct' => true],
-                    ['text' => 'To define the validation groups.', 'correct' => false],
-                    ['text' => 'To define the validation logic.', 'correct' => false],
-                ],
-            ],
             // Q14: Twig raw filter escaping
             [
                 'category' => $symfony,

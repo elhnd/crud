@@ -250,22 +250,6 @@ $result = $cloner->cloneVar($myVar);</code></pre>',
                     ['text' => '<code>/locale</code>', 'correct' => false],
                 ],
             ],
-            // OptionsResolver setAllowedTypes
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:OptionsResolver'],
-                'text' => 'Which of the following are valid types to use in <code>setAllowedTypes</code> method of <code>OptionsResolver</code> to validate a boolean value?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Both "bool" and "boolean" are valid type strings for setAllowedTypes(). There are no constants like OptionsResolver::BOOL.',
-                'resourceUrl' => 'https://symfony.com/doc/3.0/components/options_resolver.html#type-validation',
-                'answers' => [
-                    ['text' => '<code>"bool"</code>', 'correct' => true],
-                    ['text' => '<code>"boolean"</code>', 'correct' => true],
-                    ['text' => '<code>OptionsResolver::BOOL</code>', 'correct' => false],
-                    ['text' => '<code>OptionsResolver::BOOLEAN</code>', 'correct' => false],
-                ],
-            ],
             // Get current route in Twig
             [
                 'category' => $symfony,

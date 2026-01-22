@@ -132,20 +132,6 @@ $this->bar(...$args);</code></pre>',
                     ['text' => 'An error', 'correct' => false],
                 ],
             ],
-            // PropertyAccess __call
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:PropertyAccess'],
-                'text' => 'Is the <code>__call</code> magic method feature enabled by default in PropertyAccess?',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'No, __call support is disabled by default. You must enable it via PropertyAccessorBuilder::enableMagicCall().',
-                'resourceUrl' => 'https://symfony.com/doc/current/components/property_access/introduction.html#magic-call-method',
-                'answers' => [
-                    ['text' => 'No', 'correct' => true],
-                    ['text' => 'Yes', 'correct' => false],
-                ],
-            ],
             // Validator GroupSequenceProvider
             [
                 'category' => $symfony,
