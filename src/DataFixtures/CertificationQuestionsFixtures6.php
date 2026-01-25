@@ -622,24 +622,6 @@ return function(ContainerConfigurator $configurator): void {
                     ['text' => '<code>mime.types</code>', 'correct' => false],
                 ],
             ],
-            // Twig - Operator precedence
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'In Twig, which of the following operators has the <strong>highest</strong> precedence?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'The filter operator | has the highest precedence among the listed operators.',
-                'resourceUrl' => 'https://twig.symfony.com/doc/3.x/templates.html#expressions',
-                'answers' => [
-                    ['text' => '<code>|</code> (filters)', 'correct' => true],
-                    ['text' => '<code><=></code>', 'correct' => false],
-                    ['text' => '<code>or</code>', 'correct' => false],
-                    ['text' => '<code>in</code>', 'correct' => false],
-                    ['text' => '<code>==</code>', 'correct' => false],
-                    ['text' => '<code>and</code>', 'correct' => false],
-                ],
-            ],
             // Twig - Built-in functions
             [
                 'category' => $symfony,

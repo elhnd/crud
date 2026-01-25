@@ -285,28 +285,6 @@ class HomeController extends Controller {
                 ],
             ],
 
-            // Q12 - Runtime - HttpFoundation integration
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Runtime'],
-                'text' => 'Is the following code valid?
-<pre><code class="language-php">use Symfony\Component\HttpFoundation\Response;
-
-require_once dirname(__DIR__).\'/vendor/autoload_runtime.php\';
-
-return function (): Response {
-    return new Response(\'Hello world\');
-};</code></pre>',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'Oui, le composant Runtime supporte le retour direct d\'une Response depuis une closure. Le runtime se charge automatiquement d\'envoyer la réponse au client.',
-                'resourceUrl' => 'https://symfony.com/doc/5.3/components/runtime.html#using-the-runtime',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
-                ],
-            ],
-
             // Q13 - Console - CommandTester events
             [
                 'category' => $symfony,

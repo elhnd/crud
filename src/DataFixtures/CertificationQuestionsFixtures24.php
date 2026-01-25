@@ -361,24 +361,6 @@ private $number;</code></pre>',
                 ],
             ],
 
-            // Q28 - Expression Language - Registering Functions
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Expression Language'],
-                'text' => 'What are the possibles ways to register new functions in <code>Symfony\Component\ExpressionLanguage\ExpressionLanguage</code>?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Pour enregistrer des fonctions dans ExpressionLanguage, on peut utiliser register() ou registerProvider(). Les méthodes addFunction(), createFunction() et setFunctions() n\'existent pas.',
-                'resourceUrl' => 'https://symfony.com/doc/2.6/components/expression_language/extending.html, https://github.com/symfony/symfony/blob/2.6/src/Symfony/Component/ExpressionLanguage/ExpressionLanguage.php',
-                'answers' => [
-                    ['text' => 'By calling the <code>setFunctions()</code> method.', 'correct' => false],
-                    ['text' => 'By calling the <code>addFunction()</code> method.', 'correct' => true],
-                    ['text' => 'By calling the <code>createFunction()</code> method.', 'correct' => false],
-                    ['text' => 'By calling the <code>registerProvider()</code> method.', 'correct' => true],
-                    ['text' => 'By calling the <code>register()</code> method.', 'correct' => true],
-                ],
-            ],
-
             // Q29 - HttpFoundation - Accessing Request Data
             [
                 'category' => $symfony,

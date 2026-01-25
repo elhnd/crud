@@ -73,24 +73,6 @@ class CertificationQuestionsFixtures23 extends Fixture implements DependentFixtu
                 ],
             ],
 
-            // Q2 - FrameworkBundle - Container debug command
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:FrameworkBundle'],
-                'text' => 'What is the command to display the debug information of the container?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'La commande debug:container affiche toutes les informations de débogage sur le conteneur de services, incluant les services, paramètres, tags, etc.',
-                'resourceUrl' => 'http://symfony.com/doc/current/book/service_container.html#debugging-services',
-                'answers' => [
-                    ['text' => '<code>debug:container</code>', 'correct' => true],
-                    ['text' => '<code>debug:services</code>', 'correct' => false],
-                    ['text' => '<code>container:info</code>', 'correct' => false],
-                    ['text' => '<code>container:debug</code>', 'correct' => false],
-                    ['text' => '<code>services:debug</code>', 'correct' => false],
-                ],
-            ],
-
             // Q3 - PHP - Exceptions with finally block
             [
                 'category' => $php,
@@ -213,23 +195,6 @@ class HomeController
                 ],
             ],
 
-            // Q8 - HttpClient - Debug info
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpClient'],
-                'text' => 'Which method call allows to retrieve detailed logs about the requests and the responses of an http transaction?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'La méthode getInfo(\'debug\') permet de récupérer les logs détaillés des requêtes et réponses HTTP effectuées par le client HTTP de Symfony.',
-                'resourceUrl' => 'https://symfony.com/doc/5.0/components/http_client.html',
-                'answers' => [
-                    ['text' => 'getInfo(\'debug\')', 'correct' => true],
-                    ['text' => 'getInfoDebug()', 'correct' => false],
-                    ['text' => 'getDebug(\'info\')', 'correct' => false],
-                    ['text' => 'getDebugInfo()', 'correct' => false],
-                ],
-            ],
-
             // Q9 - SecurityBundle - Expression language provider tag
             [
                 'category' => $symfony,
@@ -259,49 +224,6 @@ class HomeController
                     ['text' => 'It tells the UnitOfWork to start tracking the <code>$entity</code>.', 'correct' => true],
                     ['text' => 'It persists <code>$entity</code> to the persistence layer (database).', 'correct' => false],
                     ['text' => 'It persists <code>$entity</code> to the persistence layer (database) if it doesn\'t exist already.', 'correct' => false],
-                ],
-            ],
-
-            // Q11 - Expression Language - AST dump
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Expression Language'],
-                'text' => 'Could the AST be dumped?',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'Oui, le composant Expression Language de Symfony permet de dumper l\'AST (Abstract Syntax Tree) pour inspecter la structure de l\'expression parsée.',
-                'resourceUrl' => 'https://symfony.com/doc/3.2/components/expression_language/ast.html#dumping-the-ast',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
-                ],
-            ],
-
-            // Q12 - Yaml - Date Handling
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Yaml'],
-                'text' => 'What will be stored in <code>$yaml</code> with the following code:
-<pre><code class="language-php">&lt;?php
-
-use Symfony\Component\Yaml\Yaml;
-
-$yaml = Yaml::parse(\'1983-07-01\');</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'Par défaut, le composant YAML de Symfony convertit les dates au format ISO 8601 en timestamps Unix (entier). La date 1983-07-01 devient 425865600.',
-                'resourceUrl' => 'http://symfony.com/doc/current/components/yaml.html#date-handling',
-                'answers' => [
-                    ['text' => '<pre><code>425865600</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code>1983-07-01</code></pre>', 'correct' => false],
-                    ['text' => 'An array<pre><code>array:1 [
-  0 => 425865600
-]</code></pre>', 'correct' => false],
-                    ['text' => 'A DateTime object<pre><code>DateTime {
-  +"date": "1983-07-01 00:00:00.000000"
-  +"timezone_type": 3
-  +"timezone": "UTC"
-}</code></pre>', 'correct' => false],
                 ],
             ],
 
@@ -363,23 +285,6 @@ echo implode(\', \', $data);</code></pre>',
                     ['text' => '<code>__serialize</code>, <code>__sleep</code> and <code>__wakeup</code>', 'correct' => false],
                     ['text' => '<code>__call</code>, <code>__get</code> and <code>__toString</code>', 'correct' => false],
                     ['text' => '<code>__toString</code>, <code>__serialize</code> and <code>__isset</code>', 'correct' => false],
-                ],
-            ],
-
-            // Q17 - Twig - Internals Compiler
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'Which of the following Twig internal objects is responsible for transforming an AST (Abstract Syntax Tree) into PHP code?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'Le Compiler transforme l\'AST en code PHP exécutable. Le Lexer tokenise le template, le Parser construit l\'AST à partir des tokens.',
-                'resourceUrl' => 'http://twig.symfony.com/doc/internals.html',
-                'answers' => [
-                    ['text' => 'The Compiler', 'correct' => true],
-                    ['text' => 'The Lexer', 'correct' => false],
-                    ['text' => 'The Parser', 'correct' => false],
-                    ['text' => 'The Environment', 'correct' => false],
                 ],
             ],
 
@@ -546,24 +451,6 @@ What can be said about the <code>setCode</code> command method?',
                 'answers' => [
                     ['text' => 'Yes', 'correct' => true],
                     ['text' => 'No', 'correct' => false],
-                ],
-            ],
-
-            // Q30 - Validator - Validation constraints locations
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Validator'],
-                'text' => 'Which of the following elements can contain validation constraints?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Depuis Symfony 5.3, les contraintes peuvent être placées sur les classes, les propriétés publiques, les propriétés privées/protégées, et les getters publics. Les getters privés/protégés ne sont pas supportés.',
-                'resourceUrl' => 'https://symfony.com/doc/current/validation.html#index-6',
-                'answers' => [
-                    ['text' => 'Classes', 'correct' => true],
-                    ['text' => 'Public properties', 'correct' => true],
-                    ['text' => 'Private and protected properties', 'correct' => true],
-                    ['text' => 'Public getters/issers', 'correct' => true],
-                    ['text' => 'Private and protected getters/issers', 'correct' => false],
                 ],
             ],
 

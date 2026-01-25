@@ -293,23 +293,6 @@ echo $nodes-&gt;item(0)-&gt;getAttributeNode(\'bgcolor\')-&gt;value;</code></pre
                     ['text' => 'No', 'correct' => false],
                 ],
             ],
-
-            // Q16 - Twig node_class
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'When writing a <code>Twig_Test</code>, what is a <code>node_class</code> for?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'L\'option node_class permet de spécifier une classe de noeud personnalisée qui sera compilée en primitives PHP, permettant une meilleure optimisation des performances.',
-                'resourceUrl' => 'https://twig.symfony.com/doc/2.x/advanced.html#tests',
-                'answers' => [
-                    ['text' => 'The given test will rely on a custom <code>Twig_NodeVisitorInterface</code>.', 'correct' => false],
-                    ['text' => 'The given test will use a semantic validation in addition to the basic evaluation.', 'correct' => false],
-                    ['text' => 'The given test will be compiled into PHP primitives.', 'correct' => true],
-                    ['text' => 'The <code>node_class</code> is a mandatory option to get defined in a <code>Twig_Environment</code>.', 'correct' => false],
-                ],
-            ],
         ];
     }
 }

@@ -267,24 +267,6 @@ foreach ($finder as $file) {
                 ],
             ],
 
-            // Q13 - Security - CSRF token in template
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Security'],
-                'text' => 'Could a CSRF token be generated in the template rather than in the form?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Oui, la fonction Twig csrf_token() permet de générer un token CSRF directement dans le template. C\'est utile pour les formulaires créés manuellement en HTML.',
-                'resourceUrl' => 'https://symfony.com/doc/2.1/reference/twig_reference.html#functions',
-                'answers' => [
-                    ['text' => 'Yes, using <code>generate_csrf_token()</code>', 'correct' => false],
-                    ['text' => 'It\'s not possible', 'correct' => false],
-                    ['text' => 'Yes, using <code>generate_token</code>', 'correct' => false],
-                    ['text' => 'Yes, using <code>csrf_token()</code>', 'correct' => true],
-                    ['text' => 'Yes, using <code>csrf_create_token()</code>', 'correct' => false],
-                ],
-            ],
-
             // Q14 - Routing - URL generation with FQCN
             [
                 'category' => $symfony,

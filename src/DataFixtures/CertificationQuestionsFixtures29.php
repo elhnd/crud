@@ -155,23 +155,6 @@ class CertificationQuestionsFixtures29 extends Fixture implements DependentFixtu
                 ],
             ],
 
-            // Q12 - Yaml - Null elements
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Yaml'],
-                'text' => 'Which of the following values are available to define a null element in YAML ?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'En YAML, ~ et null sont les deux valeurs valides pour définir un élément null.',
-                'resourceUrl' => 'http://symfony.com/doc/current/components/yaml/yaml_format.html#nulls',
-                'answers' => [
-                    ['text' => '<code>~</code>', 'correct' => true],
-                    ['text' => '<code>null</code>', 'correct' => true],
-                    ['text' => '<code>-</code>', 'correct' => false],
-                    ['text' => '<code>false</code>', 'correct' => false],
-                ],
-            ],
-
             // Q14 - Validator - JSR 303
             [
                 'category' => $symfony,

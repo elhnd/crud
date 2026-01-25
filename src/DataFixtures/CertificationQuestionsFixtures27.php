@@ -200,26 +200,6 @@ echo 6 === sum(1, 2, 3) ? \'Yes\' : \'No\';</code></pre>
                 ],
             ],
 
-            // Q17 - Twig - Range function
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'What is the output of the following twig code?
-<pre><code class="language-twig">{% for i in range(1, 10, 2) %}
-    {{ i }}{% if not loop.last %},{% endif %}
-{% endfor %}</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'La fonction range(1, 10, 2) génère une séquence de 1 à 10 avec un pas de 2, ce qui donne 1,3,5,7,9.',
-                'resourceUrl' => 'http://twig.symfony.com/doc/functions/range.html',
-                'answers' => [
-                    ['text' => '1,3,5,7,9', 'correct' => true],
-                    ['text' => '1,2,3,4,5,6,7,8,9,10', 'correct' => false],
-                    ['text' => '1,10,1,10', 'correct' => false],
-                    ['text' => '2,4,6,8,10', 'correct' => false],
-                ],
-            ],
-
             // Q18 - PasswordHasher - Multiple hashers
             [
                 'category' => $symfony,
@@ -423,25 +403,6 @@ $response->headers->set(\'Vary\', \'User-Agent\', false);</code></pre>', 'correc
                 'difficulty' => 3,
                 'explanation' => 'Oui, must-understand doit être couplé avec no-store pour assurer un comportement de fallback sécurisé.',
                 'resourceUrl' => 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control#directives',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
-                ],
-            ],
-
-            // Q36 - HTTP - Prefer safe header
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP'],
-                'text' => 'Is the following code valid when using the <code>safe</code> directive?
-<pre><code class="language-text">GET /foo.html HTTP/1.1
-Host: www.example.org
-User-Agent: ExampleBrowser/1.0
-Prefer: safe</code></pre>',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'Oui, cette utilisation de l\'en-tête Prefer avec la directive safe est valide selon la RFC 8674.',
-                'resourceUrl' => 'https://datatracker.ietf.org/doc/html/rfc8674#section-2',
                 'answers' => [
                     ['text' => 'Yes', 'correct' => true],
                     ['text' => 'No', 'correct' => false],

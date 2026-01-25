@@ -486,24 +486,6 @@ echo foo(1, 2, 3);</code></pre>
                 ],
             ],
 
-            // Q35 - HTTP - Status code
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP'],
-                'text' => 'What is the status code for <strong>Gone</strong>?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'Le code de statut HTTP 410 indique que la ressource demandée n\'est plus disponible de manière permanente et qu\'il n\'y a pas d\'adresse de redirection.',
-                'resourceUrl' => 'https://tools.ietf.org/html/rfc2616#section-10.4.11',
-                'answers' => [
-                    ['text' => '<code>410</code>', 'correct' => true],
-                    ['text' => '<code>404</code>', 'correct' => false],
-                    ['text' => '<code>411</code>', 'correct' => false],
-                    ['text' => '<code>409</code>', 'correct' => false],
-                    ['text' => '<code>403</code>', 'correct' => false],
-                ],
-            ],
-
             // Q36 - Doctrine ORM - The QueryBuilder
             [
                 'category' => $symfony,

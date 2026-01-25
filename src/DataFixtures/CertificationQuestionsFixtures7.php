@@ -269,22 +269,6 @@ $twig = new Environment($loader, [
                     ['text' => '<pre><code class="language-twig">{% trans %}Percent: %percent%{%}{% endtrans %}</code></pre>', 'correct' => false],
                 ],
             ],
-            // Form - PreSubmitEvent getData
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Forms'],
-                'text' => 'What is returned by the <code>getData()</code> method of <code>PreSubmitEvent</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'PreSubmitEvent::getData() returns an array containing the raw submitted data before any transformation.',
-                'resourceUrl' => 'https://symfony.com/doc/4.3/form/events.html',
-                'answers' => [
-                    ['text' => 'an array', 'correct' => true],
-                    ['text' => 'The model data of the form', 'correct' => false],
-                    ['text' => 'the view data of the form', 'correct' => false],
-                    ['text' => 'the norm data of the form', 'correct' => false],
-                ],
-            ],
             // HttpClient - consuming SSE
             [
                 'category' => $symfony,
@@ -515,26 +499,6 @@ class DefaultController
                     ['text' => 'It will return <code>{"data":{}}</code>', 'correct' => true],
                     ['text' => 'It will return <code>{"data":["foo","bar","baz"]}</code>', 'correct' => false],
                     ['text' => 'It will throw an <code>\\InvalidArgumentException</code>', 'correct' => false],
-                ],
-            ],
-            // DI - Environment variables usage
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Dependency Injection'],
-                'text' => 'Given the following configuration and the fact that the <code>.env</code> file exist with a key <code>APP_SECRET=bar</code>, which value will be used in <code>framework.secret</code>?<pre><code class="language-yaml"># config/packages/framework.yaml
-parameters:
-    env(SECRET): \'foo\'
-
-framework:
-    secret: \'%env(APP_SECRET)%\'</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'The .env file value (bar) takes precedence over the default fallback (foo) because APP_SECRET is set.',
-                'resourceUrl' => 'https://symfony.com/doc/4.2/configuration/env_var_processors.html#built-in-environment-variable-processors',
-                'answers' => [
-                    ['text' => '<code>bar</code>', 'correct' => true],
-                    ['text' => '<code>foo</code>', 'correct' => false],
-                    ['text' => 'An error will be thrown', 'correct' => false],
                 ],
             ],
             // HttpKernel - ResponseListener

@@ -289,25 +289,6 @@ $apple->variety = \'Honeycrisp\';</code></pre>',
                 ],
             ],
 
-            // Q16 - Twig - Strict Variables Mode
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'Consider the following Twig code snippet:
-<pre><code class="language-twig">The {{ color }} car!</code></pre>
-<p>What will be the result of evaluating this template without passing it a <code>color</code> variable when the <code>strict_variables</code> global setting is on?</p>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Avec strict_variables activé, Twig lève une exception Twig_Error_Runtime (ou Twig\Error\RuntimeError) si une variable n\'est pas définie.',
-                'resourceUrl' => 'https://twig.symfony.com/doc/1.x/templates.html#variables, https://twig.symfony.com/doc/2.x/templates.html#variables, https://twig.symfony.com/doc/2.x/api.html#environment-options',
-                'answers' => [
-                    ['text' => 'Twig will raise a <code>Twig_Error_Runtime</code> exception preventing the template from being evaluated.', 'correct' => true],
-                    ['text' => 'The template will be succesfully evaluated and the string <code>The  car!</code> will be displayed in the web browser.', 'correct' => false],
-                    ['text' => 'The template will be succesfully evaluated and the string <code>The empty car!</code> will be displayed in the web browser.', 'correct' => false],
-                    ['text' => 'The template will be partially evaluated and the string <code>The</code> will be displayed in the web browser.', 'correct' => false],
-                ],
-            ],
-
             // Q17 - PHP Arrays - array_reduce
             [
                 'category' => $php,

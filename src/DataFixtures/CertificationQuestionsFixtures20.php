@@ -240,21 +240,6 @@ if (0 !== count($violations)) {
                 ],
             ],
 
-            // Q19 - BrowserKit - HttpBrowser lifecycle
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:BrowserKit'],
-                'text' => 'Once started, could the <code>HttpBrowser</code> be restarted?',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'Oui, HttpBrowser peut être redémarré via la méthode restart() qui réinitialise l\'état du navigateur (cookies, historique, etc.).',
-                'resourceUrl' => 'https://github.com/symfony/symfony/blob/4.3/src/Symfony/Component/BrowserKit/HttpBrowser.php',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
-                ],
-            ],
-
             // Q20 - DI - ReverseContainer public
             [
                 'category' => $symfony,

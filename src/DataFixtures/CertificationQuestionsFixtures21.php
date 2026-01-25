@@ -171,24 +171,6 @@ EvaluatorInterface $evaluator An evaluator able to evaluate the function</code><
                 ],
             ],
 
-            // Q9 - Form - ChoiceType choice_attr
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Forms'],
-                'text' => 'Which types are allowed for the <code>choice_attr</code> option of the <code>Symfony\Component\Form\Extension\Core\Type\ChoiceType</code> form type?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'L\'option choice_attr accepte un tableau (array) ou un callable. Les types string, boolean, integer ne sont pas valides.',
-                'resourceUrl' => 'https://symfony.com/doc/2.7/reference/forms/types/choice.html#choice-attr',
-                'answers' => [
-                    ['text' => '<code>array</code>', 'correct' => true],
-                    ['text' => '<code>callable</code>', 'correct' => true],
-                    ['text' => '<code>string</code>', 'correct' => false],
-                    ['text' => '<code>boolean</code>', 'correct' => false],
-                    ['text' => '<code>integer</code>', 'correct' => false],
-                ],
-            ],
-
             // Q10 - HttpClient - cookies support
             [
                 'category' => $symfony,

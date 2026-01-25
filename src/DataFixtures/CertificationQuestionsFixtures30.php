@@ -402,23 +402,6 @@ echo $values;</code></pre>',
                 ],
             ],
 
-            // Q29 - VarDumper - global function
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:VarDumper'],
-                'text' => 'What is the name of the global function added by the VarDumper Component?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'Le composant VarDumper ajoute la fonction globale dump().',
-                'resourceUrl' => 'http://symfony.com/doc/current/components/var_dumper/introduction.html#the-dump-function',
-                'answers' => [
-                    ['text' => '<code>dump()</code>', 'correct' => true],
-                    ['text' => '<code>debug()</code>', 'correct' => false],
-                    ['text' => '<code>var_dumper()</code>', 'correct' => false],
-                    ['text' => '<code>var_dump()</code>', 'correct' => false],
-                ],
-            ],
-
             // Q30 - Config - Validation Rules
             [
                 'category' => $symfony,

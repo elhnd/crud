@@ -65,21 +65,6 @@ class CertificationQuestionsFixtures13 extends Fixture implements DependentFixtu
                 ],
             ],
 
-            // Q2 - Validator - ConstraintViolationInterface __toString
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Validator'],
-                'text' => 'Could the <code>ConstraintViolationInterface</code> be implemented without implementing the <code>__toString()</code> method?',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'Non, l\'interface ConstraintViolationInterface étend Stringable et déclare explicitement la méthode __toString(). Toute implémentation doit obligatoirement définir cette méthode.',
-                'resourceUrl' => 'https://github.com/symfony/validator/blob/7.2/ConstraintViolationInterface.php',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => false],
-                    ['text' => 'No', 'correct' => true],
-                ],
-            ],
-
             // Q3 - PHP Arrays - extract() security
             [
                 'category' => $php,

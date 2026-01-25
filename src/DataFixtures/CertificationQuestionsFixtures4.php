@@ -343,20 +343,6 @@ $this->bar(...$args);</code></pre>',
                     ['text' => 'Yes', 'correct' => false],
                 ],
             ],
-            // ControllerArgumentsEvent named arguments
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpKernel'],
-                'text' => 'Could the controller named arguments be retrieved from within <code>ControllerArgumentsEvent</code>?',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'Yes, since Symfony 6.2 you can use getNamedArguments() to get controller arguments by name.',
-                'resourceUrl' => 'https://github.com/symfony/symfony/blob/6.2/src/Symfony/Component/HttpKernel/Event/ControllerArgumentsEvent.php',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => true],
-                    ['text' => 'No', 'correct' => false],
-                ],
-            ],
             // Twig block rendering from different template
             [
                 'category' => $symfony,
@@ -467,22 +453,6 @@ $this->bar(...$args);</code></pre>',
                     ['text' => '<code>$item->exists()</code>', 'correct' => false],
                     ['text' => '<code>$item->isFound()</code>', 'correct' => false],
                     ['text' => '<code>$item->isCached()</code>', 'correct' => false],
-                ],
-            ],
-            // _controller request attribute
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpKernel'],
-                'text' => 'What is the name of the special request attribute used by <code>RouterListener</code> to know which callable to invoke?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'The _controller attribute contains the callable (controller) that should handle the request.',
-                'resourceUrl' => 'https://symfony.com/doc/2.8/components/http_kernel.html#1-the-kernel-request-event',
-                'answers' => [
-                    ['text' => '<code>_controller</code>', 'correct' => true],
-                    ['text' => '<code>_route</code>', 'correct' => false],
-                    ['text' => '<code>_action</code>', 'correct' => false],
-                    ['text' => '<code>_request</code>', 'correct' => false],
                 ],
             ],
             // ContainerConfigurator env

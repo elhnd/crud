@@ -211,24 +211,6 @@ $persons = $serializer->deserialize($data, \'Acme\Person[]\', \'json\', \'array\
                 ],
             ],
 
-            // Q8 - PHP - PHP and HTTP PUT
-            [
-                'category' => $php,
-                'subcategory' => $subcategories['PHP:PHP Basics'],
-                'text' => 'How would you access the data sent to your PHP server using the PUT HTTP method?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'PHP ne fournit pas de superglobale $_PUT. Les données envoyées via PUT doivent être lues depuis le flux php://input. Ce flux est en lecture seule et permet d\'accéder aux données brutes du corps de la requête.',
-                'resourceUrl' => 'http://php.net/manual/en/features.file-upload.put-method.php',
-                'answers' => [
-                    ['text' => 'Using the <code>php://input</code> stream', 'correct' => true],
-                    ['text' => 'Using <code>$HTTP_PUT_VARS</code>', 'correct' => false],
-                    ['text' => 'It is not possible', 'correct' => false],
-                    ['text' => 'Using <code>$_PUT</code>', 'correct' => false],
-                    ['text' => 'Using <code>$_POST</code>', 'correct' => false],
-                ],
-            ],
-
             // Q9 - PHP OOP - Instanceof Operator
             [
                 'category' => $php,

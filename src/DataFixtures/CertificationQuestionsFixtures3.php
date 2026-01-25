@@ -138,26 +138,6 @@ Which function will give the same output as <code>fseek($fp, 0)</code>?',
                     ['text' => '<code>range</code>', 'correct' => false],
                 ],
             ],
-            // Q7: Environment variables usage
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Dependency Injection'],
-                'text' => 'Given the following configuration and the fact that the <code>.env</code> file exists with a key <code>APP_SECRET=bar</code>, which value will be used in <code>framework.secret</code>?<pre><code class="language-yaml"># config/packages/framework.yaml
-parameters:
-    env(SECRET): \'foo\'
-
-framework:
-    secret: \'%env(APP_SECRET)%\'</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'The .env file value takes precedence. Since APP_SECRET=bar is defined, that value is used. The env(SECRET) default is for a different variable.',
-                'resourceUrl' => 'https://symfony.com/doc/4.2/configuration/env_var_processors.html#built-in-environment-variable-processors',
-                'answers' => [
-                    ['text' => '<code>bar</code>', 'correct' => true],
-                    ['text' => '<code>foo</code>', 'correct' => false],
-                    ['text' => 'An error will be thrown', 'correct' => false],
-                ],
-            ],
             // Q8: Compiler pass registration steps
             [
                 'category' => $symfony,
@@ -213,22 +193,6 @@ $age = $accessor->getValue($person, \'[age]\');</code></pre>',
                     ['text' => 'The value of <code>$age</code> will be <code>0</code>.', 'correct' => false],
                 ],
             ],
-            // Q11: Translator first argument
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Translation'],
-                'text' => 'What is the first argument of the constructor of <code>Symfony\\Component\\Translation\\Translator</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'The first argument of the Translator constructor is the locale string.',
-                'resourceUrl' => 'https://github.com/symfony/symfony/blob/master/src/Symfony/Component/Translation/Translator.php#L72',
-                'answers' => [
-                    ['text' => 'The locale', 'correct' => true],
-                    ['text' => 'A translator provider', 'correct' => false],
-                    ['text' => 'A translator loader', 'correct' => false],
-                    ['text' => 'The translation directory', 'correct' => false],
-                ],
-            ],
             // Q12: Filesystem mirror
             [
                 'category' => $symfony,
@@ -244,21 +208,6 @@ $fs->mirror(\'/srv/app\', \'/srv/bar\', null, [\'copy_on_windows\' => true]);</c
                 'answers' => [
                     ['text' => 'Yes', 'correct' => true],
                     ['text' => 'No', 'correct' => false],
-                ],
-            ],
-            // Q14: Twig raw filter escaping
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'Given <code>var</code> and <code>bar</code> are existing variables, among the following, which expressions are ESCAPED (not raw)?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'raw must be the last filter to prevent escaping. {{ var|raw|upper }} is escaped because upper comes after raw. {{ var|raw~bar }} concatenates, so bar is escaped.',
-                'resourceUrl' => 'https://twig.symfony.com/doc/1.x/filters/raw.html',
-                'answers' => [
-                    ['text' => '<code>{{ var|raw|upper }}</code>', 'correct' => true],
-                    ['text' => '<code>{{ var|upper|raw }}</code>', 'correct' => false],
-                    ['text' => '<code>{{ var|raw~bar }}</code>', 'correct' => true],
                 ],
             ],
             // Q15: HTTP Basic authentication

@@ -323,23 +323,6 @@ home.html.twig
                 ],
             ],
 
-            // Q22 - Event Dispatcher - Design pattern
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Event Dispatcher'],
-                'text' => 'Which design pattern does the <code>EventDispatcher</code> component implement?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Le composant EventDispatcher implémente le pattern Mediator, qui permet une communication découplée entre objets.',
-                'resourceUrl' => 'http://symfony.com/doc/current/components/event_dispatcher/introduction.html#introduction, https://en.wikipedia.org/wiki/Mediator_pattern',
-                'answers' => [
-                    ['text' => 'Mediator', 'correct' => true],
-                    ['text' => 'Adapter', 'correct' => false],
-                    ['text' => 'Factory Method', 'correct' => false],
-                    ['text' => 'Strategy', 'correct' => false],
-                ],
-            ],
-
             // Q23 - Twig - Use tag expression
             [
                 'category' => $symfony,
