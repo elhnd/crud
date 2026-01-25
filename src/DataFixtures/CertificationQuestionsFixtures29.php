@@ -378,7 +378,7 @@ $regeneratedVariable = VarExporter::import(\'exported.php\');</code></pre>', 'co
                 'answers' => [
                     ['text' => 'it allows to select a form', 'correct' => true],
                     ['text' => 'it allows to override form url action', 'correct' => false],
-                    ['text' => 'it allows to override form field default values', 'correct' => false],
+                    ['text' => 'it allows to override form field default values', 'correct' => true],
                     ['text' => 'it allows to submit a form', 'correct' => false],
                     ['text' => 'it allows to override form method', 'correct' => false],
                 ],
