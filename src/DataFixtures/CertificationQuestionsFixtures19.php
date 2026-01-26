@@ -601,7 +601,7 @@ $expressionLanguage->evaluate(\'url contains "example.com"\', [
             // Q44 - PHP - Arrays sorting
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'All array sorting functions take the array to sort as reference and modify it instead of returning the sorted array',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,

@@ -379,7 +379,7 @@ class TwitterClient
             // Arrays - array_diff_assoc
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'Which of the following functions compares array1 against array2 and returns the difference by checking array keys in addition?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,

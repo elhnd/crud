@@ -118,7 +118,7 @@ class SubcategoryDocumentationFixtures extends Fixture implements FixtureGroupIn
         
         // PHP - Types & Data
         'Typing & Strict Types' => 'https://www.php.net/manual/en/language.types.declarations.php',
-        'Arrays & Collections' => 'https://www.php.net/manual/en/book.array.php',
+        'Arrays' => 'https://www.php.net/manual/en/book.array.php',
         'Data Format & Types' => 'https://www.php.net/manual/en/language.types.php',
         'Strings' => 'https://www.php.net/manual/en/ref.strings.php',
         'JSON' => 'https://www.php.net/manual/en/book.json.php',

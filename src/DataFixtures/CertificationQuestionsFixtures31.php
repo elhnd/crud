@@ -55,7 +55,7 @@ class CertificationQuestionsFixtures31 extends Fixture implements DependentFixtu
             // Q4 - PHP Arrays - array_map usage
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'Could <code>array_map</code> be applied to multiple arrays at the same time?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,

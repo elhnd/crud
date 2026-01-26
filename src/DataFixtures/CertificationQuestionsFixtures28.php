@@ -353,7 +353,7 @@ echo $a;
             // Q25 - PHP Arrays - Array functions
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'What is the output of the following PHP code?
 <pre><code class="language-php">&lt;?php
 $myArray = [

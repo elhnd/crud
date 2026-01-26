@@ -101,7 +101,7 @@ class CertificationQuestionsFixtures26 extends Fixture implements DependentFixtu
             // Q8 - PHP Arrays - array_shift
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'Which function is used to remove and return the first element of an array?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,

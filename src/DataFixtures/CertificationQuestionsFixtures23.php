@@ -248,7 +248,7 @@ class HomeController
             // Q15 - PHP Arrays - asort SORT_FLAG_CASE
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'Given the following code, what will be displayed?
 <pre><code class="language-php">&lt;?php
 

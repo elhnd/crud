@@ -292,7 +292,7 @@ $apple->variety = \'Honeycrisp\';</code></pre>',
             // Q17 - PHP Arrays - array_reduce
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'What is the output of the following script?
 <pre><code class="language-php">&lt;?php
 

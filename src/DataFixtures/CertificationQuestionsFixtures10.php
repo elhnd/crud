@@ -85,7 +85,7 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
             // Q2 - PHP list() construct
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'The <code>___________</code> language construct is particularly useful to assign your own variable names to values within an array.',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
