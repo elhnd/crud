@@ -365,7 +365,7 @@ $listener = new AcmeListener();</code></pre>',
             // PHP Arrays - Multidimensional indexing
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'In the following code, what are the values required in <code>$a</code>, <code>$b</code>, <code>$c</code> and <code>$d</code> to output 40?<pre><code class="language-php">&lt;?php
 $values = [
     [

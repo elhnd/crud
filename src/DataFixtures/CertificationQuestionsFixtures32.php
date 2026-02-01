@@ -200,7 +200,7 @@ $cookie = new Cookie(\'cookie-name\', \'cookie-value\', \'...\', chips: true);</
             // Q9 - PHP Arrays - Array functions
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'How do you remove an element with the key <code>0</code> from the array <code>$numbers</code>?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,

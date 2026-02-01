@@ -128,7 +128,7 @@ My name is Amanda.</code></pre>
             // Q5 - PHP Arrays - range function
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'What PHP function is used to create a new array pre-filled with a sequential series of values?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,

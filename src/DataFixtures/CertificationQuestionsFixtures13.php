@@ -68,7 +68,7 @@ class CertificationQuestionsFixtures13 extends Fixture implements DependentFixtu
             // Q3 - PHP Arrays - extract() security
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'Is using <code>extract()</code> on <code>$_GET</code>, <code>$_FILES</code> and other unsecured data sources considered secure?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,

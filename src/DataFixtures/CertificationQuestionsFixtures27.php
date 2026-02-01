@@ -54,7 +54,7 @@ class CertificationQuestionsFixtures27 extends Fixture implements DependentFixtu
             // Q1 - PHP Arrays - Adding values to array
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'How do you add the value <code>10</code> to an array called <code>$myArray</code>?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
@@ -136,7 +136,7 @@ class CertificationQuestionsFixtures27 extends Fixture implements DependentFixtu
             // Q14 - PHP Arrays - Variadic functions
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'Consider the following code snippet:
 <pre><code class="language-php">function sum( ??? )
 {

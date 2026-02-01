@@ -195,7 +195,7 @@ class CertificationQuestionsFixtures25 extends Fixture implements DependentFixtu
             // Q17 - PHP Arrays - array_slice
             [
                 'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays & Collections'],
+                'subcategory' => $subcategories['PHP:Arrays'],
                 'text' => 'What is the output ?
 <pre><code class="language-php">&lt;?php
 $array1 = [\'a\', \'b\', \'c\', \'d\', \'e\', \'f\'];

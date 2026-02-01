@@ -161,7 +161,7 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
             
             // Types & Data
             'Typing & Strict Types' => 'Type declarations and strict mode',
-            'Arrays & Collections' => 'Arrays, array functions and manipulation',
+            'Arrays' => 'Arrays, array functions and manipulation',
             'Data Format & Types' => 'Data formats and type handling',
             'Strings' => 'String manipulation functions',
             'JSON' => 'JSON encoding and decoding',
@@ -446,9 +446,9 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
                     ['text' => 'False', 'correct' => false],
                 ],
             ],
-            // Arrays & Collections
+            // Arrays
             [
-                'subcategory' => 'Arrays & Collections',
+                'subcategory' => 'Arrays',
                 'text' => 'What function is used to check if a key exists in an array?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
@@ -462,7 +462,7 @@ class AppFixtures extends Fixture implements FixtureGroupInterface
                 ],
             ],
             [
-                'subcategory' => 'Arrays & Collections',
+                'subcategory' => 'Arrays',
                 'text' => 'Which array functions transform array values? (Select all that apply)',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
