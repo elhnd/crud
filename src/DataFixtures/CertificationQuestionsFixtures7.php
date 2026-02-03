@@ -376,22 +376,6 @@ class TwitterClient
                     ['text' => 'an exception will be thrown', 'correct' => false],
                 ],
             ],
-            // Arrays - array_diff_assoc
-            [
-                'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays'],
-                'text' => 'Which of the following functions compares array1 against array2 and returns the difference by checking array keys in addition?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'array_diff_assoc() computes the difference of arrays with additional index check.',
-                'resourceUrl' => 'https://php.net/manual/en/function.array-diff-assoc.php',
-                'answers' => [
-                    ['text' => '<code>array_diff_assoc</code>', 'correct' => true],
-                    ['text' => '<code>array_diff_key</code>', 'correct' => false],
-                    ['text' => '<code>array_diff_ukey</code>', 'correct' => false],
-                    ['text' => '<code>array_diff_uassoc</code>', 'correct' => false],
-                ],
-            ],
             // Messenger - exception count
             [
                 'category' => $symfony,

@@ -119,7 +119,7 @@ function bar(/* ... */ $a)
 <pre><code class="language-php">// ..
 $bus->dispatch(new PingWebhookMessage(\'GET\', \'https://example.com/status\'));</code></pre>
 <p>What happens if the HTTP response code is 3xx/4xx/5xx?</p>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'PingWebhookMessageHandler lance une exception si le code de réponse HTTP indique une erreur (3xx/4xx/5xx), car la méthode throwOnError() est appelée sur la réponse.',
                 'resourceUrl' => 'https://symfony.com/blog/new-in-symfony-6-4-more-built-in-message-handlers#ping-webhook-handler, https://github.com/symfony/symfony/blob/6.4/src/Symfony/Component/HttpClient/Messenger/PingWebhookMessageHandler.php#L30',

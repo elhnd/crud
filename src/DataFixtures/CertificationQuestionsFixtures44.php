@@ -81,7 +81,7 @@ class CertificationQuestionsFixtures44 extends Fixture implements DependentFixtu
                 'title' => 'Twig extends tag with array',
                 'text' => 'Is the following extends tag valid ?
 <pre><code>{% extends [\'layout1.html.twig\', \'layout2.html.twig\'] %}</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, Twig supports dynamic inheritance. When an array is passed, Twig will use the first template that exists.',
                 'resourceUrl' => 'https://twig.symfony.com/doc/1.x/tags/extends.html#dynamic-inheritance',
@@ -306,7 +306,7 @@ class FooCommand extends Command
     return Command::INVALID;
   }
 }</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, Command::INVALID was introduced in Symfony 5.3 to indicate that the command was run with invalid input.',
                 'resourceUrl' => 'https://symfony.com/doc/5.3/console.html#creating-a-command',
@@ -435,7 +435,7 @@ class FooCommand extends Command
                 'subcategory' => $subcategories['Symfony:FrameworkBundle'],
                 'title' => 'Validator cache service override',
                 'text' => 'Could the cache service used to store validation metadata be overridden?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, the cache service for validation metadata can be configured and overridden in the framework configuration.',
                 'resourceUrl' => 'https://symfony.com/doc/2.3/reference/configuration/framework.html#validation',

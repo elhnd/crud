@@ -99,51 +99,6 @@ class CertificationQuestionsFixtures31 extends Fixture implements DependentFixtu
                 ],
             ],
 
-            // Q7 - Validator - Validation groups count
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Validator'],
-                'text' => 'Given the following class and constraints:
-<pre><code class="language-php">&lt;?php
-
-namespace App\Entity;
-
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-
-class User implements UserInterface
-{
-    /**
-     * @Assert\Email(groups={"registration"})
-     */
-    private $email;
-
-    /**
-     * @Assert\NotBlank(groups={"registration"})
-     * @Assert\Length(min=7, groups={"registration"})
-     */
-    private $password;
-
-    /**
-     * @Assert\Length(min=2)
-     */
-    private $city;
-}</code></pre>
-<p>How many validation groups does this class contain?</p>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Cette classe contient 2 groupes de validation : "registration" (explicite) et "Default" (implicite pour la contrainte sur city qui n\'a pas de groupe spécifié).',
-                'resourceUrl' => 'https://symfony.com/doc/current/validation/groups.html',
-                'answers' => [
-                    ['text' => '2', 'correct' => true],
-                    ['text' => '1', 'correct' => false],
-                    ['text' => '3', 'correct' => false],
-                    ['text' => '4', 'correct' => false],
-                    ['text' => '5', 'correct' => false],
-                    ['text' => '0', 'correct' => false],
-                ],
-            ],
-
             // Q8 - HttpKernel - KernelEvent methods
             [
                 'category' => $symfony,

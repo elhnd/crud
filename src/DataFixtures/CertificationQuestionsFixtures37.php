@@ -368,28 +368,6 @@ $GLOBALS += [];</code></pre>',
                 ],
             ],
 
-            // Q19 - Doctrine DBAL - Connection URL
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Doctrine'],
-                'text' => 'Which of the following are valid database URLs that can be used in the <code>dbal.url</code> option in Symfony applications?
-<pre><code class="language-yaml"># app/config/config.yml
-doctrine:
-    dbal:
-        url: ...</code></pre>',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Les URLs valides incluent sqlite:///:memory: et mysql://localhost:4486/foo?charset=UTF-8. Le format mysql://localhost/mydb@user:secret est incorrect (user:password avant l\'hôte).',
-                'resourceUrl' => 'https://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html',
-                'answers' => [
-                    ['text' => '<code>sqlite:///:memory:</code>', 'correct' => true],
-                    ['text' => '<code>mysql://localhost:4486/foo?charset=UTF-8</code>', 'correct' => true],
-                    ['text' => '<code>sqlite:///data.db</code>', 'correct' => false],
-                    ['text' => '<code>pgsql://localhost:5432</code>', 'correct' => false],
-                    ['text' => '<code>mysql://localhost/mydb@user:secret</code>', 'correct' => false],
-                ],
-            ],
-
             // Q20 - HttpFoundation - Request attributes
             [
                 'category' => $symfony,
@@ -560,28 +538,6 @@ How many events are dispatched?',
                 'answers' => [
                     ['text' => 'Yes', 'correct' => true],
                     ['text' => 'No', 'correct' => false],
-                ],
-            ],
-
-            // Q29 - Translation - Loading Message Catalogs
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Translation'],
-                'text' => 'Which of the followings are part of the built-in message catalogs loaders?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Les loaders intégrés incluent : MoFileLoader, CsvFileLoader, PoFileLoader, XliffFileLoader, YamlFileLoader, PhpFileLoader, IniFileLoader, JsonFileLoader, IcuDatFileLoader, IcuResFileLoader.',
-                'resourceUrl' => 'https://github.com/symfony/translation/tree/2.3/Loader',
-                'answers' => [
-                    ['text' => 'MoFileLoader', 'correct' => true],
-                    ['text' => 'CsvFileLoader', 'correct' => true],
-                    ['text' => 'PoFileLoader', 'correct' => true],
-                    ['text' => 'XliffFileLoader', 'correct' => true],
-                    ['text' => 'YamlFileLoader', 'correct' => true],
-                    ['text' => 'JsonLoader', 'correct' => false],
-                    ['text' => 'PhpLoader', 'correct' => false],
-                    ['text' => 'IcuFileLoader', 'correct' => false],
-                    ['text' => 'IniFileLoader', 'correct' => false],
                 ],
             ],
 

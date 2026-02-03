@@ -187,23 +187,6 @@ $result = $cloner->cloneVar($myVar);</code></pre>',
                     ['text' => 'An array.', 'correct' => false],
                 ],
             ],
-            // AbstractSessionListener properties
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpKernel'],
-                'text' => 'Which sentences about <code>AbstractSessionListener::NO_AUTO_CACHE_CONTROL_HEADER</code> are true?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'This header controls the public/private cache-control property and is used as a response header.',
-                'resourceUrl' => 'https://github.com/symfony/http-kernel/blob/4.1/EventListener/AbstractSessionListener.php',
-                'answers' => [
-                    ['text' => 'It\'s related to the <code>public/private</code> property of <code>cache-control</code>', 'correct' => true],
-                    ['text' => 'It\'s designed to be used as a response header', 'correct' => true],
-                    ['text' => 'It\'s designed to be used as a <code>SessionInterface</code> option', 'correct' => false],
-                    ['text' => 'It\'s related to session storage strategy', 'correct' => false],
-                    ['text' => 'It\'s designed to be used as a request header', 'correct' => false],
-                ],
-            ],
             // Asset version access
             [
                 'category' => $symfony,
@@ -384,22 +367,6 @@ $parsed = Yaml::parse("!custom_tag { foo: bar }", Yaml::PARSE_CUSTOM_TAGS);</cod
                     ['text' => 'No', 'correct' => false],
                 ],
             ],
-            // DI shared option
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Dependency Injection'],
-                'text' => 'What is the way to always get a new instance of a service?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Setting shared: false ensures a new instance is created each time the service is requested.',
-                'resourceUrl' => 'https://symfony.com/doc/current/cookbook/service_container/shared.html',
-                'answers' => [
-                    ['text' => 'Setting the option <code>shared</code> to false.', 'correct' => true],
-                    ['text' => 'Setting the option <code>singleton</code> to false.', 'correct' => false],
-                    ['text' => 'Setting the option <code>scope</code> to <code>prototype</code>.', 'correct' => false],
-                    ['text' => 'Setting the option <code>scope</code> to <code>request</code>.', 'correct' => false],
-                ],
-            ],
             // Serializer context in attribute
             [
                 'category' => $symfony,
@@ -412,23 +379,6 @@ $parsed = Yaml::parse("!custom_tag { foo: bar }", Yaml::PARSE_CUSTOM_TAGS);</cod
                 'answers' => [
                     ['text' => 'Yes', 'correct' => true],
                     ['text' => 'No', 'correct' => false],
-                ],
-            ],
-            // Request cookies access
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpFoundation'],
-                'text' => 'How to access <code>$_COOKIE</code> data when using a <code>Symfony\\Component\\HttpFoundation\\Request</code> object?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'Cookie data is accessed via the cookies property.',
-                'resourceUrl' => 'http://symfony.com/doc/current/components/http_foundation.html#accessing-request-data',
-                'answers' => [
-                    ['text' => '<code>$request->cookies</code>', 'correct' => true],
-                    ['text' => '<code>$request->getCookie()</code>', 'correct' => false],
-                    ['text' => '<code>$request->getCookieData()</code>', 'correct' => false],
-                    ['text' => '<code>$request->cookie</code>', 'correct' => false],
-                    ['text' => '<code>$request->getCookies()</code>', 'correct' => false],
                 ],
             ],
             // MockClock from datetime

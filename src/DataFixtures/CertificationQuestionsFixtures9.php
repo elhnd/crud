@@ -80,23 +80,6 @@ class CertificationQuestionsFixtures9 extends Fixture implements DependentFixtur
                     ['text' => 'No', 'correct' => false],
                 ],
             ],
-            // Question 4 - HttpFoundation - Accessing Request Data
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpFoundation'],
-                'text' => 'How to access <code>$_COOKIE</code> data when using a <code>Symfony\\Component\\HttpFoundation\\Request</code> <code>$request</code> object?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'The cookies property is a ParameterBag containing all cookies from the request.',
-                'resourceUrl' => 'http://symfony.com/doc/current/components/http_foundation.html#accessing-request-data',
-                'answers' => [
-                    ['text' => '$request->getCookie()', 'correct' => false],
-                    ['text' => '$request->getCookies()', 'correct' => false],
-                    ['text' => '$request->cookie', 'correct' => false],
-                    ['text' => '$request->cookies', 'correct' => true],
-                    ['text' => '$request->getCookieData()', 'correct' => false],
-                ],
-            ],
             // Question 5 - DI - FrozenParameterBag
             [
                 'category' => $symfony,
@@ -273,21 +256,6 @@ class CertificationQuestionsFixtures9 extends Fixture implements DependentFixtur
                     ['text' => '$_POST', 'correct' => true],
                     ['text' => '$_GET', 'correct' => true],
                     ['text' => '$_COOKIE', 'correct' => false],
-                ],
-            ],
-            // Question 20 - Form - BirthdayType parent
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Forms'],
-                'text' => 'Which of the following form types is the parent of the <code>Symfony\\Component\\Form\\Extension\\Core\\Type\\BirthdayType</code> form type?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'BirthdayType extends DateType, configuring years in the past by default.',
-                'resourceUrl' => 'http://symfony.com/doc/current/reference/forms/types/birthday.html',
-                'answers' => [
-                    ['text' => 'Symfony\\Component\\Form\\Extension\\Core\\Type\\DateType', 'correct' => true],
-                    ['text' => 'Symfony\\Component\\Form\\Extension\\Core\\Type\\DateTimeType', 'correct' => false],
-                    ['text' => 'Symfony\\Component\\Form\\Extension\\Core\\Type\\TimeType', 'correct' => false],
                 ],
             ],
             // Question 22 - OptionsResolver - Callable without Options type-hint

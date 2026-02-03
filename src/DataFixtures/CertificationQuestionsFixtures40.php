@@ -50,50 +50,13 @@ class CertificationQuestionsFixtures40 extends Fixture implements DependentFixtu
     private function getCertificationQuestions(Category $symfony, Category $php, array $subcategories): array
     {
         return [
-            // Q1 - Console - Verbosity
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Console'],
-                'text' => 'What are the console verbosity levels?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'The valid verbosity levels are: VERBOSITY_QUIET, VERBOSITY_NORMAL, VERBOSITY_VERBOSE, VERBOSITY_VERY_VERBOSE, and VERBOSITY_DEBUG.',
-                'resourceUrl' => 'http://symfony.com/doc/current/console/verbosity.html',
-                'answers' => [
-                    ['text' => 'OutputInterface::VERBOSITY_DEBUG', 'correct' => true],
-                    ['text' => 'OutputInterface::VERBOSITY_VERY_VERBOSE', 'correct' => true],
-                    ['text' => 'OutputInterface::VERBOSITY_NO_DEBUG', 'correct' => false],
-                    ['text' => 'OutputInterface::VERBOSITY_QUIET', 'correct' => true],
-                    ['text' => 'OutputInterface::VERBOSITY_NORMAL', 'correct' => true],
-                    ['text' => 'OutputInterface::VERBOSITY_NONE', 'correct' => false],
-                    ['text' => 'OutputInterface::VERBOSITY_VERY_VERY_VERBOSE', 'correct' => false],
-                    ['text' => 'OutputInterface::VERBOSITY_VERBOSE', 'correct' => true],
-                ],
-            ],
-
-            // Q2 - Twig - Loaders definition
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'What are Twig loaders responsible for?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Loaders are responsible for loading templates from a resource name.',
-                'resourceUrl' => 'https://twig.symfony.com/doc/2.x/api.html#loaders',
-                'answers' => [
-                    ['text' => 'Loaders are responsible for loading token parsers.', 'correct' => false],
-                    ['text' => 'Loaders are responsible for loading templates from a resource name.', 'correct' => true],
-                    ['text' => 'Loaders are responsible for loading environments such as Twig_Evironment.', 'correct' => false],
-                    ['text' => 'Loaders are responsible for loading extensions.', 'correct' => false],
-                ],
-            ],
 
             // Q3 - HttpFoundation - Response::create()
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:HttpFoundation'],
                 'text' => 'Since <code>6.0</code>, could a response be created via <code>Response::create()</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'The Response::create() method was deprecated in Symfony 5.1 and removed in Symfony 6.0. Use the constructor instead.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/6.0/src/Symfony/Component/HttpFoundation/Response.php',
@@ -167,7 +130,7 @@ class CertificationQuestionsFixtures40 extends Fixture implements DependentFixtu
       return sprintf(\'%d: %s\', $this-&gt;code, $this-&gt;message);
   }
 }</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 3,
                 'explanation' => 'Throwable is an internal interface that cannot be implemented directly by userland classes. You must extend Exception or Error instead.',
                 'resourceUrl' => 'https://www.php.net/manual/en/class.throwable.php',
@@ -182,44 +145,13 @@ class CertificationQuestionsFixtures40 extends Fixture implements DependentFixtu
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Twig'],
                 'text' => 'Can we create a custom escaper for Twig?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
                 'explanation' => 'Yes, you can define custom escapers by calling the setEscaper() method on the core extension instance.',
                 'resourceUrl' => 'https://twig.symfony.com/doc/1.x/filters/escape.html#custom-escapers',
                 'answers' => [
                     ['text' => 'Yes', 'correct' => true],
                     ['text' => 'No', 'correct' => false],
-                ],
-            ],
-
-            // Q6 - Routing - XML route matching
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Routing'],
-                'text' => 'Consider the following XML route definition:
-<pre><code class="language-xml">&lt;!-- app/config/routing.xml --&gt;
-&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
-&lt;routes xmlns="http://symfony.com/schema/routing"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/routing
-        http://symfony.com/schema/routing/routing-1.0.xsd"&gt;
-    &lt;route id="app_agenda_event" path="/agenda/{date}" methods="GET"&gt;
-        &lt;default key="_controller"&gt;AppBundle:Agenda:event&lt;/default&gt;
-        &lt;requirement key="date"&gt;(?:20\d{2})-(?:(0?[1-9]|1[1-2]))-(?:(0?|[1-2])\d|3[0-1])&lt;/requirement&gt;
-    &lt;/route&gt;
-&lt;/routes&gt;</code></pre>
-<p>Which of the following URL patterns will match the <code>app_agenda_event</code> route?</p>',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'The regex requires year starting with 20, month 01-12 (with optional leading zero), and day 01-31.',
-                'resourceUrl' => 'https://symfony.com/doc/3.4/components/routing.html',
-                'answers' => [
-                    ['text' => 'http://localhost/agenda/2018-14-30', 'correct' => false],
-                    ['text' => 'http://localhost/agenda/2150-12-31', 'correct' => false],
-                    ['text' => 'http://localhost/agenda/2011-1-01', 'correct' => true],
-                    ['text' => 'http://localhost/agenda/2008-04-06', 'correct' => true],
-                    ['text' => 'http://localhost/agenda/2018-12-12', 'correct' => true],
-                    ['text' => 'http://localhost/agenda/2020-2-30', 'correct' => true],
                 ],
             ],
 
@@ -236,23 +168,6 @@ class CertificationQuestionsFixtures40 extends Fixture implements DependentFixtu
                     ['text' => 'protected property', 'correct' => true],
                     ['text' => 'public property', 'correct' => true],
                     ['text' => 'private property', 'correct' => true],
-                ],
-            ],
-
-            // Q8 - PHP Arrays - array_diff_assoc
-            [
-                'category' => $php,
-                'subcategory' => $subcategories['PHP:Arrays'],
-                'text' => 'Which of the following functions compares array1 against array2 and returns the difference by checking array keys in addition?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'array_diff_assoc() computes the difference of arrays with additional index check.',
-                'resourceUrl' => 'https://php.net/manual/en/function.array-diff-assoc.php',
-                'answers' => [
-                    ['text' => 'array_diff_ukey', 'correct' => false],
-                    ['text' => 'array_diff_uassoc', 'correct' => false],
-                    ['text' => 'array_diff_assoc', 'correct' => true],
-                    ['text' => 'array_diff_key', 'correct' => false],
                 ],
             ],
 
@@ -277,7 +192,7 @@ class CertificationQuestionsFixtures40 extends Fixture implements DependentFixtu
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'text' => 'Could a controller be defined using <code>\Closure</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
                 'explanation' => 'Yes, a controller can be a Closure. The routing component supports closures as controllers.',
                 'resourceUrl' => 'https://symfony.com/doc/2.7/controller.html#a-simple-controller',
@@ -292,7 +207,7 @@ class CertificationQuestionsFixtures40 extends Fixture implements DependentFixtu
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'text' => 'Could a service identifier be returned from a <code>ReverseContainer</code> if the service is not tagged as <code>container.reversible</code> but defined as <code>public</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, ReverseContainer can return service identifiers for public services even without the container.reversible tag.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/4.3/src/Symfony/Component/DependencyInjection/ReverseContainer.php',
@@ -312,7 +227,7 @@ class CertificationQuestionsFixtures40 extends Fixture implements DependentFixtu
 use Symfony\Component\Filesystem\Path;
 
 $path = new Path(\'/srv/app/var/cache\');</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'The Path class is a final class with only static methods. It cannot be instantiated.',
                 'resourceUrl' => 'https://github.com/symfony/filesystem/blob/5.4/Path.php',
@@ -327,7 +242,7 @@ $path = new Path(\'/srv/app/var/cache\');</code></pre>',
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'text' => 'Could a <code>ParameterBag</code> be frozen?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, FrozenParameterBag exists to provide an immutable ParameterBag.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/2.0/src/Symfony/Component/DependencyInjection/ParameterBag/FrozenParameterBag.php',
@@ -337,54 +252,18 @@ $path = new Path(\'/srv/app/var/cache\');</code></pre>',
                 ],
             ],
 
-            // Q14 - HttpFoundation - $_COOKIE access
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpFoundation'],
-                'text' => 'How to access <code>$_COOKIE</code> data when using a <code>Symfony\Component\HttpFoundation\Request</code> <code>$request</code> object?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'The $request->cookies property (a ParameterBag) provides access to $_COOKIE values.',
-                'resourceUrl' => 'http://symfony.com/doc/current/components/http_foundation.html#accessing-request-data',
-                'answers' => [
-                    ['text' => '<pre><code>$request-&gt;getCookieData()</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code>$request-&gt;getCookies()</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code>$request-&gt;cookies</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code>$request-&gt;cookie</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code>$request-&gt;getCookie()</code></pre>', 'correct' => false],
-                ],
-            ],
-
             // Q15 - Asset - VersionStrategyInterface
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Assets'],
                 'text' => 'Could the version of a asset be accessed from within a class implementing the <code>VersionStrategyInterface</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, the VersionStrategyInterface defines a getVersion() method that returns the asset version.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/2.7/src/Symfony/Component/Asset/VersionStrategy/VersionStrategyInterface.php',
                 'answers' => [
                     ['text' => 'No', 'correct' => false],
                     ['text' => 'Yes', 'correct' => true],
-                ],
-            ],
-
-            // Q16 - Validator - Validation constraints elements
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Validator'],
-                'text' => 'Which of the following elements can contain validation constraints?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Validation constraints can be applied to classes, properties (public/private/protected), and getter methods.',
-                'resourceUrl' => 'https://symfony.com/doc/current/validation.html#index-6',
-                'answers' => [
-                    ['text' => 'Classes', 'correct' => true],
-                    ['text' => 'Private and protected getters/issers', 'correct' => true],
-                    ['text' => 'Public getters/issers', 'correct' => true],
-                    ['text' => 'Public properties', 'correct' => true],
-                    ['text' => 'Private and protected properties', 'correct' => true],
                 ],
             ],
 
@@ -461,7 +340,7 @@ $path = new Path(\'/srv/app/var/cache\');</code></pre>',
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'text' => 'Could imports be configured using <code>ContainerConfigurator</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, ContainerConfigurator has an import() method to import other configuration files.',
                 'resourceUrl' => 'https://github.com/symfony/dependency-injection/blob/3.4/Loader/Configurator/ContainerConfigurator.php#L54',
@@ -518,7 +397,7 @@ $path = new Path(\'/srv/app/var/cache\');</code></pre>',
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:BrowserKit'],
                 'text' => 'Could assertions be performed on the fact that the current browser has a certain cookie?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, BrowserHasCookie constraint can be used to assert that the browser has a certain cookie.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/4.3/src/Symfony/Component/BrowserKit/Test/Constraint/BrowserHasCookie.php',
@@ -533,7 +412,7 @@ $path = new Path(\'/srv/app/var/cache\');</code></pre>',
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'text' => 'Could the fact that a class is available and will remain available in the <code>--no-dev</code> mode of Composer be obtained when using <code>ContainerBuilder</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, ContainerBuilder has a method to check if a class is available for the runtime (willBeAvailable).',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/5.3/src/Symfony/Component/DependencyInjection/ContainerBuilder.php#L1454',
@@ -619,7 +498,7 @@ $path = new Path(\'/srv/app/var/cache\');</code></pre>',
 <pre><code class="language-yaml"># app/config/config.yml
 imports:
     - { resource: "%kernel.root_dir%/parameters.yml" }</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Parameters cannot be used in the imports section because they are not yet resolved at that point.',
                 'resourceUrl' => 'https://symfony.com/doc/3.4/configuration/configuration_organization.html#different-directories-per-environment',
@@ -634,7 +513,7 @@ imports:
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Event Dispatcher'],
                 'text' => 'Could an event listener be registered while using the <code>__invoke()</code> method to listen to an event?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, event listeners can use the __invoke() method. This is the default method called if no method is specified.',
                 'resourceUrl' => 'https://symfony.com/doc/4.1/event_dispatcher.html#creating-an-event-listener',
@@ -649,7 +528,7 @@ imports:
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:FrameworkBundle'],
                 'text' => 'Given the context where the user is redirected to another page, could the original query parameters be maintained?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, the redirectToRoute method accepts a keepQueryParams option to maintain query parameters.',
                 'resourceUrl' => 'https://symfony.com/doc/5.1/controller.html#redirecting',
@@ -755,7 +634,7 @@ echo count(
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Twig'],
                 'text' => 'Could functions and filters be defined at runtime without any overhead?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, Twig allows defining undefined functions and filters on the fly using callbacks.',
                 'resourceUrl' => 'https://twig.symfony.com/doc/1.x/recipes.html#defining-undefined-functions-and-filters-on-the-fly',
@@ -795,28 +674,6 @@ Consider the following Twig snippet:
                 ],
             ],
 
-            // Q39 - Doctrine DBAL - URL
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Doctrine'],
-                'text' => 'Which of the following are valid database URLs that can be used in the <code>dbal.url</code> option in Symfony applications?
-<pre><code class="language-yaml"># app/config/config.yml
-doctrine:
-    dbal:
-        url: ...</code></pre>',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'Valid SQLite URLs include sqlite:///data.db and sqlite:///:memory:. MySQL URLs need proper format with user:pass@host.',
-                'resourceUrl' => 'https://docs.doctrine-project.org/projects/doctrine-dbal/en/latest/reference/configuration.html',
-                'answers' => [
-                    ['text' => '<code>pgsql://localhost:5432</code>', 'correct' => false],
-                    ['text' => '<code>sqlite:///data.db</code>', 'correct' => true],
-                    ['text' => '<code>mysql://localhost/mydb@user:secret</code>', 'correct' => false],
-                    ['text' => '<code>sqlite:///:memory:</code>', 'correct' => true],
-                    ['text' => '<code>mysql://localhost:4486/foo?charset=UTF-8</code>', 'correct' => false],
-                ],
-            ],
-
             // Q40 - Routing - Duplicate parameter
             [
                 'category' => $symfony,
@@ -832,7 +689,7 @@ $collection-&gt;add(\'blog_show\', new Route(\'/blog/{page}/category/{slug}/{pag
 )));
 
 return $collection;</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Route parameters must be unique. The {page} parameter appears twice, which is invalid.',
                 'resourceUrl' => 'https://symfony.com/doc/current/routing.html#routing-examples',

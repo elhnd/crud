@@ -79,24 +79,6 @@ $cookie = new Cookie(\'cookie-name\', \'cookie-value\', \'...\', chips: true);</
                 ],
             ],
 
-            // Q2 - PHP Basics - Closures and callables
-            [
-                'category' => $php,
-                'subcategory' => $subcategories['PHP:Functions'],
-                'text' => 'From PHP 8.1, how can this code snippet be replaced?
-<pre><code class="language-php">$callable = Closure::fromCallable(\'strtoupper\');</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'PHP 8.1 introduced first-class callable syntax using the ... operator, allowing $callable = strtoupper(...); as a shorthand for Closure::fromCallable().',
-                'resourceUrl' => 'https://www.php.net/manual/en/functions.first_class_callable_syntax.php',
-                'answers' => [
-                    ['text' => '<pre><code class="language-php">$callable = strtoupper(...);</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">$callable = \from_callable(\'strtoupper\');</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code class="language-php">$callable = \from_callable(strtoupper(...));</code></pre>', 'correct' => false],
-                    ['text' => 'It can\'t', 'correct' => false],
-                ],
-            ],
-
             // Q3 - Security - CSRF token generation
             [
                 'category' => $symfony,
@@ -764,24 +746,6 @@ $yaml = Yaml::parse(\'1983-07-01\');</code></pre>',
                     ['text' => 'The Environment', 'correct' => false],
                     ['text' => 'The Parser', 'correct' => false],
                     ['text' => 'The Lexer', 'correct' => false],
-                ],
-            ],
-
-            // Q38 - Validator - Validation constraints
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Validator'],
-                'text' => 'Which of the following elements can contain validation constraints?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Validation constraints can be applied to public properties, private/protected properties, classes, and public getters/issers.',
-                'resourceUrl' => 'https://symfony.com/doc/6.0/validation.html#getters',
-                'answers' => [
-                    ['text' => 'Public properties', 'correct' => true],
-                    ['text' => 'Classes', 'correct' => true],
-                    ['text' => 'Public getters/issers', 'correct' => true],
-                    ['text' => 'Private and protected properties', 'correct' => true],
-                    ['text' => 'Private and protected getters/issers', 'correct' => false],
                 ],
             ],
 

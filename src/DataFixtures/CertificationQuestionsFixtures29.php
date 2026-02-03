@@ -301,24 +301,6 @@ $regeneratedVariable = VarExporter::import(\'exported.php\');</code></pre>', 'co
                 ],
             ],
 
-            // Q26 - Form - CountryType choices
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Forms'],
-                'text' => 'By default, which function provides the choices of the <code>Symfony\Component\Form\Extension\Core\Type\CountryType</code> form type?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Depuis Symfony 5.0, les choix du CountryType sont fournis par Symfony\Component\Intl\Countries::getNames().',
-                'resourceUrl' => 'https://symfony.com/doc/5.0/reference/forms/types/country.html#choices',
-                'answers' => [
-                    ['text' => '<code>Symfony\Component\Intl\Countries::getNames()</code>', 'correct' => true],
-                    ['text' => '<code>Symfony\Component\Form\Extension\Core\Type\CountryType::getChoices()</code>', 'correct' => false],
-                    ['text' => '<code>Symfony\Component\Locale\getDisplayCountries()</code>', 'correct' => false],
-                    ['text' => '<code>Symfony\Component\Intl\Intl::getRegionBundle()->getCountryNames()</code>', 'correct' => false],
-                    ['text' => '<code>Intl::getCountries()</code>', 'correct' => false],
-                ],
-            ],
-
             // Q28 - HTTP - Pragma header
             [
                 'category' => $symfony,

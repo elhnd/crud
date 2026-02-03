@@ -167,7 +167,7 @@ if (0 !== count($violations)) {
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Filesystem'],
                 'text' => 'Is the Filesystem component based on a lazy or eager implementation?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Le composant Filesystem utilise une implémentation "lazy" - les opérations sont exécutées au moment où elles sont appelées, sans pré-chargement.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/3.4/src/Symfony/Component/Filesystem/Filesystem.php',

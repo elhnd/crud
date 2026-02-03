@@ -50,23 +50,6 @@ class CertificationQuestionsFixtures26 extends Fixture implements DependentFixtu
     private function getCertificationQuestions(Category $symfony, Category $php, array $subcategories): array
     {
         return [
-            // Q1 - HTTP - Validation caching headers
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HTTP'],
-                'text' => 'Which of the following headers are valid ones in the validation caching model?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Les en-têtes valides pour le modèle de validation de cache sont If-Modified-Since et If-None-Match. ETag et Last-Modified sont des en-têtes de réponse, pas de requête de validation. Age est un en-tête de réponse de cache.',
-                'resourceUrl' => 'https://tools.ietf.org/html/rfc2616#page-85',
-                'answers' => [
-                    ['text' => '<code>If-Modified-Since</code>', 'correct' => true],
-                    ['text' => '<code>If-None-Match</code>', 'correct' => true],
-                    ['text' => '<code>Etag</code>', 'correct' => false],
-                    ['text' => '<code>Age</code>', 'correct' => false],
-                    ['text' => '<code>Last-Modified</code>', 'correct' => false],
-                ],
-            ],
 
             // Q6 - PHP Functions - Syslog binary safe
             [
@@ -286,23 +269,6 @@ final class LocaleHelper implements LocaleAwareInterface
                     ['text' => 'A single <code>&lt;input type="text"&gt;</code> form field', 'correct' => true],
                     ['text' => 'A group of several HTML fields used to input a postal address', 'correct' => true],
                     ['text' => 'An entire <code>&lt;form&gt;</code> with multiple fields to edit a user profile', 'correct' => true],
-                ],
-            ],
-
-            // Q24 - FrameworkBundle - Default ORM
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:FrameworkBundle'],
-                'text' => 'What is the default ORM that integrates with Symfony ?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'Doctrine est l\'ORM par défaut qui s\'intègre avec Symfony, bien que d\'autres ORM comme Propel puissent être utilisés.',
-                'resourceUrl' => 'https://symfony.com/doc/current/doctrine.html',
-                'answers' => [
-                    ['text' => 'Doctrine.', 'correct' => true],
-                    ['text' => 'Propel.', 'correct' => false],
-                    ['text' => 'Hibernate.', 'correct' => false],
-                    ['text' => 'Symfony ORM.', 'correct' => false],
                 ],
             ],
 

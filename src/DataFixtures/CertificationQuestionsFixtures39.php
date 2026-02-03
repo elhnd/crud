@@ -158,23 +158,6 @@ class HomeController extends AbstractController
                 ],
             ],
 
-            // Q5 - HttpFoundation - Accessing Session
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpFoundation'],
-                'text' => 'What is the way to access the session from the <code>$request</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'La méthode getSession() de l\'objet Request permet d\'accéder à la session.',
-                'resourceUrl' => 'https://symfony.com/doc/2.8/components/http_foundation.html#accessing-the-session',
-                'answers' => [
-                    ['text' => '<pre><code class="language-php">$request-&gt;getSession()</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">$request-&gt;getPhpSession()</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code class="language-php">$request-&gt;session</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code class="language-php">$request-&gt;fetchSession()</code></pre>', 'correct' => false],
-                ],
-            ],
-
             // Q6 - Console - setCode error
             [
                 'category' => $symfony,
@@ -502,28 +485,6 @@ imports:
                     ['text' => '<code>array</code>', 'correct' => true],
                     ['text' => '<code>string</code>', 'correct' => false],
                     ['text' => '<code>Closure</code>', 'correct' => false],
-                ],
-            ],
-
-            // Q22 - Translation - Built-in loaders
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Translation'],
-                'text' => 'Which of the followings are part of the built-in message catalogs loaders?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Les loaders intégrés sont: PhpFileLoader, YamlFileLoader, XliffFileLoader, PoFileLoader, MoFileLoader, CsvFileLoader, IcuResFileLoader, IcuDatFileLoader, JsonFileLoader.',
-                'resourceUrl' => 'https://github.com/symfony/translation/tree/2.3/Loader',
-                'answers' => [
-                    ['text' => 'PoFileLoader', 'correct' => true],
-                    ['text' => 'MoFileLoader', 'correct' => true],
-                    ['text' => 'XliffFileLoader', 'correct' => true],
-                    ['text' => 'YamlFileLoader', 'correct' => true],
-                    ['text' => 'JsonLoader', 'correct' => false],
-                    ['text' => 'PhpLoader', 'correct' => false],
-                    ['text' => 'IcuFileLoader', 'correct' => false],
-                    ['text' => 'CsvLoader', 'correct' => false],
-                    ['text' => 'IniFileLoader', 'correct' => false],
                 ],
             ],
 
