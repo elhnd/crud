@@ -39,22 +39,6 @@ class CertificationQuestionsFixtures3 extends Fixture implements DependentFixtur
         $subcategories = $this->loadSubcategories($manager);
 
         $questions = [
-            // Q1: PSR-0 and PSR-4
-            [
-                'category' => $php,
-                'subcategory' => $subcategories['PHP:PSR'],
-                'text' => 'What are PSR-0 and PSR-4?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'PSR-0 and PSR-4 are PHP-FIG standards that define specifications for autoloading classes from file paths.',
-                'resourceUrl' => 'https://www.php-fig.org/psr/psr-4/',
-                'answers' => [
-                    ['text' => 'A specification for autoloading classes from file paths.', 'correct' => true],
-                    ['text' => 'A common logger interface.', 'correct' => false],
-                    ['text' => 'A coding style guide.', 'correct' => false],
-                    ['text' => 'A utility to convert non-namespaced PHP classes into namespaced ones.', 'correct' => false],
-                ],
-            ],
             // Q2: Route compilation exception
             [
                 'category' => $symfony,

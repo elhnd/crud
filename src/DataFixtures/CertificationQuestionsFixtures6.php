@@ -156,22 +156,6 @@ print my_function(40) + $c;</code></pre>What does this script output when it\'s 
                     ['text' => '<code>Clock</code>', 'correct' => false],
                 ],
             ],
-            // Translation - addLoader signature
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Translation'],
-                'text' => 'What is the way to add a loader to the translator?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'The addLoader method requires a format string as the first argument and the loader instance as the second.',
-                'resourceUrl' => 'https://symfony.com/doc/2.x/components/translation/usage.html',
-                'answers' => [
-                    ['text' => '<pre><code class="language-php">$translator->addLoader(\'array\', new ArrayLoader());</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">$translator->addLoader(new ArrayLoader());</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code class="language-php">$translator->addArrayLoader(new ArrayLoader());</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code class="language-php">$translator->addLoader(new ArrayLoader(), \'array\');</code></pre>', 'correct' => false],
-                ],
-            ],
             // DI - Enum env var processor
             [
                 'category' => $symfony,

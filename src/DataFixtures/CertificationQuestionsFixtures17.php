@@ -165,24 +165,6 @@ if (class_exists(\'\Exception\', true)) {
                 ],
             ],
 
-            // Q7 - HttpFoundation - Session usage
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpFoundation'],
-                'text' => 'Which method can be used to add a new value into <code>Session</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'La méthode set() est utilisée pour ajouter ou modifier une valeur dans la session.',
-                'resourceUrl' => 'https://github.com/symfony/symfony/blob/2.1/src/Symfony/Component/HttpFoundation/Session/Session.php#L93',
-                'answers' => [
-                    ['text' => '<code>$session->insert()</code>', 'correct' => false],
-                    ['text' => '<code>$session->add()</code>', 'correct' => false],
-                    ['text' => '<code>$session->append()</code>', 'correct' => false],
-                    ['text' => '<code>$session->init()</code>', 'correct' => false],
-                    ['text' => '<code>$session->set()</code>', 'correct' => true],
-                ],
-            ],
-
             // Q12 - DI - Compiler passes usage
             [
                 'category' => $symfony,

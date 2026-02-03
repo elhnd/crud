@@ -99,22 +99,6 @@ $this->bar(...$args);</code></pre>',
                     ['text' => 'No', 'correct' => false],
                 ],
             ],
-            // Twig loaders
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'text' => 'What are Twig loaders responsible for?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'Twig loaders are responsible for loading templates from a resource name (like filesystem paths, database, etc.).',
-                'resourceUrl' => 'https://twig.symfony.com/doc/2.x/api.html#loaders',
-                'answers' => [
-                    ['text' => 'Loaders are responsible for loading templates from a resource name.', 'correct' => true],
-                    ['text' => 'Loaders are responsible for loading token parsers.', 'correct' => false],
-                    ['text' => 'Loaders are responsible for loading environments such as Twig_Environment.', 'correct' => false],
-                    ['text' => 'Loaders are responsible for loading extensions.', 'correct' => false],
-                ],
-            ],
             // PhpSubprocess vs Process
             [
                 'category' => $symfony,

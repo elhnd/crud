@@ -89,7 +89,7 @@ class CertificationQuestionsFixtures15 extends Fixture implements DependentFixtu
         \'everything\' => 22,
     )
 ));</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'L\'expression évalue: (10 < 10) or (10 < 22) = false or true = true. L\'opérateur "or" retourne true si au moins une des conditions est vraie.',
                 'resourceUrl' => 'http://symfony.com/doc/current/components/expression_language/syntax.html#logical-operators',

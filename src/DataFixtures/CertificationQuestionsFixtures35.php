@@ -125,7 +125,7 @@ class CertificationQuestionsFixtures35 extends Fixture implements DependentFixtu
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:HTTP'],
                 'text' => 'Given a response using the <code>308</code> status code and containing a <code>Location</code> header, must the client use the header URI for automatic redirection?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'According to RFC 7538, the user agent MAY use the Location field value for automatic redirection, it is not a requirement.',
                 'resourceUrl' => 'https://tools.ietf.org/html/rfc7538#section-3',
@@ -140,7 +140,7 @@ class CertificationQuestionsFixtures35 extends Fixture implements DependentFixtu
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Cache'],
                 'text' => 'Could an item be recomputed asynchronously?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, since Symfony 5.2, cache items can be recomputed asynchronously using early expiration.',
                 'resourceUrl' => 'https://symfony.com/blog/new-in-symfony-5-2-async-cache-recomputing',
@@ -193,7 +193,7 @@ class CertificationQuestionsFixtures35 extends Fixture implements DependentFixtu
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'text' => 'It is possible to change the class of a service using the <code>ContainerBuilder</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
                 'explanation' => 'Yes, using the Definition::setClass() method, you can change the class of a service.',
                 'resourceUrl' => 'https://symfony.com/doc/current/components/dependency_injection/definitions.html',
@@ -229,7 +229,7 @@ class CertificationQuestionsFixtures35 extends Fixture implements DependentFixtu
                 'category' => $php,
                 'subcategory' => $subcategories['PHP:OOP'],
                 'text' => 'Can a class implement multiple interfaces?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
                 'explanation' => 'Yes, a PHP class can implement multiple interfaces by listing them after the implements keyword, separated by commas.',
                 'resourceUrl' => 'https://www.php.net/manual/en/language.oop5.interfaces.php',
@@ -276,7 +276,7 @@ class TwitterClient
         // ... connect to Twitter and send the encoded status
     }
 }</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'No, autowiring cannot determine which service to use when there are multiple services of the same class.',
                 'resourceUrl' => 'https://symfony.com/doc/current/components/dependency_injection/autowiring.html',
@@ -312,7 +312,7 @@ class TwitterClient
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:HttpFoundation'],
                 'text' => 'Could all <code>FlashBag</code> messages be overridden?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
                 'explanation' => 'Yes, using the setAll() method, all FlashBag messages can be overridden.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/2.1/src/Symfony/Component/HttpFoundation/Session/Flash/FlashBag.php#L127',
@@ -470,7 +470,7 @@ echo $myArray[0];</code></pre>',
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'text' => 'Could the number of time each environment variables has been resolved be obtained when using <code>ContainerBuilder</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, the ContainerBuilder tracks environment variable usage and the count can be retrieved.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/3.2/src/Symfony/Component/DependencyInjection/ContainerBuilder.php#L1077',
@@ -485,7 +485,7 @@ echo $myArray[0];</code></pre>',
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Filesystem'],
                 'text' => 'When using <code>mirror(...)</code>, could files that are not present in the source directory be deleted?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, the mirror() method has a delete option that removes files in the target that are not in the source.',
                 'resourceUrl' => 'https://symfony.com/doc/2.2/components/filesystem.html#mirror',
@@ -509,51 +509,6 @@ echo $myArray[0];</code></pre>',
                     ['text' => '<code>checkValue()</code>', 'correct' => false],
                     ['text' => '<code>exists()</code>', 'correct' => false],
                     ['text' => '<code>canRead()</code>', 'correct' => false],
-                ],
-            ],
-
-            // Q26 - Validator - Validation groups count
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Validator'],
-                'text' => 'Given the following class and constraints:
-<pre><code class="language-php">&lt;?php
-
-namespace App\Entity;
-
-use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
-
-class User implements UserInterface
-{
-    /**
-     * @Assert\Email(groups={"registration"})
-     */
-    private $email;
-
-    /**
-     * @Assert\NotBlank(groups={"registration"})
-     * @Assert\Length(min=7, groups={"registration"})
-     */
-    private $password;
-
-    /**
-     * @Assert\Length(min=2)
-     */
-    private $city;
-}</code></pre>
-<p>How many validation groups does this class contain?</p>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'There are 3 groups: "registration" (explicit), "Default" (implicit for city constraint), and "User" (class-named group).',
-                'resourceUrl' => 'https://symfony.com/doc/current/validation/groups.html',
-                'answers' => [
-                    ['text' => '3', 'correct' => true],
-                    ['text' => '4', 'correct' => false],
-                    ['text' => '0', 'correct' => false],
-                    ['text' => '2', 'correct' => false],
-                    ['text' => '1', 'correct' => false],
-                    ['text' => '5', 'correct' => false],
                 ],
             ],
 
@@ -608,7 +563,7 @@ parameters:
         \'everything\' => 22,
     )
 ));</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => '10 < 10 is false, but 10 < 22 is true. With "or", if one condition is true, the result is true.',
                 'resourceUrl' => 'http://symfony.com/doc/current/components/expression_language/syntax.html#logical-operators',
@@ -642,7 +597,7 @@ parameters:
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Expression Language'],
                 'text' => 'Could the parser cache be changed?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
                 'explanation' => 'Yes, the ExpressionLanguage component allows configuring a custom cache for parsed expressions.',
                 'resourceUrl' => 'https://symfony.com/doc/2.4/components/expression_language/caching.html#the-workflow',
@@ -657,7 +612,7 @@ parameters:
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'text' => 'Can you inject a dependency to a service without passing it to the constructor?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
                 'explanation' => 'Yes, using setter injection or property injection, dependencies can be injected without the constructor.',
                 'resourceUrl' => 'https://symfony.com/doc/current/service_container/injection_types.html',
@@ -711,7 +666,7 @@ $newArray[E_STRICT] = \'foo\';</code></pre>',
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Messenger'],
                 'text' => 'Can you have multiple buses in a single application?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
                 'explanation' => 'Yes, Symfony Messenger supports configuring multiple message buses (command bus, event bus, query bus, etc.).',
                 'resourceUrl' => 'https://symfony.com/doc/4.4/messenger/multiple_buses.html',
@@ -726,7 +681,7 @@ $newArray[E_STRICT] = \'foo\';</code></pre>',
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:Forms'],
                 'text' => 'Could values be mapped to fields using callbacks?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
                 'explanation' => 'Yes, since Symfony 5.2, you can use getter and setter callbacks for field mapping.',
                 'resourceUrl' => 'https://symfony.com/doc/5.2/form/data_mappers.html#mapping-form-fields-using-callbacks',
@@ -776,7 +731,7 @@ $newArray[E_STRICT] = \'foo\';</code></pre>',
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:HttpFoundation'],
                 'text' => 'Can the Request object be modified during its handling?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
                 'explanation' => 'Yes, the Request object is mutable and can be modified during the request lifecycle.',
                 'resourceUrl' => 'https://symfony.com/doc/current/components/http_foundation.html',

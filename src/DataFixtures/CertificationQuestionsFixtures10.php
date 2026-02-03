@@ -140,24 +140,6 @@ class CertificationQuestionsFixtures10 extends Fixture implements DependentFixtu
                 ],
             ],
 
-            // Q8 - Import parameters with kernel.root_dir
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Services'],
-                'text' => 'Is this code valid?
-<pre><code class="language-yaml"># app/config/config.yml
-imports:
-    - { resource: "%kernel.root_dir%/parameters.yml" }</code></pre>',
-                'type' => QuestionType::TRUE_FALSE,
-                'difficulty' => 2,
-                'explanation' => 'Non, kernel.root_dir a été déprécié dans Symfony 4. De plus, les paramètres ne peuvent pas être utilisés dans la section imports car ils ne sont pas encore résolus à ce stade.',
-                'resourceUrl' => 'https://symfony.com/doc/current/configuration.html',
-                'answers' => [
-                    ['text' => 'Yes', 'correct' => false],
-                    ['text' => 'No', 'correct' => true],
-                ],
-            ],
-
             // Q9 - Routing query parameters
             [
                 'category' => $symfony,

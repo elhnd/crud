@@ -114,7 +114,7 @@ class CertificationQuestionsFixtures41 extends Fixture implements DependentFixtu
 <pre><code class="language-yaml"># app/config/config.yml
 imports:
     - { resource: "%kernel.root_dir%/parameters.yml" }</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'No, since Symfony 3.4, the imports directive does not support parameters in the resource path.',
                 'resourceUrl' => 'https://symfony.com/doc/3.4/configuration/configuration_organization.html#different-directories-per-environment',
@@ -256,7 +256,7 @@ class LoggingMailer
 {
     // ...
 }</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, since Symfony 6.1, you can use the #[AsDecorator] attribute to decorate services.',
                 'resourceUrl' => 'https://symfony.com/blog/new-in-symfony-6-1-service-decoration-attributes',
@@ -357,7 +357,7 @@ class LoggingMailer
                 'subcategory' => $subcategories['Symfony:Mime'],
                 'title' => 'Custom Mime type guesser',
                 'text' => 'Could a custom type guesser be registered again when already registered?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, MimeTypes::registerGuesser() allows registering a guesser multiple times.',
                 'resourceUrl' => 'https://symfony.com/doc/4.x/components/mime.html#adding-a-mime-type-guesser',
@@ -469,7 +469,7 @@ security:
             request_matcher: app.firewall.secured_area.request_matcher
 
             # ...</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, the request_matcher option allows using a custom service to match requests for the firewall.',
                 'resourceUrl' => 'https://symfony.com/doc/4.2/security/firewall_restriction.html#restricting-by-service',
@@ -479,53 +479,13 @@ security:
                 ],
             ],
 
-            // Q21 - Console - Verbosity levels
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Console'],
-                'title' => 'Console Verbosity levels',
-                'text' => 'What are the console verbosity levels?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'The console verbosity levels are: VERBOSITY_QUIET, VERBOSITY_NORMAL, VERBOSITY_VERBOSE, VERBOSITY_VERY_VERBOSE, and VERBOSITY_DEBUG.',
-                'resourceUrl' => 'http://symfony.com/doc/current/console/verbosity.html',
-                'answers' => [
-                    ['text' => '<pre><code class="language-php">OutputInterface::VERBOSITY_QUIET</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">OutputInterface::VERBOSITY_NORMAL</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">OutputInterface::VERBOSITY_VERBOSE</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">OutputInterface::VERBOSITY_VERY_VERBOSE</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">OutputInterface::VERBOSITY_DEBUG</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">OutputInterface::VERBOSITY_NONE</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code class="language-php">OutputInterface::VERBOSITY_VERY_VERY_VERBOSE</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code class="language-php">OutputInterface::VERBOSITY_NO_DEBUG</code></pre>', 'correct' => false],
-                ],
-            ],
-
-            // Q22 - Twig - Loaders definition
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Twig'],
-                'title' => 'Twig loaders definition',
-                'text' => 'What are Twig loaders responsible for?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'Loaders are responsible for loading templates from a resource name (filesystem, database, etc.).',
-                'resourceUrl' => 'https://twig.symfony.com/doc/2.x/api.html#loaders',
-                'answers' => [
-                    ['text' => 'Loaders are responsible for loading templates from a resource name.', 'correct' => true],
-                    ['text' => 'Loaders are responsible for loading extensions.', 'correct' => false],
-                    ['text' => 'Loaders are responsible for loading environments such as Twig_Evironment.', 'correct' => false],
-                    ['text' => 'Loaders are responsible for loading token parsers.', 'correct' => false],
-                ],
-            ],
-
             // Q23 - HttpFoundation - Response::create() since 6.0
             [
                 'category' => $symfony,
                 'subcategory' => $subcategories['Symfony:HttpFoundation'],
                 'title' => 'Response::create() since 6.0',
                 'text' => 'Since <code>6.0</code>, could a response be created via <code>Response::create()</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'No, Response::create() was deprecated in 5.4 and removed in 6.0. Use new Response() instead.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/6.0/src/Symfony/Component/HttpFoundation/Response.php',
@@ -600,7 +560,7 @@ security:
       return sprintf(\'%d: %s\', $this->code, $this->message);
   }
 }</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 3,
                 'explanation' => 'Throwable is an internal interface that cannot be implemented directly by userland classes. You must extend Exception or Error instead.',
                 'resourceUrl' => 'https://www.php.net/manual/en/class.throwable.php',
@@ -616,7 +576,7 @@ security:
                 'subcategory' => $subcategories['Symfony:Twig'],
                 'title' => 'Twig custom escaper',
                 'text' => 'Can we create a custom escaper for Twig ?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, Twig allows creating custom escapers using the setEscaper() method.',
                 'resourceUrl' => 'https://twig.symfony.com/doc/1.x/filters/escape.html#custom-escapers',
@@ -716,7 +676,7 @@ security:
                 'subcategory' => $subcategories['Symfony:HttpKernel'],
                 'title' => 'Controller definition with Closure',
                 'text' => 'Could a controller be defined using <code>\Closure</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, controllers can be defined as closures in Symfony.',
                 'resourceUrl' => 'https://symfony.com/doc/2.7/controller.html#a-simple-controller',
@@ -732,7 +692,7 @@ security:
                 'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'title' => 'ReverseContainer usage',
                 'text' => 'Could a service identifier be returned from a <code>ReverseContainer</code> if the service is not tagged as <code>container.reversible</code> but defined as <code>public</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 3,
                 'explanation' => 'Yes, ReverseContainer can return identifiers for public services even without the container.reversible tag.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/4.3/src/Symfony/Component/DependencyInjection/ReverseContainer.php',
@@ -753,7 +713,7 @@ security:
 use Symfony\Component\Filesystem\Path;
 
 $path = new Path(\'/srv/app/var/cache\');</code></pre>',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'The Path class is a final class with only static methods. It cannot be instantiated.',
                 'resourceUrl' => 'https://github.com/symfony/filesystem/blob/5.4/Path.php',
@@ -769,7 +729,7 @@ $path = new Path(\'/srv/app/var/cache\');</code></pre>',
                 'subcategory' => $subcategories['Symfony:Dependency Injection'],
                 'title' => 'ParameterBag frozen',
                 'text' => 'Could a <code>ParameterBag</code> be frozen?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, the FrozenParameterBag class allows creating an immutable parameter bag.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/2.0/src/Symfony/Component/DependencyInjection/ParameterBag/FrozenParameterBag.php',
@@ -804,7 +764,7 @@ $path = new Path(\'/srv/app/var/cache\');</code></pre>',
                 'subcategory' => $subcategories['Symfony:Assets'],
                 'title' => 'VersionStrategyInterface version access',
                 'text' => 'Could the version of a asset be accessed from within a class implementing the <code>VersionStrategyInterface</code>?',
-                'type' => QuestionType::SINGLE_CHOICE,
+                'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
                 'explanation' => 'Yes, VersionStrategyInterface provides getVersion() method to access the asset version.',
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/2.7/src/Symfony/Component/Asset/VersionStrategy/VersionStrategyInterface.php',

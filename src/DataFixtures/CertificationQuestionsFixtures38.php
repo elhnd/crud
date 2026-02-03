@@ -609,23 +609,6 @@ $em-&gt;flush();</code></pre>',
                 ],
             ],
 
-            // Q29 - Form - LanguageType choices
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:Forms'],
-                'text' => 'By default, which function provides the choices of the <code>Symfony\Component\Form\Extension\Core\Type\LanguageType</code> form type?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'LanguageType utilise Symfony\Component\Intl\Languages::getNames() pour les choix.',
-                'resourceUrl' => 'https://symfony.com/doc/4.3/reference/forms/types/language.html#choices',
-                'answers' => [
-                    ['text' => '<code>Symfony\Component\Intl\Languages::getNames()</code>', 'correct' => true],
-                    ['text' => '<code>Symfony\Component\Form\Extension\Core\Type\LanguageType::getChoices()</code>', 'correct' => false],
-                    ['text' => '<code>Intl::getLanguages()</code>', 'correct' => false],
-                    ['text' => '<code>Symfony\Component\Intl\Intl::getLanguageBundle()-&gt;getLanguageNames()</code>', 'correct' => false],
-                ],
-            ],
-
             // Q30 - Expression Language - AST dump
             [
                 'category' => $symfony,

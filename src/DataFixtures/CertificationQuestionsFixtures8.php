@@ -245,22 +245,6 @@ if (0 !== count($violations)) {
                     ['text' => 'Yes', 'correct' => false],
                 ],
             ],
-            // HttpKernel - Events order
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpKernel'],
-                'text' => 'In which order does Symfony trigger the following events?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 2,
-                'explanation' => 'The correct order is: kernel.request → kernel.controller → kernel.view → kernel.response → kernel.terminate',
-                'resourceUrl' => 'https://github.com/symfony/symfony/blob/2.3/src/Symfony/Component/HttpKernel/KernelEvents.php',
-                'answers' => [
-                    ['text' => '1. kernel.request 2. kernel.controller 3. kernel.view 4. kernel.response 5. kernel.terminate', 'correct' => true],
-                    ['text' => '1. kernel.request 2. kernel.view 3. kernel.controller 4. kernel.response 5. kernel.terminate', 'correct' => false],
-                    ['text' => '1. kernel.request 2. kernel.controller 3. kernel.view 4. kernel.terminate 5. kernel.response', 'correct' => false],
-                    ['text' => '1. kernel.request 2. kernel.view 3. kernel.controller 4. kernel.terminate 5. kernel.response', 'correct' => false],
-                ],
-            ],
             // Event Dispatcher - GenericEvent
             [
                 'category' => $symfony,

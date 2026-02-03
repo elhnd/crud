@@ -288,33 +288,6 @@ echo 6 === sum(1, 2, 3) ? \'Yes\' : \'No\';</code></pre>
                 ],
             ],
 
-            // Q27 - HttpFoundation - Vary header multiple values
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpFoundation'],
-                'text' => 'Which are the valid ways of caching a <code>Response</code> based not only on the URI but also the value of the <code>Accept-Encoding</code> and <code>User-Agent</code> request headers?',
-                'type' => QuestionType::MULTIPLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'setVary() peut être appelé plusieurs fois pour ajouter des headers. On peut aussi passer une string avec valeurs séparées par des virgules, ou utiliser headers->set() avec une string.',
-                'resourceUrl' => 'http://symfony.com/doc/current/http_cache/cache_vary.html, https://github.com/symfony/symfony/blob/6.0/src/Symfony/Component/HttpFoundation/Response.php#L1042, https://github.com/symfony/symfony/blob/3.0/src/Symfony/Component/HttpFoundation/ResponseHeaderBag.php#L98',
-                'answers' => [
-                    ['text' => '<pre><code class="language-php">$response->setVary(\'Accept-Encoding\');
-$response->setVary(\'User-Agent\');</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">$response->setVary(\'Accept-Encoding, User-Agent\');</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">$response->headers->set(\'Vary\', \'Accept-Encoding, User-Agent\');</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">$response->setVary([\'Accept-Encoding\', \'User-Agent\']);</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">$response->headers->set(\'Vary\', [\'Accept-Encoding\', \'User-Agent\']);</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code class="language-php">$response->headers->set(\'Vary\', \'Accept-Encoding\');
-$response->headers->set(\'Vary\', \'User-Agent\');</code></pre>', 'correct' => false],
-                    ['text' => 'This is not possible without calling a reverse proxy', 'correct' => false],
-                    ['text' => 'This is the default behavior', 'correct' => false],
-                    ['text' => '<pre><code class="language-php">$response->setVary(\'Accept-Encoding\');
-$response->setVary(\'User-Agent\', false);</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code class="language-php">$response->headers->set(\'Vary\', \'Accept-Encoding\');
-$response->headers->set(\'Vary\', \'User-Agent\', false);</code></pre>', 'correct' => false],
-                ],
-            ],
-
             // Q28 - FrameworkBundle - data_collector tag
             [
                 'category' => $symfony,
@@ -329,32 +302,6 @@ $response->headers->set(\'Vary\', \'User-Agent\', false);</code></pre>', 'correc
                     ['text' => '<code>kernel.data_collector</code>', 'correct' => false],
                     ['text' => '<code>debug.data_collector</code>', 'correct' => false],
                     ['text' => '<code>profiler.data_collector</code>', 'correct' => false],
-                ],
-            ],
-
-            // Q31 - HttpFoundation - Query string parameter names
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpFoundation'],
-                'text' => 'Regarding this URI : <code>/example?tags.id=2</code>
-<p>What will be the content of <code>$request->query->all()</code> ?</p>',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 3,
-                'explanation' => 'PHP convertit les points dans les noms de paramètres en tableaux. tags.id devient [\'tags\' => [\'id\' => 2]].',
-                'resourceUrl' => 'http://www.php.net/manual/en/language.variables.basics.php, http://www.php.net/manual/en/language.variables.external.php',
-                'answers' => [
-                    ['text' => '<pre><code class="language-php">[ 
-    \'tags\' => [\'id\' => 2] 
-]
-</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code class="language-php">[ 
-    \'tags_id\' => 2 
-]
-</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code class="language-php">[ 
-    \'tags.id\' => 2 
-]
-</code></pre>', 'correct' => false],
                 ],
             ],
 

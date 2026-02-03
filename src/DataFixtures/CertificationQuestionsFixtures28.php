@@ -421,23 +421,6 @@ echo foo(1, 2, 3);</code></pre>
                 ],
             ],
 
-            // Q28 - HttpFoundation - Accessing Request Data
-            [
-                'category' => $symfony,
-                'subcategory' => $subcategories['Symfony:HttpFoundation'],
-                'text' => 'How to access <code>$_GET</code> data when using a <code>Symfony\Component\HttpFoundation\Request</code> <code>$request</code> object?',
-                'type' => QuestionType::SINGLE_CHOICE,
-                'difficulty' => 1,
-                'explanation' => 'Les données GET sont accessibles via la propriété $request->query qui est un ParameterBag.',
-                'resourceUrl' => 'http://symfony.com/doc/current/components/http_foundation.html#accessing-request-data',
-                'answers' => [
-                    ['text' => '<pre><code>$request-&gt;query</code></pre>', 'correct' => true],
-                    ['text' => '<pre><code>$request-&gt;getQueryData()</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code>$request-&gt;getGetData()</code></pre>', 'correct' => false],
-                    ['text' => '<pre><code>$request-&gt;getData()</code></pre>', 'correct' => false],
-                ],
-            ],
-
             // Q30 - Process - Output-disabled process
             [
                 'category' => $symfony,
