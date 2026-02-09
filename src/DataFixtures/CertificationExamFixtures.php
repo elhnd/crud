@@ -72,7 +72,7 @@ class CertificationExamFixtures extends Fixture implements FixtureGroupInterface
 Will the finishCheckout() method throw any exception because of an error in the match() statement?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le match() expression en PHP 8+ n\'a pas besoin d\'une capture de valeur. Il est valide de passer true à match(). Un "default" n\'est pas obligatoire si tous les cas sont couverts par les conditions.',
+                'explanation' => 'The match() expression in PHP 8+ does not require its return value to be captured. It is valid to pass true to match(). A "default" arm is not required as long as all cases are covered by the conditions.',
                 'resourceUrl' => 'https://www.php.net/manual/en/control-structures.match.php',
                 'answers' => [
                     ['text' => 'Yes, because you always need to capture the value returned by match() (even if it\'s void).', 'correct' => false],
@@ -97,7 +97,7 @@ When using PHP 8 or higher, can you call this function as follows without trigge
 <pre><code class="language-php">echo sum(a: 3, 7);</code></pre>',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
-                'explanation' => 'La syntaxe "sum(a: 3, 7)" est INVALIDE car après avoir utilisé un argument nommé (a: 3), vous ne pouvez pas utiliser un argument positionnel (7). La syntaxe correcte serait: sum(a: 3, b: 7) ou sum(3, 7)',
+                'explanation' => 'The syntax "sum(a: 3, 7)" is INVALID because after using a named argument (a: 3), you cannot use a positional argument (7). The correct syntax would be: sum(a: 3, b: 7) or sum(3, 7).',
                 'resourceUrl' => 'https://www.php.net/manual/en/functions.arguments.php#functions.named-arguments',
                 'answers' => [
                     ['text' => 'True', 'correct' => false],
@@ -120,7 +120,7 @@ When using PHP 8 or higher, can you call this function as follows without trigge
 }</code></pre>',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
-                'explanation' => 'PHP 8 introduit la "Constructor Property Promotion" qui permet de déclarer et initialiser des propriétés directement dans les paramètres du constructeur. Les union types (int|float) sont également supportés.',
+                'explanation' => 'PHP 8 introduced Constructor Property Promotion, which allows declaring and initializing properties directly in the constructor parameters. Union types (int|float) are also supported.',
                 'resourceUrl' => 'https://www.php.net/manual/en/language.oop5.deferred.php',
                 'answers' => [
                     ['text' => 'True', 'correct' => true],
@@ -151,7 +151,7 @@ echo (new Person())->greet(\'Alice\', true);</code></pre>
 What is the result of executing this code snippet?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La signature de la méthode dans la classe peut avoir des paramètres supplémentaires avec des valeurs par défaut. Puisque $scream = true, "WELCOME Alice!" est affiché.',
+                'explanation' => 'The method signature in the implementing class can have additional parameters with default values. Since $scream = true, "WELCOME Alice!" is displayed.',
                 'answers' => [
                     ['text' => 'Welcome Alice!', 'correct' => false],
                     ['text' => 'WELCOME Alice!', 'correct' => true],
@@ -167,7 +167,7 @@ What is the result of executing this code snippet?',
                 'text' => 'Find all the working solutions for generating a 404 error page from a controller that extends Symfony\'s AbstractController:',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Options 2, 3 et 4 sont correctes. createNotFoundException() lance une exception, NotFoundHttpException génère une 404, et Response avec code 404 fonctionne.',
+                'explanation' => 'Options 2, 3, and 4 are correct. throw createNotFoundException() throws an exception, NotFoundHttpException generates a 404, and Response with status code 404 also works.',
                 'resourceUrl' => 'https://symfony.com/doc/current/controller.html#managing-errors-and-404-pages',
                 'answers' => [
                     ['text' => '<code>return $this->error404();</code>', 'correct' => false],
@@ -210,7 +210,7 @@ class BlogController extends AbstractController
 Which statement does ??? successfully replace to forward the execution to the index method of the BlogController?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La méthode forward() accepte un contrôleur au format string avec la syntaxe \'NameSpace\\Controller::method\'.',
+                'explanation' => 'The forward() method accepts a controller as a string using the syntax \'Namespace\\Controller::method\'.',
                 'resourceUrl' => 'https://symfony.com/doc/current/controller/forwarding.html',
                 'answers' => [
                     ['text' => '[BlogController::class, \'index\']', 'correct' => false],
@@ -228,7 +228,7 @@ Which statement does ??? successfully replace to forward the execution to the in
                 'text' => 'What\'s the recommended naming convention for action methods in Symfony controllers?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
-                'explanation' => 'Depuis Symfony 4+, la convention recommandée est d\'utiliser le nom de l\'action en camelCase sans préfixe ni suffixe.',
+                'explanation' => 'Since Symfony 4+, the recommended convention is to use the action name in camelCase without any prefix or suffix.',
                 'resourceUrl' => 'https://symfony.com/doc/current/best_practices.html#controllers',
                 'answers' => [
                     ['text' => 'do[actionName]() (e.g. doShow())', 'correct' => false],
@@ -259,7 +259,7 @@ class DemoController extends AbstractController
 What is the HTTP status code of the returned response?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La méthode redirect() de AbstractController retourne par défaut un code HTTP 302 (Found) pour une redirection temporaire.',
+                'explanation' => 'The redirect() method of AbstractController returns an HTTP 302 (Found) status code by default for a temporary redirect.',
                 'resourceUrl' => 'https://symfony.com/doc/current/controller.html#redirecting',
                 'answers' => [
                     ['text' => '301 (Moved Permanently)', 'correct' => false],
@@ -277,7 +277,7 @@ What is the HTTP status code of the returned response?',
                 'text' => 'In a controller that extends Symfony\'s AbstractController and receives the current Request object in an argument called $request, which of the following statements allows to store a temporary message in the session in order to display it after a redirect?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
-                'explanation' => 'La méthode addFlash() est la manière recommandée dans Symfony pour créer des messages flash temporaires.',
+                'explanation' => 'The addFlash() method is the recommended way in Symfony to create temporary flash messages.',
                 'resourceUrl' => 'https://symfony.com/doc/current/controller.html#flash-messages',
                 'answers' => [
                     ['text' => '$this->addFlash(\'notice\', \'Item added successfully\');', 'correct' => true],
@@ -310,7 +310,7 @@ class SomeController extends AbstractController
 Which statement does ??? successfully replace in order to inject the service with ID app.request_logger in the $logger controller argument?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'L\'attribut #[Autowire(service: \'id\')] est utilisé pour injecter un service spécifique par son ID.',
+                'explanation' => 'The #[Autowire(service: \'id\')] attribute is used to inject a specific service by its ID.',
                 'resourceUrl' => 'https://symfony.com/doc/current/service_container/autowiring.html#dealing-with-multiple-implementations-of-the-same-type',
                 'answers' => [
                     ['text' => 'Autoconfigure', 'correct' => false],
@@ -328,7 +328,7 @@ Which statement does ??? successfully replace in order to inject the service wit
                 'text' => 'Which of the following is the valid way to persist a value in the user\'s session?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
-                'explanation' => 'La méthode set() est la méthode standard pour stocker une valeur dans la session Symfony.',
+                'explanation' => 'The set() method is the standard way to store a value in the Symfony session.',
                 'resourceUrl' => 'https://symfony.com/doc/current/session.html',
                 'answers' => [
                     ['text' => '$session->write(\'foo\', \'bar\');', 'correct' => false],
@@ -356,7 +356,7 @@ Which URL will generate the following code which doesn\'t specify the locale?
 <pre><code class="language-php">$url = $urlGenerator->generate(\'contact\');</code></pre>',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 3,
-                'explanation' => 'Quand on génère une URL sans spécifier la locale, Symfony utilise la locale courante de l\'utilisateur. Si elle ne correspond pas, une exception est levée.',
+                'explanation' => 'When generating a URL without specifying the locale, Symfony uses the current user locale. If it does not match any defined locale (en or nl), an exception is thrown.',
                 'resourceUrl' => 'https://symfony.com/doc/current/routing.html#localized-routes-i18n',
                 'answers' => [
                     ['text' => 'The first defined URL (in this case, the one for en locale).', 'correct' => false],
@@ -379,7 +379,7 @@ demo_route:
 Is this a valid route definition in Symfony?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
-                'explanation' => 'La syntaxe "paths" avec un tableau n\'est pas valide. La clé correcte est "path" (singulier).',
+                'explanation' => 'The "paths" key with a plain array is not a valid Symfony route definition. The correct key is "path" (singular).',
                 'resourceUrl' => 'https://symfony.com/doc/current/routing.html',
                 'answers' => [
                     ['text' => 'True', 'correct' => false],
@@ -416,7 +416,7 @@ app_blog:
 Will the showAction() method be executed if a user requests the /blog URL using the address bar of a web browser?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
-                'explanation' => 'La route pointe vers \'show\' mais la méthode s\'appelle \'showAction()\'. Symfony cherchera show() qui n\'existe pas.',
+                'explanation' => 'The route points to \'show\' but the method is called \'showAction()\'. Symfony will look for show() which does not exist.',
                 'answers' => [
                     ['text' => 'True', 'correct' => false],
                     ['text' => 'False', 'correct' => true],
@@ -432,7 +432,7 @@ Will the showAction() method be executed if a user requests the /blog URL using 
 "The .......... command can be used to get all the information about a specific route."',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
-                'explanation' => 'La commande debug:router affiche toutes les routes configurées dans l\'application.',
+                'explanation' => 'The debug:router command displays all configured routes in the application and provides detailed information about any specific route.',
                 'resourceUrl' => 'https://symfony.com/doc/current/routing.html#debugging-routes',
                 'answers' => [
                     ['text' => 'routing:route', 'correct' => false],
@@ -456,7 +456,7 @@ Which will be the value of the following $url variable?
 <pre><code class="language-php">$url = $urlGenerator->generate(\'blog_post_comments\', [\'id\' => 37]);</code></pre>',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le paramètre spécial \'_fragment\' génère un fragment d\'URL (hash/ancre). Résultat: /blog/37#comments',
+                'explanation' => 'The special \'_fragment\' parameter generates a URL fragment (hash/anchor). Result: /blog/37#comments',
                 'resourceUrl' => 'https://symfony.com/doc/current/routing.html#generating-urls',
                 'answers' => [
                     ['text' => '/blog/37/_fragment/comments', 'correct' => false],
@@ -485,7 +485,7 @@ class PostController
 Which will be the name of the route associated with the show() method?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Quand #[Route] est défini au niveau de la classe avec un paramètre \'name\', ce nom est préfixé aux routes des méthodes. blog_ + show = blog_show',
+                'explanation' => 'When #[Route] is defined at the class level with a \'name\' parameter, that name is prefixed to the method route names. blog_ + show = blog_show',
                 'resourceUrl' => 'https://symfony.com/doc/current/routing.html#route-groups-and-prefixes',
                 'answers' => [
                     ['text' => 'show', 'correct' => false],
@@ -508,7 +508,7 @@ imports:
 What will happen if the parameters.yaml file does not exist in the same config/ directory from where it\'s being imported?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le paramètre \'ignore_errors: true\' indique à Symfony d\'ignorer les erreurs. L\'application continuera normalement.',
+                'explanation' => 'The \'ignore_errors: true\' parameter tells Symfony to silently ignore errors. The application will continue working normally.',
                 'resourceUrl' => 'https://symfony.com/doc/current/service_container.html#importing-other-container-configuration-files',
                 'answers' => [
                     ['text' => 'You\'ll get an exception.', 'correct' => false],
@@ -524,7 +524,7 @@ What will happen if the parameters.yaml file does not exist in the same config/ 
                 'text' => 'A default Symfony application with both autowiring and autoconfiguration enabled defines many different logger services. Can you still use autowiring to inject some specific logger in a service?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Quand plusieurs services implémentent la même interface, il faut utiliser #[Autowire] ou configurer un alias.',
+                'explanation' => 'When multiple services implement the same interface, you need to use the #[Autowire] attribute or configure a service alias to specify which one to inject.',
                 'resourceUrl' => 'https://symfony.com/doc/current/service_container/autowiring.html',
                 'answers' => [
                     ['text' => 'Yes, and you don\'t have to do or configure anything.', 'correct' => false],
@@ -540,7 +540,7 @@ What will happen if the parameters.yaml file does not exist in the same config/ 
                 'text' => 'In a Symfony application that uses autowiring, which of the following classes should you use to type-hint a class constructor argument in order to inject the current request stack?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'RequestStack est la classe concrète dans le composant HttpFoundation pour gérer la pile de requêtes.',
+                'explanation' => 'RequestStack is the concrete class in the HttpFoundation component used to manage the request stack.',
                 'resourceUrl' => 'https://symfony.com/doc/current/service_container.html#fetching-the-request',
                 'answers' => [
                     ['text' => 'Symfony\\Component\\HttpFoundation\\RequestStack', 'correct' => true],
@@ -565,7 +565,7 @@ services:
 Which option does ??? successfully replace to inject the parameter in every constructor argument called $projectDir?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'L\'option \'bind\' dans _defaults permet de lier automatiquement des valeurs à des paramètres de constructeur.',
+                'explanation' => 'The \'bind\' option in _defaults allows automatically binding values to constructor arguments by name or type.',
                 'resourceUrl' => 'https://symfony.com/doc/current/service_container.html#binding-arguments-by-name-or-type',
                 'answers' => [
                     ['text' => 'inject_parameters', 'correct' => false],
@@ -583,7 +583,7 @@ Which option does ??? successfully replace to inject the parameter in every cons
                 'text' => 'Which service should you pass as a dependency of another service that needs to get access to the current Request object?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le service \'request_stack\' est la manière recommandée pour accéder à la requête courante.',
+                'explanation' => 'The \'request_stack\' service is the recommended way to access the current request from within a service.',
                 'resourceUrl' => 'https://symfony.com/doc/current/service_container.html#fetching-the-request',
                 'answers' => [
                     ['text' => 'event_dispatcher', 'correct' => false],
@@ -610,7 +610,7 @@ services:
 In which services will Symfony inject the value of kernel.project_dir in any constructor argument called $projectDir?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La section _defaults s\'applique uniquement aux services définis dans le même fichier de configuration.',
+                'explanation' => 'The _defaults section only applies to services defined in the same configuration file.',
                 'resourceUrl' => 'https://symfony.com/doc/current/service_container.html#binding-arguments-by-name-or-type',
                 'answers' => [
                     ['text' => 'In none. This bind option does not exist.', 'correct' => false],
@@ -631,7 +631,7 @@ twig:
     xxx: [\'yyy\']</code></pre>',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'L\'option \'paths\' (pluriel) dans la configuration Twig permet de définir des répertoires supplémentaires pour les templates.',
+                'explanation' => 'The \'paths\' option (plural) in the Twig configuration allows defining additional directories for templates.',
                 'resourceUrl' => 'https://symfony.com/doc/current/templates.html#template-namespaces',
                 'answers' => [
                     ['text' => 'paths and \'%kernel.project_dir%/resources/views/\'', 'correct' => true],
@@ -662,7 +662,7 @@ twig:
 In the child.html.twig template, which statement does ??? successfully replace to render "Lorem ipsum - Dolor Sit Amet" as the page title?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La fonction parent() dans Twig permet d\'accéder au contenu du block parent.',
+                'explanation' => 'The parent() function in Twig renders the content of the parent block.',
                 'resourceUrl' => 'https://twig.symfony.com/doc/3.x/functions/parent.html',
                 'answers' => [
                     ['text' => 'parent(\'title\') - Dolor Sit Amet', 'correct' => false],
@@ -679,7 +679,7 @@ In the child.html.twig template, which statement does ??? successfully replace t
                 'text' => 'Which of the following Twig filters would you apply to remove the white spaces only from the right side of the contents of a given variable?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
-                'explanation' => 'Le filtre |rtrim (right trim) supprime les espaces blancs uniquement à droite d\'une chaîne.',
+                'explanation' => 'Twig does not have a dedicated |rtrim filter. To remove whitespace only from the right side, use the |trim filter with the side parameter: |trim(side = \'right\').',
                 'resourceUrl' => 'https://twig.symfony.com/doc/3.x/filters/trim.html',
                 'answers' => [
                     ['text' => '|rtrim', 'correct' => false],
@@ -711,7 +711,7 @@ A Twig template has the following code:
 What will be the link generated by the above Twig snippet?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 3,
-                'explanation' => 'La fonction asset() génère un chemin avec le base_path et applique le version_format.',
+                'explanation' => 'The asset() function generates a path using the package\'s base_path and applies the version_format with the configured version string.',
                 'resourceUrl' => 'https://symfony.com/doc/current/reference/configuration/framework.html#assets',
                 'answers' => [
                     ['text' => '/docs/pdf/v2/terms_and_conditions.pdf', 'correct' => false],
@@ -731,7 +731,7 @@ What will be the link generated by the above Twig snippet?',
 <code>{{ block("footer", "base.html.twig") }}</code>',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La fonction block() avec deux arguments rend le contenu du block spécifié depuis le template indiqué.',
+                'explanation' => 'The block() function with two arguments renders the content of the specified block from the given template.',
                 'resourceUrl' => 'https://twig.symfony.com/doc/3.x/functions/block.html',
                 'answers' => [
                     ['text' => 'It renders the contents of the footer block. If that block is undefined, it renders the contents of the base.html.twig template as a fallback content.', 'correct' => false],
@@ -750,7 +750,7 @@ What will be the link generated by the above Twig snippet?',
 <code>{% include \'some_template.html.twig\' with { title } only %}</code>',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
-                'explanation' => 'Cette syntaxe est valide en Twig 3. { title } est équivalent à { \'title\': title } - c\'est une syntaxe raccourcie.',
+                'explanation' => 'This syntax is valid in Twig 3. { title } is equivalent to { \'title\': title } — it is a shorthand syntax.',
                 'resourceUrl' => 'https://twig.symfony.com/doc/3.x/tags/include.html',
                 'answers' => [
                     ['text' => 'True', 'correct' => true],
@@ -773,7 +773,7 @@ The result is: {{ result }}</code></pre>
 What will be the output when rendering this template?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'loop.index0 va de 0 à 4 pour une boucle de 5 itérations. Somme: 0+1+2+3+4 = 10',
+                'explanation' => 'loop.index0 goes from 0 to 4 for a loop with 5 iterations. Sum: 0+1+2+3+4 = 10',
                 'resourceUrl' => 'https://twig.symfony.com/doc/3.x/tags/for.html#the-loop-variable',
                 'answers' => [
                     ['text' => 'The result is: 10', 'correct' => true],

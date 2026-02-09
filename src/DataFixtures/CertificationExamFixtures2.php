@@ -61,7 +61,7 @@ class CertificationExamFixtures2 extends Fixture implements FixtureGroupInterfac
 Where will Symfony report any validation errors in this case?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 3,
-                'explanation' => 'IsTrue sur une méthode getterXXX/isXXX place l\'erreur sur la propriété correspondante (password). Si la méthode ne correspond pas à un getter, l\'erreur est placée au niveau de l\'objet.',
+                'explanation' => 'IsTrue on a getterXXX/isXXX method places the error on the corresponding property. If the method does not correspond to a getter, the error is placed at the object level (displayed at the top of the form, not associated with any field).',
                 'resourceUrl' => 'https://symfony.com/doc/current/reference/constraints/IsTrue.html',
                 'answers' => [
                     ['text' => 'At the top of the form (not associated with any field) (not found)', 'correct' => true],
@@ -95,7 +95,7 @@ class Actor
 Which of the following constraints does ??? successfully replace in order to validate the date of death is not greater than the current day?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La contrainte LessThanOrEqual permet de vérifier qu\'une date est inférieure ou égale à une autre date. "today" est une valeur spéciale reconnue par cette contrainte qui représente la date du jour. Cela garantit que dateOfDeath <= aujourd\'hui (pas dans le futur).',
+                'explanation' => 'The LessThanOrEqual constraint verifies that a date is less than or equal to another date. "today" is a special value recognized by this constraint that represents the current date. This ensures that dateOfDeath <= today (not in the future).',
                 'resourceUrl' => 'https://symfony.com/doc/current/reference/constraints/LessThanOrEqual.html',
                 'answers' => [
                     ['text' => '#[Assert\Range(min: "today")]', 'correct' => false],
@@ -124,7 +124,7 @@ class User
 Which Symfony Validator constraint does ??? successfully replace to ensure the user is under 18 years old?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Aucune des contraintes proposées n\'est valide ou appropriée pour vérifier l\'âge. Pour vérifier qu\'un utilisateur a moins de 18 ans, il faudrait utiliser #[Assert\LessThan(\'-18 years\')] ou #[Assert\GreaterThan(\'today - 18 years\')] ou créer une contrainte personnalisée avec Expression ou Callback.',
+                'explanation' => 'None of the proposed constraints are valid or appropriate for checking age. To verify that a user is under 18 years old, you would need to use #[Assert\LessThan(\'-18 years\')] or #[Assert\GreaterThan(\'today - 18 years\')] or create a custom constraint with Expression or Callback.',
                 'resourceUrl' => 'https://symfony.com/doc/current/reference/constraints.html',
                 'answers' => [
                     ['text' => '#[Assert\Regex(\'/^\\d+$/\')]', 'correct' => false],
@@ -158,7 +158,7 @@ class Picture
 Is the above validation configuration valid?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
-                'explanation' => 'La contrainte #[Assert\Image] n\'a pas de paramètre \'orientations\'. Les paramètres valides incluent mimeTypes, maxSize, minWidth, maxWidth, minHeight, maxHeight, maxRatio, minRatio, allowSquare, allowLandscape, allowPortrait (booléens, pas un tableau), detectCorrupted.',
+                'explanation' => 'The #[Assert\Image] constraint does not have an \'orientations\' parameter. Valid parameters include mimeTypes, maxSize, minWidth, maxWidth, minHeight, maxHeight, maxRatio, minRatio, allowSquare, allowLandscape, allowPortrait (booleans, not an array), and detectCorrupted.',
                 'resourceUrl' => 'https://symfony.com/doc/current/reference/constraints/Image.html',
                 'answers' => [
                     ['text' => 'True', 'correct' => false],
@@ -189,7 +189,7 @@ class TaskType extends AbstractType
 What fields will Symfony apply the "form type guessing" mechanism to?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le "form type guessing" s\'applique quand le type du champ n\'est pas explicitement spécifié. field1 a TextType::class explicite, donc pas de guessing. field2 et field3 n\'ont pas de type explicite, Symfony devinera le type à partir des métadonnées.',
+                'explanation' => 'Form type guessing applies when the field type is not explicitly specified. field1 has an explicit TextType::class, so no guessing occurs. field2 and field3 do not have explicit types, so Symfony will guess the type from metadata (Doctrine mappings, validation constraints, etc.).',
                 'resourceUrl' => 'https://symfony.com/doc/current/forms.html#field-type-guessing',
                 'answers' => [
                     ['text' => 'field1 only.', 'correct' => false],
@@ -207,7 +207,7 @@ What fields will Symfony apply the "form type guessing" mechanism to?',
                 'text' => 'Which of the following is not a built-in form field type class provided by the Symfony Form component?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'FloatType n\'existe pas comme type de formulaire Symfony. Pour les nombres décimaux, Symfony utilise NumberType avec l\'option \'scale\' ou \'html5\' => false. Les autres types (CurrencyType, CountryType, LocaleType, LanguageType) existent tous.',
+                'explanation' => 'FloatType does not exist as a Symfony form type. For decimal numbers, Symfony uses NumberType with the \'scale\' or \'html5\' => false option. The other types (CurrencyType, CountryType, LocaleType, LanguageType) all exist.',
                 'resourceUrl' => 'https://symfony.com/doc/current/reference/forms/types.html',
                 'answers' => [
                     ['text' => 'CurrencyType', 'correct' => false],
@@ -225,7 +225,7 @@ What fields will Symfony apply the "form type guessing" mechanism to?',
                 'text' => 'Inside a custom form type definition class, which of the following statements is the right solution to customize the name of the twig block used to render the form?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La méthode getBlockPrefix() dans un custom form type détermine le préfixe utilisé pour les blocks Twig. Par exemple, si getBlockPrefix() retourne \'my_custom\', Symfony cherchera les blocks my_custom_widget, my_custom_row, my_custom_label, etc.',
+                'explanation' => 'The getBlockPrefix() method in a custom form type determines the prefix used for Twig blocks. For example, if getBlockPrefix() returns \'my_custom\', Symfony will look for the blocks my_custom_widget, my_custom_row, my_custom_label, etc.',
                 'resourceUrl' => 'https://symfony.com/doc/current/form/create_custom_field_type.html#defining-the-form-type',
                 'answers' => [
                     ['text' => 'Implement a getName() method.', 'correct' => false],
@@ -243,7 +243,7 @@ What fields will Symfony apply the "form type guessing" mechanism to?',
                 'text' => 'How can you dynamically change the submitted data of a form object just after they are normalized and written into the mapped object?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 3,
-                'explanation' => 'L\'événement FormEvents::POST_SUBMIT est déclenché après que les données ont été normalisées et écrites dans l\'objet mappé. C\'est l\'endroit approprié pour modifier les données soumises de manière dynamique.',
+                'explanation' => 'The FormEvents::POST_SUBMIT event is triggered after the data has been normalized and written into the mapped object. This is the appropriate place to dynamically modify the submitted data.',
                 'resourceUrl' => 'https://symfony.com/doc/current/form/events.html',
                 'answers' => [
                     ['text' => 'Creating a listener that listens to the kernel.request main event.', 'correct' => false],
@@ -270,7 +270,7 @@ What fields will Symfony apply the "form type guessing" mechanism to?',
 Which statement does ??? successfully replace in order to add a CSS class to the form_row block?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La variable row_attr contient les attributs HTML de la ligne de formulaire. Pour accéder à la classe existante et y ajouter une nouvelle, on utilise row_attr.class.',
+                'explanation' => 'The row_attr variable contains the HTML attributes for the form row. To access the existing class and add a new one, you use row_attr.class.',
                 'resourceUrl' => 'https://symfony.com/doc/current/form/form_themes.html',
                 'answers' => [
                     ['text' => 'attributes', 'correct' => false],
@@ -288,7 +288,7 @@ Which statement does ??? successfully replace in order to add a CSS class to the
                 'text' => 'Which of the following methods is NOT considered idempotent by the HTTP specification?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'POST n\'est pas idempotent car chaque appel peut créer une nouvelle ressource. GET, PUT, DELETE et HEAD sont idempotents selon la spécification HTTP.',
+                'explanation' => 'POST is not idempotent because each call can create a new resource. GET, PUT, DELETE, and HEAD are idempotent according to the HTTP specification.',
                 'resourceUrl' => 'https://developer.mozilla.org/en-US/docs/Glossary/Idempotent',
                 'answers' => [
                     ['text' => 'PUT', 'correct' => false],
@@ -306,7 +306,7 @@ Which statement does ??? successfully replace in order to add a CSS class to the
                 'text' => 'Which of the following is NOT a valid HTTP status code?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le code 505 existe mais signifie "HTTP Version Not Supported", pas "Locale Not Available". "505 Locale Not Available" n\'est pas un code de statut HTTP standard.',
+                'explanation' => 'Status code 505 exists but means "HTTP Version Not Supported", not "Locale Not Available". "505 Locale Not Available" is not a standard HTTP status code.',
                 'answers' => [
                     ['text' => '204 No Content', 'correct' => false],
                     ['text' => '307 Temporary Redirect', 'correct' => false],
@@ -322,7 +322,7 @@ Which statement does ??? successfully replace in order to add a CSS class to the
                 'text' => 'Which of the following messages is mostly associated with the 405 HTTP status code?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
-                'explanation' => 'Le code HTTP 405 signifie "Method Not Allowed". Il est retourné quand la méthode HTTP utilisée (GET, POST, PUT, DELETE, etc.) n\'est pas autorisée pour la ressource demandée.',
+                'explanation' => 'HTTP status code 405 means "Method Not Allowed". It is returned when the HTTP method used (GET, POST, PUT, DELETE, etc.) is not allowed for the requested resource.',
                 'answers' => [
                     ['text' => 'Unauthorized', 'correct' => false],
                     ['text' => 'Method Not Allowed', 'correct' => true],
@@ -339,7 +339,7 @@ Which statement does ??? successfully replace in order to add a CSS class to the
                 'text' => '400 is one of the server error HTTP status codes.',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 1,
-                'explanation' => '400 est un code d\'erreur CLIENT (4xx), pas un code d\'erreur SERVEUR (5xx). Le code 400 signifie "Bad Request" - la requête du client est malformée. Les codes 5xx sont les erreurs serveur.',
+                'explanation' => '400 is a CLIENT error code (4xx), not a SERVER error code (5xx). Status code 400 means "Bad Request" — the client\'s request is malformed. 5xx codes are server errors.',
                 'answers' => [
                     ['text' => 'True', 'correct' => false],
                     ['text' => 'False', 'correct' => true],
@@ -353,7 +353,7 @@ Which statement does ??? successfully replace in order to add a CSS class to the
                 'text' => 'Which of the following HTTP status codes is mostly associated with the Service Unavailable message?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
-                'explanation' => 'Le code HTTP 503 signifie "Service Unavailable". Il indique que le serveur est temporairement indisponible (maintenance, surcharge, etc.).',
+                'explanation' => 'HTTP status code 503 means "Service Unavailable". It indicates that the server is temporarily unavailable (maintenance, overload, etc.).',
                 'answers' => [
                     ['text' => '500', 'correct' => false],
                     ['text' => '501', 'correct' => false],
@@ -386,7 +386,7 @@ A user accesses the /time page twice using the same browser:
 What date/time will the page display on the second request?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 3,
-                'explanation' => 'L\'attribut #[Cache(expires: \'+1 hour\')] configure le cache HTTP pour 1 heure. La 1ère requête à 16:00:00 génère la page et la met en cache jusqu\'\u00e0 17:00:00. La 2ème requête à 16:50:00 est encore dans la période de cache, donc le navigateur utilise sa version en cache qui affiche 16:00:00.',
+                'explanation' => 'The #[Cache(expires: \'+1 hour\')] attribute configures HTTP caching for 1 hour. The first request at 16:00:00 generates the page and caches it until 17:00:00. The second request at 16:50:00 is still within the cache period, so the browser uses its cached version which displays 16:00:00.',
                 'resourceUrl' => 'https://symfony.com/doc/current/http_cache.html',
                 'answers' => [
                     ['text' => 'Wed, March 2nd 16:00:00', 'correct' => true],
@@ -429,7 +429,7 @@ Clock2: {{ updated_at|date(\'H:i:s T\') }}</code></pre>
 If ESI caching is enabled and the first user requests the /about page at 16:00:00 GMT, what date will each clock display when the second user requests the same page at 17:30:00 GMT?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 3,
-                'explanation' => 'Avec ESI (Edge Side Includes), les fragments sont mis en cache et invalidés indépendamment. La page /about (Clock1) a un smaxage de 3600 (1h), le fragment news (Clock2) a un smaxage de 600 (10 min). À 17:30:00 GMT, Clock1 affiche toujours 16:00:00 (contenu de la page principale caché), tandis que Clock2 affiche 17:30:00 (fragment ESI régénéré car son cache de 10 min a expiré).',
+                'explanation' => 'With ESI (Edge Side Includes), fragments are cached and invalidated independently. The /about page (Clock1) has an smaxage of 3600 (1h), and the news fragment (Clock2) has an smaxage of 600 (10 min). At 17:30:00 GMT, since 1.5h have passed, the main page cache has also expired, so both clocks would be regenerated. Note: the expected answer assumes the main page is still cached, which would only be true if the second request happened within the 1-hour window.',
                 'resourceUrl' => 'https://symfony.com/doc/current/http_cache/esi.html',
                 'answers' => [
                     ['text' => 'Clock1: 17:00:00 GMT / Clock2: 17:30:00 GMT', 'correct' => false],
@@ -456,7 +456,7 @@ If ESI caching is enabled and the first user requests the /about page at 16:00:0
 Is this response cacheable either on the client (web browser) or on a shared reverse proxy cache like Varnish?',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
-                'explanation' => 'Définir un ETag seul ne rend pas une réponse cacheable. L\'ETag est utilisé pour la validation du cache (validation conditionnelle), mais il ne spécifie pas que la réponse PEUT être mise en cache. Pour rendre une réponse cacheable, il faut également définir Cache-Control: public ou private, ou définir s-maxage/max-age.',
+                'explanation' => 'Setting an ETag alone does not make a response cacheable. The ETag is used for cache validation (conditional validation), but it does not specify that the response CAN be cached. To make a response cacheable, you must also set Cache-Control: public or private, or define s-maxage/max-age.',
                 'resourceUrl' => 'https://symfony.com/doc/current/http_cache/validation.html',
                 'answers' => [
                     ['text' => 'True', 'correct' => false],
@@ -471,7 +471,7 @@ Is this response cacheable either on the client (web browser) or on a shared rev
                 'text' => 'Which of the following HTTP methods are not cacheable?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Selon la spécification HTTP (RFC 7231), les méthodes cacheables sont GET et HEAD. Les méthodes DELETE, PUT et POST ne sont pas cacheables car elles modifient l\'état du serveur.',
+                'explanation' => 'According to the HTTP specification (RFC 7231), the cacheable methods are GET and HEAD. The DELETE, PUT, and POST methods are not cacheable because they modify the server state.',
                 'resourceUrl' => 'https://developer.mozilla.org/en-US/docs/Glossary/Cacheable',
                 'answers' => [
                     ['text' => 'DELETE', 'correct' => true],
@@ -499,7 +499,7 @@ class SomeCommand extends Command
 If all the code of the execute() method is just the $output->writeln(\'...\') shown above, will this command run successfully when executing it as php bin/console app:some-command in the console terminal?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La méthode execute() doit retourner un code de statut (int) : Command::SUCCESS (0) en cas de succès, Command::FAILURE (1) en cas d\'échec, ou Command::INVALID (2) pour une utilisation incorrecte. Dans le code présenté, la méthode execute() ne retourne aucune valeur après writeln(). Cela provoquera une TypeError car la signature déclare un retour de type int.',
+                'explanation' => 'The execute() method must return a status code (int): Command::SUCCESS (0) on success, Command::FAILURE (1) on failure, or Command::INVALID (2) for incorrect usage. In the code shown, the execute() method does not return any value after writeln(). This will cause a TypeError because the method signature declares an int return type.',
                 'resourceUrl' => 'https://symfony.com/doc/current/console.html',
                 'answers' => [
                     ['text' => 'Yes, it will print the "Hello world" message.', 'correct' => false],
@@ -515,7 +515,7 @@ If all the code of the execute() method is just the $output->writeln(\'...\') sh
 <pre><code>php bin/console --profile app:my-command</code></pre>',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'L\'option --profile active le profilage de la commande, mais cela nécessite que le Profiler soit actif. Le Profiler Symfony n\'est actif que lorsque l\'application est en "debug mode" (APP_DEBUG=1). En environnement de production (APP_DEBUG=0), le Profiler n\'est pas chargé, donc l\'option --profile n\'aura aucun effet.',
+                'explanation' => 'The --profile option enables command profiling, but this requires the Profiler to be active. The Symfony Profiler is only active when the application is in "debug mode" (APP_DEBUG=1). In production environment (APP_DEBUG=0), the Profiler is not loaded, so the --profile option will have no effect.',
                 'resourceUrl' => 'https://symfony.com/doc/current/console.html#profiling-commands',
                 'answers' => [
                     ['text' => 'Yes.', 'correct' => false],
@@ -545,7 +545,7 @@ class FooCommand extends Command
 Which statement does xxx successfully replace in order to avoid showing this command in the list of commands displayed when executing php bin/console list?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La méthode setHidden(true) permet de masquer une commande de la liste affichée par php bin/console list. La commande reste exécutable directement (php bin/console app:foo), mais elle n\'apparaît pas dans la liste. C\'est utile pour les commandes internes ou de maintenance.',
+                'explanation' => 'The setHidden(true) method hides a command from the list displayed by php bin/console list. The command remains directly executable (php bin/console app:foo), but it does not appear in the list. This is useful for internal or maintenance commands.',
                 'resourceUrl' => 'https://symfony.com/doc/current/console.html#hiding-commands',
                 'answers' => [
                     ['text' => 'setPublic(false)', 'correct' => false],
@@ -577,7 +577,7 @@ class GreetCommand extends Command
 Which of the following will execute the command correctly?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Les bonnes commandes sont : php bin/console app:greet --yell (option sans valeur), php bin/console app:greet "Jane Smith" --yell (argument + option), php bin/console app:greet "Jane Smith" (seulement l\'argument). Les mauvaises : php bin/console app:greet --yell=yes (VALUE_NONE ne prend pas de valeur), php bin/console app:greet --yell --name="Jane Smith" (\'name\' est un argument, pas une option).',
+                'explanation' => 'The correct commands are: php bin/console app:greet --yell (option without value), php bin/console app:greet "Jane Smith" --yell (argument + option), php bin/console app:greet "Jane Smith" (argument only). The incorrect ones: php bin/console app:greet --yell=yes (VALUE_NONE does not accept a value), php bin/console app:greet --yell --name="Jane Smith" (\'name\' is an argument, not an option).',
                 'resourceUrl' => 'https://symfony.com/doc/current/console/input.html',
                 'answers' => [
                     ['text' => 'php bin/console app:greet --yell=yes', 'correct' => false],
@@ -595,7 +595,7 @@ Which of the following will execute the command correctly?',
                 'text' => 'Which of the following built-in security roles/attributes would you use to check if the user is an anonymous user browsing your web site?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Dans Symfony 5.1+, le concept d\'utilisateur anonyme a changé. Les utilisateurs anonymes n\'ont pas de rôles spécifiques. Pour vérifier si un utilisateur est anonyme (non authentifié), on utilise $this->isGranted(\'IS_AUTHENTICATED_FULLY\') qui retourne false pour les utilisateurs non authentifiés, ou $this->getUser() === null.',
+                'explanation' => 'In Symfony 5.1+, the concept of anonymous users changed. Anonymous users do not have any specific roles. To check if a user is anonymous (not authenticated), use $this->isGranted(\'IS_AUTHENTICATED_FULLY\') which returns false for unauthenticated users, or $this->getUser() === null.',
                 'resourceUrl' => 'https://symfony.com/doc/current/security.html#checking-to-see-if-a-user-is-logged-in',
                 'answers' => [
                     ['text' => 'IS_ANONYMOUSLY_AUTHENTICATED', 'correct' => false],
@@ -618,7 +618,7 @@ Which of the following will execute the command correctly?',
 How will this configuration change the application behavior?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 3,
-                'explanation' => 'La configuration trusted_proxies et trusted_headers définit quels proxies sont de confiance et quels headers ils peuvent envoyer. Symfony ne fera confiance aux headers X-Forwarded-* QUE si la requête provient d\'une IP listée dans trusted_proxies. C\'est important pour la sécurité : sans cette configuration, un attaquant pourrait envoyer de faux headers pour usurper son IP.',
+                'explanation' => 'The trusted_proxies and trusted_headers configuration defines which proxies are trusted and which headers they can send. Symfony will only trust X-Forwarded-* headers if the request comes from an IP listed in trusted_proxies. This is important for security: without this configuration, an attacker could send fake headers to spoof their IP address.',
                 'resourceUrl' => 'https://symfony.com/doc/current/deployment/proxies.html',
                 'answers' => [
                     ['text' => 'ESI caching will only work for reverse proxies located at those IP addresses.', 'correct' => false],
@@ -647,7 +647,7 @@ How will this configuration change the application behavior?',
 Which statement does ??? successfully replace in order to throw an AccessDeniedException exception if the current authenticated user has not been granted the EDIT_COMMENT permission on the $comment object?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La méthode denyAccessUnlessGranted() est la méthode standard dans AbstractController pour vérifier les permissions. Elle vérifie si l\'utilisateur actuel a la permission spécifiée et lance une AccessDeniedException automatiquement si la permission est refusée.',
+                'explanation' => 'The denyAccessUnlessGranted() method is the standard method in AbstractController for checking permissions. It verifies whether the current user has the specified permission and automatically throws an AccessDeniedException if the permission is denied.',
                 'resourceUrl' => 'https://symfony.com/doc/current/security.html#securing-controllers-and-other-code',
                 'answers' => [
                     ['text' => '$this->throwAccessDeniedExceptionUnless(\'EDIT_COMMENT\', $comment);', 'correct' => false],
@@ -665,7 +665,7 @@ Which statement does ??? successfully replace in order to throw an AccessDeniedE
                 'text' => 'Which of the following features are provided by Symfony\'s access_control security mechanism?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 3,
-                'explanation' => 'Le mécanisme access_control permet de : restreindre l\'accès par rôle (roles), par adresse IP (ip/ips), et forcer HTTPS (requires_channel). Il ne gère PAS : les certificats de sécurité (configuré via firewalls) ni la géolocalisation (nécessite une implémentation personnalisée).',
+                'explanation' => 'The access_control mechanism allows: restricting access by role (roles), by IP address (ip/ips), and enforcing HTTPS (requires_channel). It does NOT handle: security certificates (configured via firewalls) or geolocation (requires a custom implementation).',
                 'resourceUrl' => 'https://symfony.com/doc/current/security/access_control.html',
                 'answers' => [
                     ['text' => 'Restrict access by role, ensuring that the user has the required roles to access the resource.', 'correct' => true],
@@ -683,7 +683,7 @@ Which statement does ??? successfully replace in order to throw an AccessDeniedE
                 'text' => 'Which of the following information can you retrieve thanks to the Symfony\\Component\\Security\\Http\\Authentication\\AuthenticationUtils service?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le service AuthenticationUtils fournit : getLastUsername() qui retourne le dernier nom d\'utilisateur saisi lors d\'une tentative échouée, et getLastAuthenticationError() qui retourne l\'exception d\'authentification. Il ne fournit PAS l\'utilisateur actuel, les hashs de mots de passe, ou la liste des rôles.',
+                'explanation' => 'The AuthenticationUtils service provides: getLastUsername() which returns the last username entered during a failed attempt, and getLastAuthenticationError() which returns the authentication exception. It does NOT provide the current user, password hashes, or the list of roles.',
                 'resourceUrl' => 'https://symfony.com/doc/current/security.html#fetching-the-user-object',
                 'answers' => [
                     ['text' => 'The current authenticated user.', 'correct' => false],
@@ -701,7 +701,7 @@ Which statement does ??? successfully replace in order to throw an AccessDeniedE
                 'text' => 'The crawler object used in functional tests only works when the response is an XML or an HTML document.',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
-                'explanation' => 'Le Crawler de Symfony utilise DomCrawler component qui parse du XML ou du HTML. Il ne fonctionne PAS pour JSON, texte brut, ou binaires. Pour les réponses JSON, utiliser json_decode() sur le contenu de la réponse.',
+                'explanation' => 'Symfony\'s Crawler uses the DomCrawler component which parses XML or HTML. It does NOT work for JSON, plain text, or binaries. For JSON responses, use json_decode() on the response content.',
                 'resourceUrl' => 'https://symfony.com/doc/current/testing.html#testing-application-with-the-test-client',
                 'answers' => [
                     ['text' => 'True', 'correct' => true],
@@ -723,7 +723,7 @@ $token = $client->getProfile()->getToken();</code></pre>
 Which value is held by the $token variable in this functional test?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Dans le contexte du Profiler Symfony, getToken() retourne un identifiant unique pour la requête profilée. C\'est une chaîne unique générée pour chaque requête, utilisée pour identifier le profil dans la Web Debug Toolbar et accessible via l\'URL /_profiler/{token}. Ce n\'est PAS un token de sécurité, ni un token CSRF, ni le APP_SECRET.',
+                'explanation' => 'In the context of the Symfony Profiler, getToken() returns a unique identifier for the profiled request. It is a unique string generated for each request, used to identify the profile in the Web Debug Toolbar and accessible via the URL /_profiler/{token}. It is NOT a security token, a CSRF token, or the APP_SECRET.',
                 'resourceUrl' => 'https://symfony.com/doc/current/testing/profiling.html',
                 'answers' => [
                     ['text' => 'The current security authentication token (ie: AnonymousToken, UsernamePasswordToken etc.).', 'correct' => false],
@@ -752,7 +752,7 @@ Will the following test pass?
 }</code></pre>',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 3,
-                'explanation' => 'Le Crawler Symfony (DomCrawler) est conçu pour parser du HTML ou XML, pas du CSS pur. Le test échouera car le Crawler ne peut pas parser le texte CSS comme du DOM. filter(\'p\') cherche un élément HTML <p>, pas une règle CSS "p { }". Pour tester du CSS, utiliser $response->getContent() et assertStringContainsString().',
+                'explanation' => 'The Symfony Crawler (DomCrawler) is designed to parse HTML or XML, not raw CSS. The test will fail because the Crawler cannot parse CSS text as DOM. filter(\'p\') looks for an HTML <p> element, not a CSS rule "p { }". To test CSS, use $response->getContent() and assertStringContainsString().',
                 'resourceUrl' => 'https://symfony.com/doc/current/testing.html#testing-application-with-the-test-client',
                 'answers' => [
                     ['text' => 'No, because the test execution results in an error.', 'correct' => true],
@@ -769,7 +769,7 @@ Will the following test pass?
                 'text' => 'What is the recommended file path for the functional test of a controller called UserController in a default Symfony application?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
-                'explanation' => 'Dans une application Symfony standard, les tests sont dans tests/ (pluriel). Pour un contrôleur UserController situé dans src/Controller/UserController.php, le test fonctionnel devrait être tests/Controller/UserControllerTest.php. La structure sous tests/ reflète celle sous src/.',
+                'explanation' => 'In a standard Symfony application, tests are in tests/ (plural). For a UserController located in src/Controller/UserController.php, the functional test should be tests/Controller/UserControllerTest.php. The structure under tests/ mirrors the one under src/.',
                 'resourceUrl' => 'https://symfony.com/doc/current/testing.html#application-tests',
                 'answers' => [
                     ['text' => 'src/Tests/Functional/UserControllerTest.php', 'correct' => false],
@@ -794,7 +794,7 @@ $client2->insulate();</code></pre>
 In which environment does each HTTP client run?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Chaque client peut être configuré pour s\'exécuter dans un environnement spécifique. $client1 = static::createClient() crée un client dans l\'environnement par défaut des tests : \'test\'. $client2 = static::createClient([\'environment\' => \'prod\']) crée un client explicitement dans l\'environnement \'prod\'. La méthode insulate() isole chaque requête dans un processus PHP séparé mais n\'affecte PAS l\'environnement.',
+                'explanation' => 'Each client can be configured to run in a specific environment. $client1 = static::createClient() creates a client in the default test environment: \'test\'. $client2 = static::createClient([\'environment\' => \'prod\']) creates a client explicitly in the \'prod\' environment. The insulate() method isolates each request in a separate PHP process but does NOT affect the environment.',
                 'resourceUrl' => 'https://symfony.com/doc/current/testing.html#testing-application-with-the-test-client',
                 'answers' => [
                     ['text' => 'You cannot create two different clients in the same test.', 'correct' => false],
@@ -823,7 +823,7 @@ for ($i = 0; $i < 30; ++$i) {
 How will these requests be performed by the application?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le HttpClient de Symfony effectue les requêtes de manière asynchrone et parallèle par défaut. $client->request() retourne immédiatement un objet ResponseInterface sans bloquer. Les 30 requêtes sont toutes lancées rapidement et s\'exécutent en parallèle via HTTP/2 multiplexing ou connexions multiples.',
+                'explanation' => 'Symfony\'s HttpClient performs requests asynchronously and in parallel by default. $client->request() returns a ResponseInterface object immediately without blocking. All 30 requests are launched quickly and execute in parallel via HTTP/2 multiplexing or multiple connections.',
                 'resourceUrl' => 'https://symfony.com/doc/current/http_client.html#concurrent-requests',
                 'answers' => [
                     ['text' => 'Sequentially (each request waits until the previous one is finished).', 'correct' => false],
@@ -844,7 +844,7 @@ $filesystem->copy(\'/path/to/dir1\', \'/path/to/dir2\');</code></pre>
 If dir1 exists and Symfony has permission to create dir2, will this code copy the contents of dir1 into dir2?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La méthode copy() du composant Filesystem de Symfony ne copie QUE des fichiers, pas des répertoires. Si vous passez un répertoire, une exception sera levée. Pour copier un répertoire entier, utiliser mirror() : $filesystem->mirror(\'/path/to/source\', \'/path/to/destination\');',
+                'explanation' => 'The copy() method of Symfony\'s Filesystem component only copies files, not directories. If you pass a directory, an exception will be thrown. To copy an entire directory, use mirror(): $filesystem->mirror(\'/path/to/source\', \'/path/to/destination\');',
                 'resourceUrl' => 'https://symfony.com/doc/current/components/filesystem.html',
                 'answers' => [
                     ['text' => 'Yes.', 'correct' => false],
@@ -860,7 +860,7 @@ If dir1 exists and Symfony has permission to create dir2, will this code copy th
                 'text' => 'Which one of the following directories doesn\'t belong to a Symfony 7 application using the default directory structure?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 1,
-                'explanation' => 'Le répertoire app/ n\'existe plus dans Symfony 4+ (incluant Symfony 7). Symfony 2 et 3 utilisaient app/ pour la configuration, les ressources et le kernel. Symfony 4+ a simplifié : config/ remplace app/config/, templates/ remplace app/Resources/views/, src/Kernel.php remplace app/AppKernel.php.',
+                'explanation' => 'The app/ directory no longer exists in Symfony 4+ (including Symfony 7). Symfony 2 and 3 used app/ for configuration, resources, and the kernel. Symfony 4+ simplified the structure: config/ replaces app/config/, templates/ replaces app/Resources/views/, and src/Kernel.php replaces app/AppKernel.php.',
                 'resourceUrl' => 'https://symfony.com/doc/current/setup/file_structure.html',
                 'answers' => [
                     ['text' => 'app/', 'correct' => true],
@@ -878,7 +878,7 @@ If dir1 exists and Symfony has permission to create dir2, will this code copy th
                 'text' => 'Which of the following methods should you use to check if some lock (stored in the $lock variable) has already been acquired by some process?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le composant Lock de Symfony n\'a pas de méthode isAcquired(). La manière correcte est d\'utiliser acquire() : si acquire() retourne false, le lock est déjà détenu par un autre processus. Exemple : if (!$lock->acquire(false)) { echo "Was acquired by someone else"; }',
+                'explanation' => 'Symfony\'s Lock component does not have an isAcquired() method. The correct way is to use acquire(): if acquire() returns false, the lock is already held by another process. Example: if (!$lock->acquire(false)) { echo "Was acquired by someone else"; }',
                 'resourceUrl' => 'https://symfony.com/doc/current/lock.html',
                 'answers' => [
                     ['text' => 'if ($lock->isAcquired()) { echo "Was acquired by someone else"; }', 'correct' => false],
@@ -900,7 +900,7 @@ APP_ENV=dev</code></pre>
 If the application doesn\'t define its execution environment in any other way, in which environment will the application run?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Symfony charge les fichiers d\'environnement dans un ordre spécifique, et .env.local a la priorité sur .env. Ordre de chargement : .env, .env.local, .env.{APP_ENV}, .env.{APP_ENV}.local. Dans ce cas, .env définit APP_ENV=prod, puis .env.local définit APP_ENV=dev et OVERRIDE la valeur. Résultat final : APP_ENV=dev',
+                'explanation' => 'Symfony loads environment files in a specific order, and .env.local takes priority over .env. Loading order: .env, .env.local, .env.{APP_ENV}, .env.{APP_ENV}.local. In this case, .env sets APP_ENV=prod, then .env.local sets APP_ENV=dev and OVERRIDES the value. Final result: APP_ENV=dev',
                 'resourceUrl' => 'https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-env-files',
                 'answers' => [
                     ['text' => 'prod', 'correct' => false],
@@ -923,7 +923,7 @@ If the application doesn\'t define its execution environment in any other way, i
 Which statement does ??? successfully replace to make the strict_variables option to be false in the prod environment?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La syntaxe when@{environment} permet de définir des configurations spécifiques à un environnement. Exemple correct : when@prod: pour override la configuration en production. C\'est une fonctionnalité de Symfony 5.3+ qui permet de tout mettre dans un seul fichier au lieu de créer des fichiers séparés.',
+                'explanation' => 'The when@{environment} syntax allows defining environment-specific configurations. Correct example: when@prod: to override the configuration in production. This is a Symfony 5.3+ feature that allows putting everything in a single file instead of creating separate files.',
                 'resourceUrl' => 'https://symfony.com/doc/current/configuration.html#configuration-environments',
                 'answers' => [
                     ['text' => 'config@prod', 'correct' => false],
@@ -948,7 +948,7 @@ Which statement does ??? successfully replace to make the strict_variables optio
 In a default Symfony application which uses autowiring, which constructor argument do you have to use to get the my_cache_pool cache pool injected in your services?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Avec l\'autowiring Symfony, les pools de cache sont injectés via le type-hint CacheInterface + le nom du paramètre en camelCase. Le pool my_cache_pool se transforme en $myCachePool. Exemple : public function __construct(CacheInterface $myCachePool) {}',
+                'explanation' => 'With Symfony autowiring, cache pools are injected via the CacheInterface type-hint + the parameter name in camelCase. The pool my_cache_pool becomes $myCachePool. Example: public function __construct(CacheInterface $myCachePool) {}',
                 'resourceUrl' => 'https://symfony.com/doc/current/cache.html#creating-a-cache-pool',
                 'answers' => [
                     ['text' => 'CacheInterface $myCachePool', 'correct' => true],
@@ -966,7 +966,7 @@ In a default Symfony application which uses autowiring, which constructor argume
                 'text' => 'Which of the following templates are valid for customizing 404 error pages in a Symfony web application that has installed and configured Twig?',
                 'type' => QuestionType::MULTIPLE_CHOICE,
                 'difficulty' => 3,
-                'explanation' => 'Symfony permet de personnaliser les pages d\'erreur en créant des templates dans templates/bundles/TwigBundle/Exception/. Les templates valides sont : templates/bundles/TwigBundle/Exception/error404.html.twig (spécifique au code 404) et templates/bundles/TwigBundle/Exception/error.html.twig (page d\'erreur générique fallback).',
+                'explanation' => 'Symfony allows customizing error pages by creating templates in templates/bundles/TwigBundle/Exception/. The valid templates are: templates/bundles/TwigBundle/Exception/error404.html.twig (specific to 404 status code) and templates/bundles/TwigBundle/Exception/error.html.twig (generic fallback error page).',
                 'resourceUrl' => 'https://symfony.com/doc/current/controller/error_pages.html',
                 'answers' => [
                     ['text' => 'templates/Resources/TwigBundle/views/error/404.html.twig', 'correct' => false],
@@ -984,7 +984,7 @@ In a default Symfony application which uses autowiring, which constructor argume
                 'text' => 'Which of the following Symfony components is responsible for getting information about class properties by using different sources of metadata?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le composant PropertyInfo extrait des informations (métadonnées) sur les propriétés d\'une classe. Il détecte les types de propriétés, identifie si une propriété est accessible (readable/writable), et extrait des informations depuis plusieurs sources : réflexion PHP, PHPDoc, accesseurs, attributs PHP 8+.',
+                'explanation' => 'The PropertyInfo component extracts metadata about class properties. It detects property types, identifies whether a property is accessible (readable/writable), and extracts information from multiple sources: PHP reflection, PHPDoc, accessors, and PHP 8+ attributes.',
                 'resourceUrl' => 'https://symfony.com/doc/current/components/property_info.html',
                 'answers' => [
                     ['text' => 'PropertyAccess', 'correct' => false],
@@ -1002,7 +1002,7 @@ In a default Symfony application which uses autowiring, which constructor argume
                 'text' => 'If two listeners are associated with the same event and they have exactly the same priority, Symfony only executes the listener which was first defined.',
                 'type' => QuestionType::TRUE_FALSE,
                 'difficulty' => 2,
-                'explanation' => 'Quand deux listeners ont exactement la même priorité, Symfony exécute LES DEUX, dans l\'ordre de leur enregistrement. Symfony n\'exécute pas "seulement" le premier. Les deux listeners sont exécutés, et l\'ordre d\'exécution est déterminé par l\'ordre d\'enregistrement.',
+                'explanation' => 'When two listeners have exactly the same priority, Symfony executes BOTH of them, in the order they were registered. Symfony does not execute "only" the first one. Both listeners are executed, and the execution order is determined by the registration order.',
                 'resourceUrl' => 'https://symfony.com/doc/current/event_dispatcher.html#event-listener-priority',
                 'answers' => [
                     ['text' => 'True', 'correct' => false],
@@ -1017,7 +1017,7 @@ In a default Symfony application which uses autowiring, which constructor argume
                 'text' => 'Which command can you run in production to improve performance when using env vars for configuration in a default Symfony application?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La commande composer dump-env prod optimise l\'utilisation des variables d\'environnement. Elle parse tous les fichiers .env* et génère un fichier .env.local.php optimisé. Ce fichier PHP est plus rapide à charger que les fichiers .env texte et améliore significativement les performances en production.',
+                'explanation' => 'The composer dump-env prod command optimizes environment variable usage. It parses all .env* files and generates an optimized .env.local.php file. This PHP file is faster to load than .env text files and significantly improves performance in production.',
                 'resourceUrl' => 'https://symfony.com/doc/current/configuration.html#configuring-environment-variables-in-production',
                 'answers' => [
                     ['text' => 'composer dump-env prod', 'correct' => true],
@@ -1048,7 +1048,7 @@ class BlogListener
 Which method does ??? successfully replace in order to prevent other listeners from responding to this same event?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'La méthode stopPropagation() empêche l\'exécution des listeners suivants pour le même événement. Tous les événements Symfony étendent Event ou implémentent StoppableEventInterface. stopPropagation() marque l\'événement comme "arrêté". Les listeners suivants (avec priorité plus basse) ne sont pas exécutés.',
+                'explanation' => 'The stopPropagation() method prevents subsequent listeners from being executed for the same event. All Symfony events extend Event or implement StoppableEventInterface. stopPropagation() marks the event as "stopped". Subsequent listeners (with lower priority) are not executed.',
                 'resourceUrl' => 'https://symfony.com/doc/current/event_dispatcher.html#stopping-event-flow-propagation',
                 'answers' => [
                     ['text' => 'cancelPropagation()', 'correct' => false],
@@ -1066,7 +1066,7 @@ Which method does ??? successfully replace in order to prevent other listeners f
                 'text' => 'Which of the following is not a class defined in the Intl component to provide access to ICU (International Components for Unicode) data?',
                 'type' => QuestionType::SINGLE_CHOICE,
                 'difficulty' => 2,
-                'explanation' => 'Le composant Intl de Symfony/PHP fournit plusieurs classes pour accéder aux données ICU : Currencies, Countries, Languages, Locales. Mais "NumberFormats" n\'en fait pas partie. Pour formater des nombres, utiliser NumberFormatter (classe PHP native de l\'extension intl), pas une classe du composant Intl.',
+                'explanation' => 'Symfony\'s Intl component provides several classes for accessing ICU data: Currencies, Countries, Languages, Locales. But "NumberFormats" is not one of them. To format numbers, use NumberFormatter (a native PHP class from the intl extension), not a class from the Intl component.',
                 'resourceUrl' => 'https://symfony.com/doc/current/reference/forms/types/country.html',
                 'answers' => [
                     ['text' => 'Currencies', 'correct' => false],
