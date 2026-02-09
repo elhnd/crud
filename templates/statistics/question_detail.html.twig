@@ -7,7 +7,7 @@
     <!-- Header -->
     <div class="mb-6">
         <div class="flex items-center gap-4 mb-4">
-            <a href="{{ path('statistics_weak_areas') }}" class="text-gray-500 hover:text-gray-700 transition">
+            <a href="{{ backUrl|default(path('statistics_weak_areas')) }}" class="text-gray-500 hover:text-gray-700 transition">
                 <i class="fas fa-arrow-left text-xl"></i>
             </a>
             <h1 class="text-3xl font-bold text-gray-800">
@@ -106,17 +106,19 @@
                         <span class="text-sm text-gray-500">
                             <i class="fas fa-sync-alt mr-1"></i> Regenerate in:
                         </span>
-                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline">
+                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline" onsubmit="showAILoader(event, 'en')">
                             <input type="hidden" name="locale" value="en">
                             <input type="hidden" name="regenerate" value="1">
-                            <button type="submit" class="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+                            <input type="hidden" name="backUrl" value="{{ backUrl }}">
+                            <button type="submit" class="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition ai-regenerate-btn">
                                 🇬🇧 English
                             </button>
                         </form>
-                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline">
+                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline" onsubmit="showAILoader(event, 'fr')">
                             <input type="hidden" name="locale" value="fr">
                             <input type="hidden" name="regenerate" value="1">
-                            <button type="submit" class="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
+                            <input type="hidden" name="backUrl" value="{{ backUrl }}">
+                            <button type="submit" class="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition ai-regenerate-btn">
                                 🇫🇷 Français
                             </button>
                         </form>
@@ -132,16 +134,18 @@
                     </p>
                     
                     <div class="flex flex-wrap justify-center gap-4">
-                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline">
+                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline" onsubmit="showAILoader(event, 'en')">
                             <input type="hidden" name="locale" value="en">
-                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium">
+                            <input type="hidden" name="backUrl" value="{{ backUrl }}">
+                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium ai-generate-btn">
                                 <i class="fas fa-magic mr-2"></i>
                                 Generate in English 🇬🇧
                             </button>
                         </form>
-                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline">
+                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline" onsubmit="showAILoader(event, 'fr')">
                             <input type="hidden" name="locale" value="fr">
-                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium">
+                            <input type="hidden" name="backUrl" value="{{ backUrl }}">
+                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium ai-generate-btn">
                                 <i class="fas fa-magic mr-2"></i>
                                 Générer en Français 🇫🇷
                             </button>
@@ -283,4 +287,261 @@
         </a>
     </div>
 </div>
+
+<!-- AI Loading Modal -->
+<div id="aiLoadingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full mx-4 animate-fadeIn">
+        <!-- Robot Animation -->
+        <div class="text-center mb-6">
+            <div class="relative inline-block">
+                <i class="fas fa-robot text-8xl text-purple-500 animate-bounce"></i>
+                <div class="absolute -right-2 -top-2">
+                    <i class="fas fa-sparkles text-2xl text-yellow-400 animate-ping"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Title -->
+        <h3 class="text-2xl font-bold text-gray-800 text-center mb-2">
+            <span id="aiLoadingTitle">Generating AI Explanation</span>
+        </h3>
+        <p class="text-gray-500 text-center mb-6">
+            <span id="aiLoadingSubtitle">Please wait while Claude analyzes the question...</span>
+        </p>
+
+        <!-- Progress Bar -->
+        <div class="mb-6">
+            <div class="flex justify-between text-sm text-gray-600 mb-2">
+                <span id="aiProgressStep">Connecting to API...</span>
+                <span id="aiProgressPercent">0%</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                <div id="aiProgressBar" class="h-3 bg-gradient-to-r from-purple-500 via-violet-500 to-indigo-500 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Loading Steps -->
+        <div class="space-y-3">
+            <div id="step1" class="flex items-center text-sm text-gray-400 transition-all">
+                <i class="fas fa-circle-notch fa-spin mr-3 text-purple-500"></i>
+                <span>Connecting to Claude API...</span>
+            </div>
+            <div id="step2" class="flex items-center text-sm text-gray-300 transition-all">
+                <i class="fas fa-circle mr-3 text-gray-300"></i>
+                <span>Analyzing question context...</span>
+            </div>
+            <div id="step3" class="flex items-center text-sm text-gray-300 transition-all">
+                <i class="fas fa-circle mr-3 text-gray-300"></i>
+                <span>Searching Symfony documentation...</span>
+            </div>
+            <div id="step4" class="flex items-center text-sm text-gray-300 transition-all">
+                <i class="fas fa-circle mr-3 text-gray-300"></i>
+                <span>Generating detailed explanation...</span>
+            </div>
+            <div id="step5" class="flex items-center text-sm text-gray-300 transition-all">
+                <i class="fas fa-circle mr-3 text-gray-300"></i>
+                <span>Finalizing response...</span>
+            </div>
+        </div>
+
+        <!-- Estimated Time -->
+        <div class="mt-6 text-center">
+            <div class="text-2xl font-bold text-purple-600 mb-1">
+                <i class="fas fa-stopwatch mr-2"></i>
+                <span id="realTimer">0.0s</span>
+            </div>
+            <div class="text-xs text-gray-400">
+                Temps écoulé / Elapsed time
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    .animate-fadeIn {
+        animation: fadeIn 0.3s ease-out;
+    }
+</style>
+
+<script>
+let timerInterval = null;
+let startTime = null;
+
+function showAILoader(event, locale) {
+    event.preventDefault();
+    
+    const form = event.target;
+    const isRegenerate = form.querySelector('input[name="regenerate"]')?.value === '1';
+    const questionId = {{ question.id }};
+    
+    const modal = document.getElementById('aiLoadingModal');
+    const progressBar = document.getElementById('aiProgressBar');
+    const progressPercent = document.getElementById('aiProgressPercent');
+    const progressStep = document.getElementById('aiProgressStep');
+    const realTimer = document.getElementById('realTimer');
+    
+    // Update title based on locale
+    const title = locale === 'fr' ? 'Génération de l\'explication IA' : 'Generating AI Explanation';
+    const subtitle = locale === 'fr' ? 'Veuillez patienter pendant que Claude analyse la question...' : 'Please wait while Claude analyzes the question...';
+    document.getElementById('aiLoadingTitle').textContent = title;
+    document.getElementById('aiLoadingSubtitle').textContent = subtitle;
+    
+    // Show modal
+    modal.classList.remove('hidden');
+    
+    // Disable all buttons
+    document.querySelectorAll('.ai-generate-btn, .ai-regenerate-btn').forEach(btn => {
+        btn.disabled = true;
+        btn.classList.add('opacity-50', 'cursor-not-allowed');
+    });
+    
+    // Start real timer
+    startTime = Date.now();
+    realTimer.textContent = '0.0s';
+    
+    timerInterval = setInterval(() => {
+        const elapsed = ((Date.now() - startTime) / 1000).toFixed(1);
+        realTimer.textContent = elapsed + 's';
+    }, 100);
+    
+    // Progress steps
+    const steps = [
+        { id: 'step1', text: locale === 'fr' ? 'Connexion à l\'API Claude...' : 'Connecting to Claude API...', percent: 15, delay: 500 },
+        { id: 'step2', text: locale === 'fr' ? 'Analyse du contexte de la question...' : 'Analyzing question context...', percent: 30, delay: 2000 },
+        { id: 'step3', text: locale === 'fr' ? 'Recherche dans la documentation Symfony...' : 'Searching Symfony documentation...', percent: 50, delay: 4000 },
+        { id: 'step4', text: locale === 'fr' ? 'Génération de l\'explication détaillée...' : 'Generating detailed explanation...', percent: 75, delay: 8000 },
+        { id: 'step5', text: locale === 'fr' ? 'Finalisation de la réponse...' : 'Finalizing response...', percent: 90, delay: 12000 }
+    ];
+    
+    let currentStep = 0;
+    let stepTimeout = null;
+    
+    function updateStep() {
+        if (currentStep < steps.length) {
+            const step = steps[currentStep];
+            
+            // Update progress bar
+            progressBar.style.width = step.percent + '%';
+            progressPercent.textContent = step.percent + '%';
+            progressStep.textContent = step.text;
+            
+            // Update step icon
+            const stepElement = document.getElementById(step.id);
+            stepElement.querySelector('i').className = 'fas fa-circle-notch fa-spin mr-3 text-purple-500';
+            stepElement.querySelector('span').className = '';
+            stepElement.className = 'flex items-center text-sm text-gray-700 font-medium transition-all';
+            
+            // Mark previous step as complete
+            if (currentStep > 0) {
+                const prevStep = document.getElementById(steps[currentStep - 1].id);
+                prevStep.querySelector('i').className = 'fas fa-check-circle mr-3 text-green-500';
+                prevStep.className = 'flex items-center text-sm text-green-600 transition-all';
+            }
+            
+            currentStep++;
+            
+            if (currentStep < steps.length) {
+                stepTimeout = setTimeout(updateStep, steps[currentStep].delay - steps[currentStep - 1].delay);
+            }
+        }
+    }
+    
+    // Start progress animation
+    setTimeout(updateStep, steps[0].delay);
+    
+    // Make AJAX request
+    fetch('{{ path('api_generate_explanation', {id: question.id}) }}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+            locale: locale,
+            regenerate: isRegenerate
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Stop timer
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+        if (stepTimeout) {
+            clearTimeout(stepTimeout);
+        }
+        
+        // Update to 100%
+        progressBar.style.width = '100%';
+        progressPercent.textContent = '100%';
+        
+        // Mark all steps as complete
+        steps.forEach((step, index) => {
+            const stepElement = document.getElementById(step.id);
+            stepElement.querySelector('i').className = 'fas fa-check-circle mr-3 text-green-500';
+            stepElement.className = 'flex items-center text-sm text-green-600 transition-all';
+        });
+        
+        progressStep.textContent = locale === 'fr' ? 'Terminé !' : 'Complete!';
+        
+        // Show final time
+        const finalTime = data.duration || ((Date.now() - startTime) / 1000).toFixed(1);
+        realTimer.textContent = finalTime + 's';
+        
+        if (data.success) {
+            // Success - reload page after short delay
+            setTimeout(() => {
+                window.location.reload();
+            }, 1500);
+        } else {
+            // Error
+            alert(locale === 'fr' 
+                ? 'Erreur: ' + (data.error || 'Une erreur est survenue')
+                : 'Error: ' + (data.error || 'An error occurred')
+            );
+            modal.classList.add('hidden');
+            
+            // Re-enable buttons
+            document.querySelectorAll('.ai-generate-btn, .ai-regenerate-btn').forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        
+        if (timerInterval) {
+            clearInterval(timerInterval);
+        }
+        if (stepTimeout) {
+            clearTimeout(stepTimeout);
+        }
+        
+        alert(locale === 'fr' 
+            ? 'Erreur de connexion: ' + error.message
+            : 'Connection error: ' + error.message
+        );
+        
+        modal.classList.add('hidden');
+        
+        // Re-enable buttons
+        document.querySelectorAll('.ai-generate-btn, .ai-regenerate-btn').forEach(btn => {
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+        });
+    });
+}
+</script>
+
 {% endblock %}

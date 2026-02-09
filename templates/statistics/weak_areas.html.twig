@@ -81,7 +81,7 @@
                 {% if mostFailedQuestions|length > 0 %}
                 <div class="space-y-4">
                     {% for question in mostFailedQuestions %}
-                    <a href="{{ path('statistics_question_detail', {id: question.questionId}) }}" 
+                    <a href="{{ path('statistics_question_detail', {id: question.questionId, backUrl: path('statistics_weak_areas')}) }}" 
                        class="block p-4 bg-orange-50 rounded-lg border border-orange-100 hover:bg-orange-100 hover:border-orange-200 transition-colors">
                         <div class="text-gray-800 font-medium mb-2 question-text">
                             {{ question.questionText|truncate_question(20000) }}

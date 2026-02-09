@@ -192,7 +192,7 @@
                                 <p class="text-cyan-600 text-sm">Get a detailed AI explanation with examples and best practices</p>
                             </div>
                         </div>
-                        <a href="{{ path('statistics_question_detail', {id: answer.question.id}) }}" 
+                        <a href="{{ path('statistics_question_detail', {id: answer.question.id, backUrl: app.request.uri}) }}" 
                            class="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:from-cyan-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center space-x-2">
                             <i class="fas fa-brain"></i>
                             <span>View AI Explanation</span>
