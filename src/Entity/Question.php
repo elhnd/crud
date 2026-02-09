@@ -72,10 +72,17 @@ class Question
     #[ORM\OneToOne(mappedBy: 'question', targetEntity: QuestionExplanation::class, cascade: ['persist', 'remove'])]
     private ?QuestionExplanation $aiExplanation = null;
 
+    /**
+     * @var Collection<int, QuestionReport>
+     */
+    #[ORM\OneToMany(targetEntity: QuestionReport::class, mappedBy: 'question', orphanRemoval: true, cascade: ['remove'])]
+    private Collection $reports;
+
     public function __construct()
     {
         $this->answers = new ArrayCollection();
         $this->userAnswers = new ArrayCollection();
+        $this->reports = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -372,5 +379,41 @@ class Question
         $this->aiExplanation = $aiExplanation;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, QuestionReport>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(QuestionReport $report): static
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setQuestion($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(QuestionReport $report): static
+    {
+        if ($this->reports->removeElement($report)) {
+            if ($report->getQuestion() === $this) {
+                $report->setQuestion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getPendingReportsCount(): int
+    {
+        return $this->reports->filter(
+            fn(QuestionReport $report) => $report->getStatus() === QuestionReport::STATUS_PENDING
+        )->count();
     }
 }
