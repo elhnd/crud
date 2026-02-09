@@ -63,15 +63,23 @@ class StatisticsController extends AbstractController
     }
 
     #[Route('/question/{id}', name: 'statistics_question_detail')]
-    public function questionDetail(Question $question): Response
+    public function questionDetail(Question $question, Request $request): Response
     {
         $questionStats = $this->userAnswerRepository->getQuestionStats($question);
         $aiExplanation = $this->claudeAIService->getExplanation($question);
+
+        // Get backUrl from query parameter, or use referer, or default to weak areas
+        $backUrl = $request->query->get('backUrl');
+        if (!$backUrl) {
+            $referer = $request->headers->get('referer');
+            $backUrl = $referer ?: $this->generateUrl('statistics_weak_areas');
+        }
 
         return $this->render('statistics/question_detail.html.twig', [
             'question' => $question,
             'stats' => $questionStats,
             'aiExplanation' => $aiExplanation,
+            'backUrl' => $backUrl,
         ]);
     }
 
@@ -81,10 +89,17 @@ class StatisticsController extends AbstractController
         $locale = $request->request->get('locale', 'en');
         $forceRegenerate = $request->request->getBoolean('regenerate', false);
 
+        // Get backUrl to maintain it through redirects
+        $backUrl = $request->request->get('backUrl');
+        $redirectParams = ['id' => $question->getId()];
+        if ($backUrl) {
+            $redirectParams['backUrl'] = $backUrl;
+        }
+
         // Check API connectivity first
         if (!$this->claudeAIService->isApiReachable()) {
             $this->addFlash('error', 'Cannot connect to Claude API. Please check your network connection or try again later.');
-            return $this->redirectToRoute('statistics_question_detail', ['id' => $question->getId()]);
+            return $this->redirectToRoute('statistics_question_detail', $redirectParams);
         }
 
         $explanation = $this->claudeAIService->generateExplanation($question, $locale, $forceRegenerate);
@@ -96,7 +111,50 @@ class StatisticsController extends AbstractController
             $this->addFlash('success', 'Explanation generated successfully!');
         }
 
-        return $this->redirectToRoute('statistics_question_detail', ['id' => $question->getId()]);
+        return $this->redirectToRoute('statistics_question_detail', $redirectParams);
+    }
+
+    #[Route('/api/question/{id}/generate-explanation', name: 'api_generate_explanation', methods: ['POST'])]
+    public function apiGenerateExplanation(Question $question, Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $locale = $data['locale'] ?? 'en';
+        $forceRegenerate = $data['regenerate'] ?? false;
+
+        $startTime = microtime(true);
+
+        // Check API connectivity first
+        if (!$this->claudeAIService->isApiReachable()) {
+            return $this->json([
+                'success' => false,
+                'error' => 'Cannot connect to Claude API. Please check your network connection or try again later.',
+                'duration' => round(microtime(true) - $startTime, 2)
+            ], 503);
+        }
+
+        $explanation = $this->claudeAIService->generateExplanation($question, $locale, $forceRegenerate);
+        $duration = round(microtime(true) - $startTime, 2);
+
+        if ($explanation === null) {
+            $error = $this->claudeAIService->getLastError() ?? 'Unknown error';
+            return $this->json([
+                'success' => false,
+                'error' => $error,
+                'duration' => $duration
+            ], 500);
+        }
+
+        return $this->json([
+            'success' => true,
+            'explanation' => [
+                'content' => $explanation->getContent(),
+                'locale' => $explanation->getLocale(),
+                'generatedAt' => $explanation->getGeneratedAt()->format('M d, Y'),
+                'modelUsed' => $explanation->getModelUsed(),
+                'tokensUsed' => $explanation->getTokensUsed()
+            ],
+            'duration' => $duration
+        ]);
     }
 
     #[Route('/progress', name: 'statistics_progress')]
