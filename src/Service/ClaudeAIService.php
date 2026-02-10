@@ -12,7 +12,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class ClaudeAIService
 {
     private const API_URL = 'https://api.anthropic.com/v1/messages';
-    private const MODEL = 'claude-sonnet-4-20250514';
+    private const MODEL ='claude-opus-4-6';   //'claude-sonnet-4-20250514';
     private const MAX_TOKENS = 1500;
     private const TIMEOUT = 60; // seconds
 
