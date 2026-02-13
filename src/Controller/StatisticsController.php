@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Entity\Question;
+use App\Entity\QuestionExplanation;
 use App\Repository\CategoryRepository;
 use App\Repository\UserAnswerRepository;
 use App\Service\ClaudeAIService;
@@ -66,7 +67,21 @@ class StatisticsController extends AbstractController
     public function questionDetail(Question $question, Request $request): Response
     {
         $questionStats = $this->userAnswerRepository->getQuestionStats($question);
-        $aiExplanation = $this->claudeAIService->getExplanation($question);
+        
+        // Get requested locale from query param, default to 'en'
+        $selectedLocale = $request->query->get('locale', 'en');
+        
+        // Get available locales that have been already generated
+        $availableLocales = $this->claudeAIService->getAvailableLocales($question);
+        
+        // Get explanation for the selected locale
+        $aiExplanation = $this->claudeAIService->getExplanation($question, $selectedLocale);
+        
+        // If no explanation for selected locale, try to get any available one
+        if (!$aiExplanation && !empty($availableLocales)) {
+            $aiExplanation = $this->claudeAIService->getExplanation($question, $availableLocales[0]);
+            $selectedLocale = $availableLocales[0];
+        }
 
         // Get backUrl from query parameter, or use referer, or default to weak areas
         $backUrl = $request->query->get('backUrl');
@@ -79,6 +94,9 @@ class StatisticsController extends AbstractController
             'question' => $question,
             'stats' => $questionStats,
             'aiExplanation' => $aiExplanation,
+            'selectedLocale' => $selectedLocale,
+            'availableLocales' => $availableLocales,
+            'supportedLocales' => QuestionExplanation::SUPPORTED_LOCALES,
             'backUrl' => $backUrl,
         ]);
     }
@@ -91,7 +109,7 @@ class StatisticsController extends AbstractController
 
         // Get backUrl to maintain it through redirects
         $backUrl = $request->request->get('backUrl');
-        $redirectParams = ['id' => $question->getId()];
+        $redirectParams = ['id' => $question->getId(), 'locale' => $locale];
         if ($backUrl) {
             $redirectParams['backUrl'] = $backUrl;
         }
@@ -123,15 +141,6 @@ class StatisticsController extends AbstractController
 
         $startTime = microtime(true);
 
-        // Check API connectivity first
-        if (!$this->claudeAIService->isApiReachable()) {
-            return $this->json([
-                'success' => false,
-                'error' => 'Cannot connect to Claude API. Please check your network connection or try again later.',
-                'duration' => round(microtime(true) - $startTime, 2)
-            ], 503);
-        }
-
         $explanation = $this->claudeAIService->generateExplanation($question, $locale, $forceRegenerate);
         $duration = round(microtime(true) - $startTime, 2);
 
@@ -153,6 +162,7 @@ class StatisticsController extends AbstractController
                 'modelUsed' => $explanation->getModelUsed(),
                 'tokensUsed' => $explanation->getTokensUsed()
             ],
+            'availableLocales' => $this->claudeAIService->getAvailableLocales($question),
             'duration' => $duration
         ]);
     }

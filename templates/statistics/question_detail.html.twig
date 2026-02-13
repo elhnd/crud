@@ -88,11 +88,39 @@
                 <span class="text-xs text-white/80 bg-white/20 px-2 py-1 rounded-full">
                     <i class="fas fa-clock mr-1"></i>
                     Generated {{ aiExplanation.generatedAt|date('M d, Y') }}
-                    {% if aiExplanation.locale == 'fr' %}🇫🇷{% else %}🇬🇧{% endif %}
+                    {% if aiExplanation.updatedAt %}
+                        (updated {{ aiExplanation.updatedAt|date('M d, Y') }})
+                    {% endif %}
                 </span>
                 {% endif %}
             </div>
         </div>
+
+        {# Language tabs #}
+        <div class="border-b border-gray-200 bg-gray-50 px-6">
+            <div class="flex items-center gap-1 -mb-px">
+                {% for localeCode, localeName in supportedLocales %}
+                    {% set isActive = selectedLocale == localeCode %}
+                    {% set isAvailable = localeCode in availableLocales %}
+                    
+                    <a href="{{ path('statistics_question_detail', {id: question.id, locale: localeCode, backUrl: backUrl}) }}"
+                       class="inline-flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors
+                              {{ isActive ? 'border-purple-500 text-purple-600 bg-white' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        <span>{{ localeName }}</span>
+                        {% if isAvailable %}
+                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-green-100 text-green-600" title="Saved in database">
+                                <i class="fas fa-check text-xs"></i>
+                            </span>
+                        {% else %}
+                            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gray-200 text-gray-400" title="Not generated yet">
+                                <i class="fas fa-minus text-xs"></i>
+                            </span>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+
         <div class="p-6">
             {% if aiExplanation %}
                 <!-- Display existing explanation -->
@@ -100,54 +128,53 @@
                     {{ aiExplanation.content|markdown }}
                 </div>
                 
-                <!-- Regenerate options -->
+                <!-- Regenerate option for current locale -->
                 <div class="mt-6 pt-6 border-t border-gray-200">
                     <div class="flex flex-wrap items-center gap-4">
                         <span class="text-sm text-gray-500">
-                            <i class="fas fa-sync-alt mr-1"></i> Regenerate in:
+                            <i class="fas fa-sync-alt mr-1"></i> Regenerate this explanation:
                         </span>
-                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline" onsubmit="showAILoader(event, 'en')">
-                            <input type="hidden" name="locale" value="en">
+                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline" onsubmit="showAILoader(event, '{{ selectedLocale }}')">
+                            <input type="hidden" name="locale" value="{{ selectedLocale }}">
                             <input type="hidden" name="regenerate" value="1">
                             <input type="hidden" name="backUrl" value="{{ backUrl }}">
                             <button type="submit" class="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition ai-regenerate-btn">
-                                🇬🇧 English
+                                <i class="fas fa-redo mr-1"></i>
+                                {{ supportedLocales[selectedLocale] }} Regenerate
                             </button>
                         </form>
-                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline" onsubmit="showAILoader(event, 'fr')">
-                            <input type="hidden" name="locale" value="fr">
-                            <input type="hidden" name="regenerate" value="1">
-                            <input type="hidden" name="backUrl" value="{{ backUrl }}">
-                            <button type="submit" class="px-4 py-2 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition ai-regenerate-btn">
-                                🇫🇷 Français
-                            </button>
-                        </form>
+                        
+                        {# Show generate buttons for locales not yet available #}
+                        {% for localeCode, localeName in supportedLocales %}
+                            {% if localeCode not in availableLocales %}
+                                <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline" onsubmit="showAILoader(event, '{{ localeCode }}')">
+                                    <input type="hidden" name="locale" value="{{ localeCode }}">
+                                    <input type="hidden" name="backUrl" value="{{ backUrl }}">
+                                    <button type="submit" class="px-4 py-2 text-sm bg-purple-100 text-purple-700 rounded-lg hover:bg-purple-200 transition ai-generate-btn">
+                                        <i class="fas fa-magic mr-1"></i>
+                                        Generate {{ localeName }}
+                                    </button>
+                                </form>
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
             {% else %}
-                <!-- No explanation yet - show generation options -->
+                <!-- No explanation for this locale -->
                 <div class="text-center py-12">
                     <i class="fas fa-robot text-purple-300 text-6xl mb-6"></i>
-                    <h3 class="text-xl font-semibold text-gray-700 mb-3">No AI Explanation Yet</h3>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-3">No AI Explanation in {{ supportedLocales[selectedLocale] }}</h3>
                     <p class="text-gray-500 mb-8 max-w-md mx-auto">
                         Generate an explanation based on official Symfony documentation with code examples.
                     </p>
                     
                     <div class="flex flex-wrap justify-center gap-4">
-                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline" onsubmit="showAILoader(event, 'en')">
-                            <input type="hidden" name="locale" value="en">
+                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline" onsubmit="showAILoader(event, '{{ selectedLocale }}')">
+                            <input type="hidden" name="locale" value="{{ selectedLocale }}">
                             <input type="hidden" name="backUrl" value="{{ backUrl }}">
                             <button type="submit" class="inline-flex items-center px-6 py-3 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition font-medium ai-generate-btn">
                                 <i class="fas fa-magic mr-2"></i>
-                                Generate in English 🇬🇧
-                            </button>
-                        </form>
-                        <form action="{{ path('statistics_generate_explanation', {id: question.id}) }}" method="POST" class="inline" onsubmit="showAILoader(event, 'fr')">
-                            <input type="hidden" name="locale" value="fr">
-                            <input type="hidden" name="backUrl" value="{{ backUrl }}">
-                            <button type="submit" class="inline-flex items-center px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium ai-generate-btn">
-                                <i class="fas fa-magic mr-2"></i>
-                                Générer en Français 🇫🇷
+                                Generate in {{ supportedLocales[selectedLocale] }}
                             </button>
                         </form>
                     </div>
@@ -414,13 +441,13 @@ function showAILoader(event, locale) {
         realTimer.textContent = elapsed + 's';
     }, 100);
     
-    // Progress steps
+    // Progress steps - faster intervals matching Sonnet speed
     const steps = [
-        { id: 'step1', text: locale === 'fr' ? 'Connexion à l\'API Claude...' : 'Connecting to Claude API...', percent: 15, delay: 500 },
-        { id: 'step2', text: locale === 'fr' ? 'Analyse du contexte de la question...' : 'Analyzing question context...', percent: 30, delay: 2000 },
-        { id: 'step3', text: locale === 'fr' ? 'Recherche dans la documentation Symfony...' : 'Searching Symfony documentation...', percent: 50, delay: 4000 },
-        { id: 'step4', text: locale === 'fr' ? 'Génération de l\'explication détaillée...' : 'Generating detailed explanation...', percent: 75, delay: 8000 },
-        { id: 'step5', text: locale === 'fr' ? 'Finalisation de la réponse...' : 'Finalizing response...', percent: 90, delay: 12000 }
+        { id: 'step1', text: locale === 'fr' ? 'Connexion à l\'API Claude...' : 'Connecting to Claude API...', percent: 20, delay: 300 },
+        { id: 'step2', text: locale === 'fr' ? 'Analyse du contexte...' : 'Analyzing context...', percent: 40, delay: 1500 },
+        { id: 'step3', text: locale === 'fr' ? 'Recherche documentation Symfony...' : 'Searching Symfony docs...', percent: 60, delay: 3000 },
+        { id: 'step4', text: locale === 'fr' ? 'Génération de l\'explication...' : 'Generating explanation...', percent: 80, delay: 5000 },
+        { id: 'step5', text: locale === 'fr' ? 'Finalisation...' : 'Finalizing...', percent: 92, delay: 8000 }
     ];
     
     let currentStep = 0;
@@ -499,10 +526,12 @@ function showAILoader(event, locale) {
         realTimer.textContent = finalTime + 's';
         
         if (data.success) {
-            // Success - reload page after short delay
+            // Success - render content directly without page reload
             setTimeout(() => {
-                window.location.reload();
-            }, 1500);
+                const url = new URL(window.location.href);
+                url.searchParams.set('locale', locale);
+                window.location.href = url.toString();
+            }, 600);
         } else {
             // Error
             alert(locale === 'fr' 

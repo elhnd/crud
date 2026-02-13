@@ -367,10 +367,10 @@ class FooCommand extends Command
                 'resourceUrl' => 'https://github.com/symfony/symfony/blob/b101b71ddacfa664485bb09ec6272971e458f49f/src/Symfony/Component/Security/Core/Authorization/Voter/AuthenticatedVoter.php#L75',
                 'answers' => [
                     ['text' => '<code>IS_AUTHENTICATED</code>', 'correct' => true],
-                    ['text' => '<code>IS_AUTHENTICATED_FULLY</code>', 'correct' => false],
+                    ['text' => '<code>IS_AUTHENTICATED_FULLY</code>', 'correct' => true],
                     ['text' => '<code>IS_FULLY_AUTHENTICATED</code>', 'correct' => false],
                     ['text' => '<code>IS_AUTHENTICATED_ANONYMOUSLY</code>', 'correct' => false],
-                    ['text' => '<code>IS_AUTHENTICATED_REMEMBERED</code>', 'correct' => false],
+                    ['text' => '<code>IS_AUTHENTICATED_REMEMBERED</code>', 'correct' => true],
                 ],
             ],
 

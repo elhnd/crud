@@ -12,9 +12,11 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class ClaudeAIService
 {
     private const API_URL = 'https://api.anthropic.com/v1/messages';
-    private const MODEL ='claude-opus-4-6';   //'claude-sonnet-4-20250514';
-    private const MAX_TOKENS = 1500;
-    private const TIMEOUT = 60; // seconds
+    private const MODEL = 'claude-opus-4-6';  //'claude-sonnet-4-20250514';
+    private const MAX_TOKENS = 1024;
+    private const TIMEOUT = 30; // seconds
+
+    private const SYSTEM_PROMPT = 'You are a concise Symfony certification tutor. You explain questions based EXCLUSIVELY on official Symfony and PHP documentation. Always include doc links. Be direct, no filler text.';
 
     private ?string $lastError = null;
 
@@ -28,13 +30,13 @@ class ClaudeAIService
     }
 
     /**
-     * Check if the API is reachable
+     * Check if the API is reachable (lightweight HEAD request)
      */
     public function isApiReachable(): bool
     {
         try {
-            $response = $this->httpClient->request('GET', 'https://api.anthropic.com', [
-                'timeout' => 5,
+            $response = $this->httpClient->request('HEAD', 'https://api.anthropic.com', [
+                'timeout' => 2,
             ]);
             return $response->getStatusCode() < 500;
         } catch (\Exception $e) {
@@ -47,14 +49,11 @@ class ClaudeAIService
      */
     public function generateExplanation(Question $question, string $locale = 'en', bool $forceRegenerate = false): ?QuestionExplanation
     {
-        // Check if explanation already exists
-        $existingExplanation = $this->explanationRepository->findByQuestion($question);
+        // Check if explanation already exists for this specific locale
+        $existingExplanation = $this->explanationRepository->findByQuestionAndLocale($question, $locale);
         
         if ($existingExplanation && !$forceRegenerate) {
-            // If locale is different, regenerate
-            if ($existingExplanation->getLocale() === $locale) {
-                return $existingExplanation;
-            }
+            return $existingExplanation;
         }
 
         try {
@@ -85,6 +84,7 @@ class ClaudeAIService
         } catch (\Exception $e) {
             $this->logger->error('Failed to generate AI explanation', [
                 'question_id' => $question->getId(),
+                'locale' => $locale,
                 'error' => $e->getMessage(),
             ]);
             return null;
@@ -128,7 +128,6 @@ PROMPT;
 
     private function callClaudeAPI(string $prompt): ?array
     {
-        set_time_limit(60);
         if (empty($this->claudeApiKey)) {
             $this->logger->error('Claude API key is not configured');
             return null;
@@ -145,6 +144,8 @@ PROMPT;
                 'json' => [
                     'model' => self::MODEL,
                     'max_tokens' => self::MAX_TOKENS,
+                    'temperature' => 0,
+                    'system' => self::SYSTEM_PROMPT,
                     'messages' => [
                         [
                             'role' => 'user',
@@ -175,18 +176,44 @@ PROMPT;
     }
 
     /**
-     * Get existing explanation or null if not generated yet
+     * Get existing explanation for a specific locale, or first available
      */
-    public function getExplanation(Question $question): ?QuestionExplanation
+    public function getExplanation(Question $question, ?string $locale = null): ?QuestionExplanation
     {
+        if ($locale !== null) {
+            return $this->explanationRepository->findByQuestionAndLocale($question, $locale);
+        }
+
         return $this->explanationRepository->findByQuestion($question);
     }
 
     /**
-     * Check if an explanation exists for a question
+     * Get all explanations for a question (all locales)
+     * @return QuestionExplanation[]
      */
-    public function hasExplanation(Question $question): bool
+    public function getAllExplanations(Question $question): array
     {
+        return $this->explanationRepository->findAllByQuestion($question);
+    }
+
+    /**
+     * Get available locales for a question
+     * @return string[]
+     */
+    public function getAvailableLocales(Question $question): array
+    {
+        return $this->explanationRepository->getAvailableLocales($question);
+    }
+
+    /**
+     * Check if an explanation exists for a question (optionally for a specific locale)
+     */
+    public function hasExplanation(Question $question, ?string $locale = null): bool
+    {
+        if ($locale !== null) {
+            return $this->explanationRepository->findByQuestionAndLocale($question, $locale) !== null;
+        }
+
         return $this->explanationRepository->findByQuestion($question) !== null;
     }
 

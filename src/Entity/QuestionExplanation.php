@@ -8,17 +8,23 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: QuestionExplanationRepository::class)]
 #[ORM\HasLifecycleCallbacks]
+#[ORM\UniqueConstraint(name: 'unique_question_locale', columns: ['question_id', 'locale'])]
 class QuestionExplanation
 {
     public const LOCALE_EN = 'en';
     public const LOCALE_FR = 'fr';
+
+    public const SUPPORTED_LOCALES = [
+        self::LOCALE_EN => '🇬🇧 English',
+        self::LOCALE_FR => '🇫🇷 Français',
+    ];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'aiExplanation', targetEntity: Question::class)]
+    #[ORM\ManyToOne(inversedBy: 'aiExplanations', targetEntity: Question::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Question $question = null;
 
