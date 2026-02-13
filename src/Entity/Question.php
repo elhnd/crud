@@ -69,8 +69,9 @@ class Question
     #[ORM\Column(options: ['default' => true])]
     private bool $isActive = true;
 
-    #[ORM\OneToOne(mappedBy: 'question', targetEntity: QuestionExplanation::class, cascade: ['persist', 'remove'])]
-    private ?QuestionExplanation $aiExplanation = null;
+    /** @var Collection<int, QuestionExplanation> */
+    #[ORM\OneToMany(mappedBy: 'question', targetEntity: QuestionExplanation::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $aiExplanations;
 
     /**
      * @var Collection<int, QuestionReport>
@@ -83,6 +84,7 @@ class Question
         $this->answers = new ArrayCollection();
         $this->userAnswers = new ArrayCollection();
         $this->reports = new ArrayCollection();
+        $this->aiExplanations = new ArrayCollection();
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -364,21 +366,60 @@ class Question
         return $this;
     }
 
-    public function getAiExplanation(): ?QuestionExplanation
+    /**
+     * @return Collection<int, QuestionExplanation>
+     */
+    public function getAiExplanations(): Collection
     {
-        return $this->aiExplanation;
+        return $this->aiExplanations;
     }
 
-    public function setAiExplanation(?QuestionExplanation $aiExplanation): static
+    /**
+     * Get AI explanation for a specific locale
+     */
+    public function getAiExplanation(?string $locale = null): ?QuestionExplanation
     {
-        // Set the owning side of the relation if necessary
-        if ($aiExplanation !== null && $aiExplanation->getQuestion() !== $this) {
-            $aiExplanation->setQuestion($this);
+        if ($locale === null) {
+            return $this->aiExplanations->first() ?: null;
         }
 
-        $this->aiExplanation = $aiExplanation;
+        foreach ($this->aiExplanations as $explanation) {
+            if ($explanation->getLocale() === $locale) {
+                return $explanation;
+            }
+        }
+
+        return null;
+    }
+
+    public function addAiExplanation(QuestionExplanation $explanation): static
+    {
+        if (!$this->aiExplanations->contains($explanation)) {
+            $this->aiExplanations->add($explanation);
+            $explanation->setQuestion($this);
+        }
 
         return $this;
+    }
+
+    public function removeAiExplanation(QuestionExplanation $explanation): static
+    {
+        if ($this->aiExplanations->removeElement($explanation)) {
+            if ($explanation->getQuestion() === $this) {
+                $explanation->setQuestion(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get available locales for AI explanations
+     * @return string[]
+     */
+    public function getAvailableExplanationLocales(): array
+    {
+        return $this->aiExplanations->map(fn(QuestionExplanation $e) => $e->getLocale())->toArray();
     }
 
     /**

@@ -27,6 +27,31 @@ class QuestionExplanationRepository extends ServiceEntityRepository
         return $this->findOneBy(['question' => $question, 'locale' => $locale]);
     }
 
+    /**
+     * Find all explanations for a question (all locales)
+     * @return QuestionExplanation[]
+     */
+    public function findAllByQuestion(Question $question): array
+    {
+        return $this->findBy(['question' => $question], ['locale' => 'ASC']);
+    }
+
+    /**
+     * Get available locales for a question
+     * @return string[]
+     */
+    public function getAvailableLocales(Question $question): array
+    {
+        $results = $this->createQueryBuilder('e')
+            ->select('e.locale')
+            ->where('e.question = :question')
+            ->setParameter('question', $question)
+            ->getQuery()
+            ->getSingleColumnResult();
+
+        return $results;
+    }
+
     public function save(QuestionExplanation $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
