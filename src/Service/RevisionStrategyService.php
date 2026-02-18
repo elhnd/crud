@@ -15,22 +15,46 @@ use App\Repository\UserRepository;
  */
 class RevisionStrategyService
 {
-    // Certification exam topics weights (based on official Symfony certification)
+    // Certification exam topics based on official Symfony certification
+    // Source: https://certification.symfony.com/exams/symfony.html
+    // 75 questions, 14 official topics, 90 minutes — total weights = 100%
+    // All 68 DB subcategories are mapped to ensure complete Topic Analysis coverage
     private const CERTIFICATION_TOPICS = [
-        'PHP' => ['weight' => 10, 'subtopics' => ['OOP', 'PHP Basics', 'Interfaces & Traits', 'PSR', 'Namespaces']],
-        'HTTP' => ['weight' => 10, 'subtopics' => ['HTTP', 'HttpFoundation', 'HttpKernel']],
-        'Symfony Architecture' => ['weight' => 15, 'subtopics' => ['Architecture', 'Controllers', 'Routing', 'Configuration']],
-        'Controllers' => ['weight' => 10, 'subtopics' => ['Controllers', 'Routing']],
-        'Routing' => ['weight' => 10, 'subtopics' => ['Routing']],
-        'Templating with Twig' => ['weight' => 10, 'subtopics' => ['Twig']],
-        'Forms' => ['weight' => 10, 'subtopics' => ['Forms', 'Validation']],
-        'Data Validation' => ['weight' => 5, 'subtopics' => ['Validation']],
-        'Dependency Injection' => ['weight' => 10, 'subtopics' => ['Dependency Injection', 'Services']],
-        'Security' => ['weight' => 10, 'subtopics' => ['Security', 'PasswordHasher']],
-        'HTTP Caching' => ['weight' => 5, 'subtopics' => ['Cache', 'HTTP']],
-        'Console' => ['weight' => 5, 'subtopics' => ['Console']],
-        'Automated Tests' => ['weight' => 5, 'subtopics' => ['Testing']],
-        'Miscellaneous' => ['weight' => 5, 'subtopics' => ['Event Dispatcher', 'Serializer', 'Messenger', 'Mailer', 'Translation']],
+        'PHP' => ['weight' => 7, 'inExam' => true, 'subtopics' => [
+            'OOP', 'PHP Basics', 'Interfaces & Traits', 'Functions', 'Closures',
+            'Exceptions', 'Typing & Strict Types', 'Arrays', 'Data Format & Types',
+            'Strings', 'JSON', 'XML', 'DOM', 'Namespaces', 'SPL', 'I/O',
+        ]],
+        'HTTP' => ['weight' => 5, 'inExam' => true, 'subtopics' => [
+            'HTTP', 'HttpClient', 'Session',
+        ]],
+        'Symfony Architecture' => ['weight' => 8, 'inExam' => true, 'subtopics' => [
+            'HttpFoundation', 'Architecture', 'Configuration', 'Event Dispatcher', 'PSR',
+        ]],
+        'Controllers' => ['weight' => 7, 'inExam' => true, 'subtopics' => [
+            'Controllers', 'HttpKernel', 'FrameworkBundle',
+        ]],
+        'Routing' => ['weight' => 7, 'inExam' => true, 'subtopics' => ['Routing']],
+        'Templating with Twig' => ['weight' => 7, 'inExam' => true, 'subtopics' => ['Twig', 'Assets']],
+        'Forms' => ['weight' => 8, 'inExam' => true, 'subtopics' => ['Forms', 'OptionsResolver']],
+        'Data Validation' => ['weight' => 6, 'inExam' => true, 'subtopics' => ['Validation', 'Validator']],
+        'Dependency Injection' => ['weight' => 8, 'inExam' => true, 'subtopics' => ['Dependency Injection', 'Services']],
+        'Security' => ['weight' => 8, 'inExam' => true, 'subtopics' => ['Security', 'PasswordHasher']],
+        'Messenger' => ['weight' => 5, 'inExam' => true, 'subtopics' => ['Messenger']],
+        'Console' => ['weight' => 5, 'inExam' => true, 'subtopics' => ['Console']],
+        'Automated Tests' => ['weight' => 7, 'inExam' => true, 'subtopics' => [
+            'Testing', 'BrowserKit', 'DomCrawler', 'CssSelector',
+        ]],
+        'Miscellaneous' => ['weight' => 12, 'inExam' => true, 'subtopics' => [
+            'Cache', 'HttpCache', 'Clock', 'Filesystem', 'Finder',
+            'Mailer', 'Mime', 'Process', 'PropertyAccess', 'Runtime',
+            'Serializer', 'Dotenv', 'ErrorHandler', 'Expression Language',
+            'VarDumper', 'Translation', 'Miscellaneous',
+        ]],
+        'Not in Official Exam' => ['weight' => 0, 'inExam' => false, 'subtopics' => [
+            'Doctrine', 'AssetMapper', 'Lock', 'Intl', 'Inflector',
+            'VarExporter', 'Yaml',
+        ]],
     ];
 
     public function __construct(
@@ -191,6 +215,7 @@ class RevisionStrategyService
 
             $topicAnalysis[$topic] = [
                 'weight' => $info['weight'],
+                'inExam' => $info['inExam'],
                 'subtopics' => $subtopicData,
                 'averageScore' => round($averageScore, 1),
                 'coverage' => round($coverage, 1),
@@ -479,7 +504,9 @@ class RevisionStrategyService
                 'title' => 'More practice needed',
                 'description' => 'You have only answered ' . $totalQuestions . ' questions. Aim for at least 500 questions for good preparation.',
                 'action' => 'Start a quiz now',
-                'actionUrl' => '/quiz/start',
+                'actionRoute' => 'quiz_start_form',
+                'actionRouteParams' => [],
+                'actionUrl' => null,
             ];
         }
 
@@ -492,7 +519,9 @@ class RevisionStrategyService
                 'title' => 'Areas to improve',
                 'description' => 'Focus on: ' . implode(', ', $weakNames),
                 'action' => 'View weak areas',
-                'actionUrl' => '/statistics/weak-areas',
+                'actionRoute' => 'statistics_weak_areas',
+                'actionRouteParams' => [],
+                'actionUrl' => null,
             ];
         }
 
@@ -505,7 +534,9 @@ class RevisionStrategyService
                 'title' => 'Try certification mode',
                 'description' => 'Exam simulations are essential to prepare for real conditions.',
                 'action' => 'Start a mock exam',
-                'actionUrl' => '/quiz/start?mode=certification',
+                'actionRoute' => 'quiz_certification_exam',
+                'actionRouteParams' => [],
+                'actionUrl' => null,
             ];
         }
 
@@ -518,6 +549,8 @@ class RevisionStrategyService
                 'title' => 'Strengthen your knowledge',
                 'description' => 'Your success rate is ' . round($successRate, 1) . '%. Study the Symfony documentation to improve this score.',
                 'action' => 'Symfony Documentation',
+                'actionRoute' => null,
+                'actionRouteParams' => [],
                 'actionUrl' => 'https://symfony.com/doc/current/index.html',
             ];
         }
@@ -530,6 +563,8 @@ class RevisionStrategyService
                 'title' => 'Excellent work!',
                 'description' => 'You have mastered ' . count($strongAreas) . ' topics with over 80% success rate. Keep it up!',
                 'action' => null,
+                'actionRoute' => null,
+                'actionRouteParams' => [],
                 'actionUrl' => null,
             ];
         }
