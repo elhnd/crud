@@ -1,67 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello BlogController!{% endblock %}
+{% block title %}Blog - Demo{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="card-modern p-8 animate-fade-in-up">
+        <div class="flex items-center gap-3 mb-6">
+            <span class="w-10 h-10 flex items-center justify-center bg-gradient-to-br from-primary-500 to-violet-500 rounded-xl text-white">
+                <i class="fas fa-code"></i>
+            </span>
+            <h1 class="text-2xl font-extrabold text-gray-900 dark:text-white">Hello {{ controller_name }} ! ✅</h1>
+        </div>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+        <div class="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 mb-6 border border-gray-200 dark:border-gray-700 text-sm text-gray-600 dark:text-gray-400">
+            <p class="mb-2">This message comes from:</p>
+            <ul class="list-disc list-inside space-y-1">
+                <li>Your controller: <code class="bg-gray-200 dark:bg-gray-700 text-primary-600 dark:text-primary-400 px-2 py-0.5 rounded text-xs">src/Controller/BlogController.php</code></li>
+                <li>Your template: <code class="bg-gray-200 dark:bg-gray-700 text-primary-600 dark:text-primary-400 px-2 py-0.5 rounded text-xs">templates/blog/index.html.twig</code></li>
+            </ul>
+        </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>/home/elhadji/certif/crud/src/Controller/BlogController.php</code></li>
-        <li>Your template at <code>/home/elhadji/certif/crud/templates/blog/index.html.twig</code></li>
-    </ul>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <!-- Numeric loop -->
+            <div class="bg-gradient-to-br from-primary-50 to-violet-50 dark:from-primary-900/20 dark:to-violet-900/20 rounded-xl p-4 border border-primary-100 dark:border-primary-800/30">
+                <h3 class="text-sm font-bold text-primary-700 dark:text-primary-400 mb-2"><i class="fas fa-hashtag mr-1"></i> Loop 0..10</h3>
+                <div class="text-sm text-gray-700 dark:text-gray-300 font-mono">
+                    {% for i in 0..10 %}{{ i }}{{ not loop.last ? ', ' }}{% endfor %}
+                </div>
+            </div>
 
-    {% for i in 0..10 %}
-        * {{i}}
-         {# {{ loop.parent }} - #}
-    {% endfor %}
-    <br>
-    {% for i in range(50, 60) %}
-        * {{loop.index0}} -
-        * {{i}}
-    {% endfor %}
-    <br>
-    {% for letter in 'a'..'z' %}
-        * {{loop.revindex0}} -
-        * {{ letter }}
-    {% endfor %}
-    <br>
-    {% for letter in 'a'|upper..'z'|upper %}
-        {% if loop.first %}
-            {{ 'This is the first letter: ' ~ letter }} <br>
-        {% endif %}
+            <!-- Range loop -->
+            <div class="bg-gradient-to-br from-emerald-50 to-teal-50 dark:from-emerald-900/20 dark:to-teal-900/20 rounded-xl p-4 border border-emerald-100 dark:border-emerald-800/30">
+                <h3 class="text-sm font-bold text-emerald-700 dark:text-emerald-400 mb-2"><i class="fas fa-arrow-right mr-1"></i> Range 50..60</h3>
+                <div class="text-sm text-gray-700 dark:text-gray-300 font-mono">
+                    {% for i in range(50, 60) %}[{{ loop.index0 }}:{{ i }}]{{ not loop.last ? ' ' }}{% endfor %}
+                </div>
+            </div>
 
-        {% if loop.last %}
-            This is the last letter: 
-        {% endif %}
-        * {{ letter }}
-    {% endfor %}
-    <br>
+            <!-- Letter loop -->
+            <div class="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 rounded-xl p-4 border border-amber-100 dark:border-amber-800/30">
+                <h3 class="text-sm font-bold text-amber-700 dark:text-amber-400 mb-2"><i class="fas fa-font mr-1"></i> Letters a..z</h3>
+                <div class="text-sm text-gray-700 dark:text-gray-300 font-mono">
+                    {% for letter in 'a'..'z' %}{{ letter }}{% endfor %}
+                </div>
+            </div>
+        </div>
 
-    {# <h1>Members</h1>
-    <ul>
-        {% for key in users|keys %}
-            <li>{{ key }}</li>
-        {% endfor %}
-    </ul>
-    <ul>
-    {% for key, user in users %}
-        <li>{{ key }}: {{ user.name|e }}</li>
-    {% endfor %} #}
-</ul>
-{# {{ include('blog/_user_profile.html.twig', {'users': users}) }} #}
+        <!-- Uppercase loop -->
+        <div class="bg-gradient-to-br from-violet-50 to-pink-50 dark:from-violet-900/20 dark:to-pink-900/20 rounded-xl p-4 mb-6 border border-violet-100 dark:border-violet-800/30">
+            <h3 class="text-sm font-bold text-violet-700 dark:text-violet-400 mb-2"><i class="fas fa-spell-check mr-1"></i> Uppercase A..Z (first/last)</h3>
+            <div class="text-sm text-gray-700 dark:text-gray-300 font-mono">
+                {% for letter in 'a'|upper..'z'|upper %}
+                    {% if loop.first %}<span class="text-emerald-600 dark:text-emerald-400 font-bold">First: {{ letter }}</span> → {% endif %}
+                    {% if loop.last %} → <span class="text-red-600 dark:text-red-400 font-bold">Last: {{ letter }}</span>{% endif %}
+                    {{ letter }}
+                {% endfor %}
+            </div>
+        </div>
 
-<h1>Members</h1>
- {# {{ render(path('blog_users')) }} #}
-  {# {{ render(url('blog_users')) }} #}
-  {{ render(controller(
-        'App\\Controller\\BlogController::users'
-    )) }}
+        <!-- Controller render -->
+        <div class="card-modern p-4">
+            <h3 class="text-sm font-bold text-gray-700 dark:text-gray-300 mb-3"><i class="fas fa-users mr-1"></i> Members (render controller)</h3>
+            {{ render(controller('App\\Controller\\BlogController::users')) }}
+        </div>
+    </div>
 </div>
 {% endblock %}
