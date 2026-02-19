@@ -1,88 +1,79 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ category.name }} Statistics - Quiz Trainer{% endblock %}
+{% block title %}{{ category.name }} - Statistics{% endblock %}
 
 {% block body %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
-    <div class="mb-8">
-        <div class="flex items-center mb-4">
-            <a href="{{ path('statistics_dashboard') }}" class="text-gray-400 hover:text-gray-600 mr-4">
-                <i class="fas fa-arrow-left"></i>
+    <div class="mb-8 animate-fade-in-up">
+        <div class="flex items-center gap-3 mb-4">
+            <a href="{{ path('statistics_dashboard') }}" class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition">
+                <i class="fas fa-arrow-left text-sm"></i>
             </a>
             <div>
-                <h1 class="text-3xl font-bold text-gray-800">
-                    {{ category.name }} Statistics
-                </h1>
-                <p class="text-gray-500">Detailed performance analysis for {{ category.name }}</p>
+                <h1 class="text-2xl font-extrabold text-gray-800">{{ category.name }}</h1>
+                <p class="text-gray-400 text-sm">Detailed performance analysis</p>
             </div>
         </div>
     </div>
 
-    <!-- Subcategory Stats -->
-    <div class="bg-white rounded-xl shadow overflow-hidden mb-8">
-        <div class="px-6 py-4 border-b">
-            <h2 class="text-xl font-bold text-gray-800">
-                <i class="fas fa-chart-bar text-indigo-600 mr-2"></i> Performance by Subcategory
+    <div class="card-modern overflow-hidden mb-8 animate-fade-in-up stagger-1">
+        <div class="bg-gray-50/80 px-5 py-3 border-b border-gray-100">
+            <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
+                <i class="fas fa-chart-bar text-primary-500"></i> Performance by Subcategory
             </h2>
         </div>
-        
         {% if stats.successRates|length > 0 %}
-        <div class="p-6">
+        <div class="p-5">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {% for rate in stats.successRates %}
-                <div class="p-4 bg-gray-50 rounded-lg">
+                <div class="p-4 bg-gray-50 rounded-xl">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="font-medium text-gray-800">{{ rate.subcategoryName }}</span>
-                        <span class="font-bold {% if rate.successRate >= 80 %}text-green-600{% elseif rate.successRate >= 60 %}text-yellow-600{% else %}text-red-600{% endif %}">
+                        <span class="font-medium text-gray-700 text-sm">{{ rate.subcategoryName }}</span>
+                        <span class="font-bold text-sm {% if rate.successRate >= 80 %}text-emerald-600{% elseif rate.successRate >= 60 %}text-amber-500{% else %}text-red-500{% endif %}">
                             {{ rate.successRate|number_format(1) }}%
                         </span>
                     </div>
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-2">
-                        <div class="h-2 rounded-full {% if rate.successRate >= 80 %}bg-green-500{% elseif rate.successRate >= 60 %}bg-yellow-500{% else %}bg-red-500{% endif %}" 
+                    <div class="w-full bg-gray-200 rounded-full h-1.5 mb-2">
+                        <div class="h-1.5 rounded-full transition-all {% if rate.successRate >= 80 %}bg-emerald-500{% elseif rate.successRate >= 60 %}bg-amber-500{% else %}bg-red-500{% endif %}" 
                              style="width: {{ rate.successRate }}%"></div>
                     </div>
-                    <div class="text-sm text-gray-500">
-                        {{ rate.correct }} / {{ rate.total }} correct
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-400 text-xs">{{ rate.correct }} / {{ rate.total }} correct</span>
+                        <a href="{{ path('quiz_start_form') }}" class="text-primary-500 text-xs hover:text-primary-700 font-bold transition">
+                            Practice <i class="fas fa-arrow-right ml-0.5"></i>
+                        </a>
                     </div>
-                    <a href="{{ path('quiz_start_form') }}" class="text-indigo-600 text-sm hover:text-indigo-800 mt-2 inline-block">
-                        Practice <i class="fas fa-arrow-right ml-1"></i>
-                    </a>
                 </div>
                 {% endfor %}
             </div>
         </div>
         {% else %}
         <div class="p-8 text-center">
-            <i class="fas fa-chart-pie text-gray-300 text-5xl mb-4"></i>
-            <p class="text-gray-500">No statistics available yet. Start taking quizzes!</p>
+            <div class="text-4xl mb-3">📊</div>
+            <p class="text-gray-400 text-sm">No statistics yet. Start a quiz!</p>
             <a href="{{ path('quiz_by_category', {id: category.id}) }}" 
-               class="inline-block mt-4 bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition">
-                Start Quiz
+               class="inline-block mt-3 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-5 py-2 rounded-xl font-bold text-sm hover:shadow-lg transition-all">
+                Start
             </a>
         </div>
         {% endif %}
     </div>
 
-    <!-- Chart -->
-    <div class="bg-white rounded-xl shadow p-6 mb-8">
-        <h2 class="text-xl font-bold text-gray-800 mb-4">
-            <i class="fas fa-chart-line text-indigo-600 mr-2"></i> Subcategory Comparison
+    <div class="card-modern p-6 mb-8 animate-fade-in-up stagger-2">
+        <h2 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
+            <i class="fas fa-chart-line text-primary-500"></i> Subcategory Comparison
         </h2>
-        <div class="h-80">
-            <canvas id="subcategoryComparisonChart"></canvas>
-        </div>
+        <div class="h-72"><canvas id="subcategoryComparisonChart"></canvas></div>
     </div>
 
-    <!-- Action Buttons -->
-    <div class="flex justify-center space-x-4">
+    <div class="flex justify-center gap-3 animate-fade-in-up">
         <a href="{{ path('quiz_by_category', {id: category.id}) }}" 
-           class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition">
-            <i class="fas fa-play mr-2"></i> Practice {{ category.name }}
+           class="bg-gradient-to-r from-primary-500 to-primary-600 text-white px-5 py-3 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-primary-500/25 transition-all flex items-center gap-2">
+            <i class="fas fa-play"></i> Practice {{ category.name }}
         </a>
         <a href="{{ path('statistics_dashboard') }}" 
-           class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
-            <i class="fas fa-chart-bar mr-2"></i> Back to Dashboard
+           class="bg-gray-100 text-gray-600 px-5 py-3 rounded-xl font-bold text-sm hover:bg-gray-200 transition flex items-center gap-2">
+            <i class="fas fa-chart-bar"></i> Dashboard
         </a>
     </div>
 </div>
@@ -95,35 +86,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         const data = await fetch('{{ path("api_subcategory_success_rate", {id: category.id}) }}').then(r => r.json());
         new Chart(document.getElementById('subcategoryComparisonChart'), {
             type: 'bar',
-            data: {
-                labels: data.labels,
-                datasets: [{
-                    label: 'Success Rate (%)',
-                    data: data.data,
-                    backgroundColor: data.colors,
-                    borderRadius: 8,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            callback: value => value + '%'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: { display: false }
-                }
-            }
+            data: { labels: data.labels, datasets: [{ label: 'Success rate (%)', data: data.data, backgroundColor: data.colors, borderRadius: 10 }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
         });
-    } catch (e) {
-        console.log('No data available');
-    }
+    } catch (e) {}
 });
 </script>
 {% endblock %}

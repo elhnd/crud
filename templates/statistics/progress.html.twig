@@ -1,46 +1,37 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Progress Tracking - Symfony & PHP Quiz Trainer{% endblock %}
+{% block title %}Progress Tracking - Quiz Trainer{% endblock %}
 
 {% block body %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">
-            <i class="fas fa-chart-line text-indigo-600 mr-2"></i> Progress Tracking
+    <div class="mb-8 animate-fade-in-up">
+        <h1 class="text-2xl font-extrabold text-gray-800 flex items-center gap-2">
+            <span class="w-10 h-10 bg-gradient-to-br from-primary-500 to-cyan-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-500/20">
+                <i class="fas fa-chart-line text-sm"></i>
+            </span>
+            Progress Tracking
         </h1>
-        <p class="text-gray-500">View your score progression over time</p>
+        <p class="text-gray-400 text-sm mt-1">Evolution of your scores over time</p>
     </div>
 
-    <!-- Main Progress Chart -->
-    <div class="bg-white rounded-xl shadow p-6 mb-8">
-        <h2 class="text-xl font-bold text-gray-800 mb-4">
-            Daily Average Scores (Last 30 Days)
-        </h2>
-        <div class="h-96">
-            <canvas id="dailyProgressChart"></canvas>
-        </div>
+    <div class="card-modern p-6 mb-8 animate-fade-in-up stagger-1">
+        <h2 class="text-base font-bold text-gray-800 mb-4">Daily Average Scores (last 30 days)</h2>
+        <div class="h-80"><canvas id="dailyProgressChart"></canvas></div>
     </div>
 
-    <!-- Individual Sessions Chart -->
-    <div class="bg-white rounded-xl shadow p-6 mb-8">
-        <h2 class="text-xl font-bold text-gray-800 mb-4">
-            Individual Session Scores
-        </h2>
-        <div class="h-80">
-            <canvas id="sessionProgressChart"></canvas>
-        </div>
+    <div class="card-modern p-6 mb-8 animate-fade-in-up stagger-2">
+        <h2 class="text-base font-bold text-gray-800 mb-4">Scores by Session</h2>
+        <div class="h-72"><canvas id="sessionProgressChart"></canvas></div>
     </div>
 
-    <!-- Action Buttons -->
-    <div class="flex justify-center space-x-4">
+    <div class="flex justify-center gap-3 animate-fade-in-up">
         <a href="{{ path('quiz_start_form') }}" 
-           class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition">
-            <i class="fas fa-play mr-2"></i> Take a Quiz
+           class="bg-gradient-to-r from-primary-500 to-primary-600 text-white px-5 py-3 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-primary-500/25 transition-all flex items-center gap-2">
+            <i class="fas fa-play"></i> Start a Quiz
         </a>
         <a href="{{ path('statistics_dashboard') }}" 
-           class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
-            <i class="fas fa-chart-bar mr-2"></i> Dashboard
+           class="bg-gray-100 text-gray-600 px-5 py-3 rounded-xl font-bold text-sm hover:bg-gray-200 transition flex items-center gap-2">
+            <i class="fas fa-chart-bar"></i> Dashboard
         </a>
     </div>
 </div>
@@ -49,104 +40,25 @@
 {% block javascripts %}
 <script>
 document.addEventListener('DOMContentLoaded', async function() {
-    // Daily Progress Chart
+    Chart.defaults.font.family = 'Inter, sans-serif';
     try {
         const dailyData = await fetch('{{ path("api_progress_over_time") }}').then(r => r.json());
         new Chart(document.getElementById('dailyProgressChart'), {
             type: 'line',
-            data: {
-                labels: dailyData.labels,
-                datasets: [{
-                    label: 'Average Score',
-                    data: dailyData.data,
-                    borderColor: '#4F46E5',
-                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 6,
-                    pointHoverRadius: 8,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            callback: value => value + '%'
-                        }
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: context => `Score: ${context.raw}%`
-                        }
-                    }
-                }
-            }
+            data: { labels: dailyData.labels, datasets: [{ label: 'Average score', data: dailyData.data, borderColor: '#6366f1', backgroundColor: 'rgba(99,102,241,0.08)', fill: true, tension: 0.4, pointRadius: 5, pointHoverRadius: 7, pointBackgroundColor: '#6366f1' }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }, plugins: { tooltip: { callbacks: { label: ctx => `Score: ${ctx.raw}%` } } } }
         });
-    } catch (e) {
-        console.log('No daily data available');
-    }
+    } catch (e) {}
 
-    // Session Progress Chart
     try {
         const sessionData = await fetch('{{ path("api_score_progression") }}').then(r => r.json());
-        
-        const colors = sessionData.categories.map(cat => {
-            if (cat === 'Symfony') return '#1a1a1a';
-            if (cat === 'PHP') return '#777BB4';
-            return '#4F46E5';
-        });
-
+        const colors = sessionData.categories.map(c => c === 'Symfony' ? '#1a1a1a' : c === 'PHP' ? '#777BB4' : '#6366f1');
         new Chart(document.getElementById('sessionProgressChart'), {
             type: 'scatter',
-            data: {
-                datasets: [{
-                    label: 'Session Scores',
-                    data: sessionData.labels.map((label, i) => ({
-                        x: i,
-                        y: sessionData.data[i],
-                        label: sessionData.categories[i]
-                    })),
-                    backgroundColor: colors,
-                    pointRadius: 8,
-                    pointHoverRadius: 10,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            callback: value => value + '%'
-                        }
-                    },
-                    x: {
-                        display: false
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: context => {
-                                const point = context.raw;
-                                return `${point.label}: ${point.y}%`;
-                            }
-                        }
-                    }
-                }
-            }
+            data: { datasets: [{ label: 'Sessions', data: sessionData.labels.map((l, i) => ({ x: i, y: sessionData.data[i], label: sessionData.categories[i] })), backgroundColor: colors, pointRadius: 7, pointHoverRadius: 9 }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } }, x: { display: false } }, plugins: { tooltip: { callbacks: { label: ctx => `${ctx.raw.label}: ${ctx.raw.y}%` } } } }
         });
-    } catch (e) {
-        console.log('No session data available');
-    }
+    } catch (e) {}
 });
 </script>
 {% endblock %}
