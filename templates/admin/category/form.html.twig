@@ -1,17 +1,20 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ category ? 'Edit Category' : 'New Category' }} - Admin{% endblock %}
+{% block title %}{{ category ? 'Edit category' : 'New category' }} - Admin{% endblock %}
 
 {% block body %}
-<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
-    <div class="mb-8">
-        <a href="{{ path('admin_category_index') }}" class="text-indigo-600 hover:text-indigo-800 mb-4 inline-block">
-            <i class="fas fa-arrow-left mr-2"></i> Back to Categories
+    <div class="mb-8 animate-fade-in-up">
+        <a href="{{ path('admin_category_index') }}" class="inline-flex items-center gap-2 text-primary-500 hover:text-primary-400 mb-4 transition group">
+            <i class="fas fa-arrow-left group-hover:-translate-x-1 transition-transform"></i> 
+            <span>Back to categories</span>
         </a>
-        <h1 class="text-3xl font-bold text-gray-800">
-            <i class="fas {{ category ? 'fa-edit' : 'fa-plus-circle' }} text-indigo-600 mr-2"></i>
-            {{ category ? 'Edit Category' : 'New Category' }}
+        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white flex items-center gap-3">
+            <span class="w-10 h-10 flex items-center justify-center bg-gradient-to-br from-primary-500 to-violet-500 rounded-xl text-white">
+                <i class="fas {{ category ? 'fa-edit' : 'fa-plus' }}"></i>
+            </span>
+            {{ category ? 'Edit category' : 'New category' }}
         </h1>
     </div>
 
@@ -19,62 +22,62 @@
     <form method="POST" class="space-y-6">
         <input type="hidden" name="_token" value="{{ csrf_token('category_form') }}">
 
-        <div class="bg-white rounded-xl shadow p-6">
-            <div class="space-y-4">
+        <div class="card-modern p-6 animate-fade-in-up stagger-1">
+            <div class="space-y-5">
                 <!-- Name -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Category Name <span class="text-red-500">*</span>
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                        Category name <span class="text-red-500">*</span>
                     </label>
                     <input type="text" name="name" required
                         value="{{ formData.name ?? category.name ?? '' }}"
-                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                        placeholder="e.g., Symfony, PHP, JavaScript">
+                        class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-gray-900 dark:text-white"
+                        placeholder="ex: Symfony, PHP, JavaScript">
                 </div>
 
                 <!-- Description -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Description
                     </label>
                     <textarea name="description" rows="3"
-                        class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                        class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-gray-900 dark:text-white"
                         placeholder="Brief description of this category...">{{ formData.description ?? category.description ?? '' }}</textarea>
                 </div>
 
                 <!-- Icon -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Icon (Font Awesome)
                     </label>
                     <div class="flex gap-3">
                         <input type="text" name="icon" id="iconInput"
                             value="{{ formData.icon ?? category.icon ?? '' }}"
-                            class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                            placeholder="e.g., book, code, database">
-                        <div class="bg-gray-100 rounded-lg px-4 py-3 flex items-center justify-center w-14">
-                            <i id="iconPreview" class="fas fa-{{ formData.icon ?? category.icon ?? 'folder' }} text-gray-600 text-xl"></i>
+                            class="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-gray-900 dark:text-white"
+                            placeholder="ex: book, code, database">
+                        <div class="bg-gray-100 dark:bg-gray-700 rounded-xl px-4 py-3 flex items-center justify-center w-14">
+                            <i id="iconPreview" class="fas fa-{{ formData.icon ?? category.icon ?? 'folder' }} text-primary-500 text-xl"></i>
                         </div>
                     </div>
-                    <p class="text-xs text-gray-500 mt-1">
+                    <p class="text-xs text-gray-500 mt-2">
                         <i class="fas fa-info-circle mr-1"></i> 
                         Enter the icon name without "fa-". 
-                        <a href="https://fontawesome.com/icons" target="_blank" class="text-indigo-600 hover:underline">Browse icons</a>
+                        <a href="https://fontawesome.com/icons" target="_blank" class="text-primary-500 hover:underline">Browse icons</a>
                     </p>
                 </div>
 
                 <!-- Color -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Color
                     </label>
                     <div class="flex gap-3">
                         <input type="color" name="color" id="colorInput"
                             value="{{ formData.color ?? category.color ?? '#6366f1' }}"
-                            class="h-12 w-20 border border-gray-300 rounded-lg cursor-pointer">
+                            class="h-12 w-20 border border-gray-200 dark:border-gray-700 rounded-xl cursor-pointer">
                         <input type="text" id="colorText"
                             value="{{ formData.color ?? category.color ?? '#6366f1' }}"
-                            class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 font-mono"
+                            class="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-transparent font-mono transition text-gray-900 dark:text-white"
                             placeholder="#6366f1">
                     </div>
                 </div>
@@ -82,25 +85,25 @@
         </div>
 
         <!-- Quick Icon Picker -->
-        <div class="bg-white rounded-xl shadow p-6">
-            <h3 class="text-sm font-medium text-gray-700 mb-3">Quick Icon Selection</h3>
+        <div class="card-modern p-6 animate-fade-in-up stagger-2">
+            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Quick icon selection</h3>
             <div class="flex flex-wrap gap-2">
                 {% set commonIcons = ['book', 'code', 'database', 'server', 'cog', 'puzzle-piece', 'layer-group', 'cubes', 'terminal', 'laptop-code', 'sitemap', 'project-diagram', 'flask', 'graduation-cap', 'lightbulb'] %}
                 {% for icon in commonIcons %}
-                <button type="button" class="icon-btn p-2 border border-gray-200 rounded-lg hover:border-indigo-500 hover:bg-indigo-50 transition" data-icon="{{ icon }}">
-                    <i class="fas fa-{{ icon }} text-gray-600"></i>
+                <button type="button" class="icon-btn p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all duration-200" data-icon="{{ icon }}">
+                    <i class="fas fa-{{ icon }} text-gray-500 dark:text-gray-400 hover:text-primary-500"></i>
                 </button>
                 {% endfor %}
             </div>
         </div>
 
         <!-- Submit -->
-        <div class="flex items-center justify-between">
-            <a href="{{ path('admin_category_index') }}" class="text-gray-600 hover:text-gray-800">
+        <div class="flex items-center justify-between animate-fade-in-up stagger-3">
+            <a href="{{ path('admin_category_index') }}" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition">
                 <i class="fas fa-times mr-2"></i> Cancel
             </a>
-            <button type="submit" class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition">
-                <i class="fas fa-save mr-2"></i> {{ category ? 'Update Category' : 'Create Category' }}
+            <button type="submit" class="btn-primary px-6 py-3 rounded-xl font-semibold">
+                <i class="fas fa-save mr-2"></i> {{ category ? 'Update' : 'Create category' }}
             </button>
         </div>
     </form>
@@ -115,29 +118,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const colorText = document.getElementById('colorText');
     const iconBtns = document.querySelectorAll('.icon-btn');
 
-    // Icon preview
     iconInput.addEventListener('input', function() {
-        iconPreview.className = 'fas fa-' + (this.value || 'folder') + ' text-gray-600 text-xl';
+        iconPreview.className = 'fas fa-' + (this.value || 'folder') + ' text-primary-500 text-xl';
     });
 
-    // Quick icon selection
     iconBtns.forEach(btn => {
         btn.addEventListener('click', function() {
             const icon = this.dataset.icon;
             iconInput.value = icon;
-            iconPreview.className = 'fas fa-' + icon + ' text-gray-600 text-xl';
+            iconPreview.className = 'fas fa-' + icon + ' text-primary-500 text-xl';
+            iconBtns.forEach(b => b.classList.remove('border-primary-500', 'bg-primary-50'));
+            this.classList.add('border-primary-500', 'bg-primary-50');
         });
     });
 
-    // Color sync
-    colorInput.addEventListener('input', function() {
-        colorText.value = this.value;
-    });
-
+    colorInput.addEventListener('input', function() { colorText.value = this.value; });
     colorText.addEventListener('input', function() {
-        if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) {
-            colorInput.value = this.value;
-        }
+        if (/^#[0-9A-Fa-f]{6}$/.test(this.value)) colorInput.value = this.value;
     });
 });
 </script>

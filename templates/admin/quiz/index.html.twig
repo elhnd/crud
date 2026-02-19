@@ -1,298 +1,185 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Quiz Administration - Symfony & PHP Quiz Trainer{% endblock %}
+{% block title %}Quiz administration - Admin{% endblock %}
 
 {% block body %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
-    <div class="mb-8 flex items-center justify-between">
+    <div class="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fade-in-up">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                <i class="fas fa-cogs text-indigo-600 mr-2"></i> Quiz Administration
+            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white flex items-center gap-3">
+                <span class="w-10 h-10 flex items-center justify-center bg-gradient-to-br from-primary-500 to-violet-500 rounded-xl text-white">
+                    <i class="fas fa-cogs"></i>
+                </span>
+                Quiz administration
             </h1>
-            <p class="text-gray-500">Manage and monitor quiz sessions</p>
+            <p class="text-gray-500 dark:text-gray-400 mt-1">Manage and monitor quiz sessions</p>
         </div>
-        <div class="flex gap-3">
-            <a href="{{ path('admin_category_index') }}" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition">
-                <i class="fas fa-folder-tree mr-2"></i> Categories
-            </a>
-            <a href="{{ path('admin_question_index') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
-                <i class="fas fa-question-circle mr-2"></i> Manage Questions
-            </a>
-            <a href="{{ path('admin_report_index') }}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">
-                <i class="fas fa-flag mr-2"></i> Reports
-            </a>
-            <a href="{{ path('app_home') }}" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition">
-                <i class="fas fa-arrow-left mr-2"></i> Back to Home
-            </a>
+        <div class="flex gap-3 flex-wrap">
+            <a href="{{ path('admin_category_index') }}" class="btn-ghost px-4 py-2 rounded-xl text-sm"><i class="fas fa-folder-tree mr-2"></i> Categories</a>
+            <a href="{{ path('admin_question_index') }}" class="btn-primary px-4 py-2 rounded-xl text-sm"><i class="fas fa-question-circle mr-2"></i> Questions</a>
+            <a href="{{ path('admin_report_index') }}" class="bg-red-500/10 text-red-500 px-4 py-2 rounded-xl text-sm hover:bg-red-500/20 transition font-medium"><i class="fas fa-flag mr-2"></i> Reports</a>
+            <a href="{{ path('app_home') }}" class="btn-ghost px-4 py-2 rounded-xl text-sm"><i class="fas fa-arrow-left mr-2"></i> Home</a>
         </div>
     </div>
 
-    <!-- Stats Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-        <div class="bg-white rounded-xl shadow p-4">
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8 animate-fade-in-up stagger-1">
+        <div class="card-modern p-4">
             <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-xs uppercase">Total Sessions</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ stats.total }}</p>
-                </div>
-                <div class="bg-indigo-100 p-2 rounded-lg">
-                    <i class="fas fa-list text-indigo-600"></i>
-                </div>
+                <div><p class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">Total sessions</p><p class="text-2xl font-extrabold text-gray-900 dark:text-white mt-1">{{ stats.total }}</p></div>
+                <div class="w-10 h-10 flex items-center justify-center bg-primary-100 dark:bg-primary-900/30 rounded-xl"><i class="fas fa-list text-primary-500"></i></div>
             </div>
         </div>
-
-        <div class="bg-white rounded-xl shadow p-4">
+        <div class="card-modern p-4">
             <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-xs uppercase">Completed</p>
-                    <p class="text-2xl font-bold text-green-600">{{ stats.byStatus.completed ?? 0 }}</p>
-                </div>
-                <div class="bg-green-100 p-2 rounded-lg">
-                    <i class="fas fa-check-circle text-green-600"></i>
-                </div>
+                <div><p class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">Completed</p><p class="text-2xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1">{{ stats.byStatus.completed ?? 0 }}</p></div>
+                <div class="w-10 h-10 flex items-center justify-center bg-emerald-100 dark:bg-emerald-900/30 rounded-xl"><i class="fas fa-check-circle text-emerald-500"></i></div>
             </div>
         </div>
-
-        <div class="bg-white rounded-xl shadow p-4">
+        <div class="card-modern p-4">
             <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-xs uppercase">In Progress</p>
-                    <p class="text-2xl font-bold text-yellow-600">{{ stats.byStatus.in_progress ?? 0 }}</p>
-                </div>
-                <div class="bg-yellow-100 p-2 rounded-lg">
-                    <i class="fas fa-spinner text-yellow-600"></i>
-                </div>
+                <div><p class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">In progress</p><p class="text-2xl font-extrabold text-amber-600 dark:text-amber-400 mt-1">{{ stats.byStatus.in_progress ?? 0 }}</p></div>
+                <div class="w-10 h-10 flex items-center justify-center bg-amber-100 dark:bg-amber-900/30 rounded-xl"><i class="fas fa-spinner text-amber-500"></i></div>
             </div>
         </div>
-
-        <div class="bg-white rounded-xl shadow p-4">
+        <div class="card-modern p-4">
             <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-xs uppercase">Avg Score</p>
-                    <p class="text-2xl font-bold {% if stats.averageScore >= 80 %}text-green-600{% elseif stats.averageScore >= 60 %}text-yellow-600{% else %}text-red-600{% endif %}">
-                        {{ stats.averageScore }}%
-                    </p>
-                </div>
-                <div class="bg-purple-100 p-2 rounded-lg">
-                    <i class="fas fa-chart-line text-purple-600"></i>
-                </div>
+                <div><p class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">Average score</p><p class="text-2xl font-extrabold {% if stats.averageScore >= 80 %}text-emerald-600 dark:text-emerald-400{% elseif stats.averageScore >= 60 %}text-amber-600 dark:text-amber-400{% else %}text-red-600 dark:text-red-400{% endif %} mt-1">{{ stats.averageScore }}%</p></div>
+                <div class="w-10 h-10 flex items-center justify-center bg-violet-100 dark:bg-violet-900/30 rounded-xl"><i class="fas fa-chart-line text-violet-500"></i></div>
             </div>
         </div>
-
-        <div class="bg-white rounded-xl shadow p-4">
+        <div class="card-modern p-4">
             <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-xs uppercase">Today</p>
-                    <p class="text-2xl font-bold text-blue-600">{{ stats.sessionsToday }}</p>
-                </div>
-                <div class="bg-blue-100 p-2 rounded-lg">
-                    <i class="fas fa-calendar-day text-blue-600"></i>
-                </div>
+                <div><p class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">Today</p><p class="text-2xl font-extrabold text-blue-600 dark:text-blue-400 mt-1">{{ stats.sessionsToday }}</p></div>
+                <div class="w-10 h-10 flex items-center justify-center bg-blue-100 dark:bg-blue-900/30 rounded-xl"><i class="fas fa-calendar-day text-blue-500"></i></div>
             </div>
         </div>
     </div>
 
-    <!-- Filters & Actions -->
-    <div class="bg-white rounded-xl shadow mb-6">
-        <div class="p-4 border-b border-gray-200">
+    <!-- Filters & Table -->
+    <div class="card-modern mb-6 animate-fade-in-up stagger-2">
+        <div class="p-4 border-b border-gray-100 dark:border-gray-700/50">
             <form method="GET" class="flex flex-wrap gap-4 items-end">
                 <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Status</label>
-                    <select name="status" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
-                        <option value="">All Status</option>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Status</label>
+                    <select name="status" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white">
+                        <option value="">All</option>
                         <option value="completed" {{ filters.status == 'completed' ? 'selected' : '' }}>Completed</option>
-                        <option value="in_progress" {{ filters.status == 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="in_progress" {{ filters.status == 'in_progress' ? 'selected' : '' }}>In progress</option>
                         <option value="abandoned" {{ filters.status == 'abandoned' ? 'selected' : '' }}>Abandoned</option>
                     </select>
                 </div>
-
                 <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Category</label>
-                    <select name="category" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
-                        <option value="">All Categories</option>
-                        {% for category in categories %}
-                            <option value="{{ category.id }}" {{ filters.category == category.id ? 'selected' : '' }}>
-                                {{ category.name }}
-                            </option>
-                        {% endfor %}
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Category</label>
+                    <select name="category" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white">
+                        <option value="">All</option>
+                        {% for category in categories %}<option value="{{ category.id }}" {{ filters.category == category.id ? 'selected' : '' }}>{{ category.name }}</option>{% endfor %}
                     </select>
                 </div>
-
                 <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Date From</label>
-                    <input type="date" name="date_from" value="{{ filters.date_from }}"
-                           class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">From</label>
+                    <input type="date" name="date_from" value="{{ filters.date_from }}" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white">
                 </div>
-
                 <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Date To</label>
-                    <input type="date" name="date_to" value="{{ filters.date_to }}"
-                           class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">To</label>
+                    <input type="date" name="date_to" value="{{ filters.date_to }}" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white">
                 </div>
-
                 <div class="flex gap-2">
-                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700 transition">
-                        <i class="fas fa-filter mr-1"></i> Filter
-                    </button>
-                    <a href="{{ path('admin_quiz_index') }}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-300 transition">
-                        <i class="fas fa-times mr-1"></i> Clear
-                    </a>
+                    <button type="submit" class="btn-primary px-4 py-2 rounded-xl text-sm"><i class="fas fa-filter mr-1"></i> Filter</button>
+                    <a href="{{ path('admin_quiz_index') }}" class="btn-ghost px-4 py-2 rounded-xl text-sm"><i class="fas fa-times mr-1"></i> Clear</a>
                 </div>
             </form>
         </div>
 
         <!-- Bulk Actions -->
-        <div class="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+        <div class="p-4 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-700/50 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <label class="flex items-center">
-                    <input type="checkbox" id="selectAll" class="rounded text-indigo-600 mr-2">
-                    <span class="text-sm text-gray-600">Select All</span>
-                </label>
-                <span class="text-sm text-gray-400" id="selectedCount">0 selected</span>
+                <label class="flex items-center cursor-pointer"><input type="checkbox" id="selectAll" class="rounded text-primary-500 mr-2 border-gray-300 dark:border-gray-600"><span class="text-sm text-gray-600 dark:text-gray-400">Select all</span></label>
+                <span class="text-sm text-gray-400 dark:text-gray-500" id="selectedCount">0 selected</span>
             </div>
-
             <div class="flex gap-2">
                 <form action="{{ path('admin_quiz_bulk_delete') }}" method="POST" id="bulkDeleteForm" class="inline">
                     <input type="hidden" name="_token" value="{{ csrf_token('bulk_delete') }}">
-                    <button type="submit" class="bg-red-100 text-red-600 px-3 py-1.5 rounded-lg text-sm hover:bg-red-200 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled id="bulkDeleteBtn">
-                        <i class="fas fa-trash mr-1"></i> Delete Selected
+                    <button type="submit" class="bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-3 py-1.5 rounded-xl text-sm hover:bg-red-200 dark:hover:bg-red-900/40 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium" disabled id="bulkDeleteBtn">
+                        <i class="fas fa-trash mr-1"></i> Delete
                     </button>
                 </form>
-
-                <form action="{{ path('admin_quiz_cleanup_abandoned') }}" method="POST" class="inline" onsubmit="return confirm('Delete all abandoned sessions older than 7 days?');">
+                <form action="{{ path('admin_quiz_cleanup_abandoned') }}" method="POST" class="inline" onsubmit="return confirm('Delete all abandoned sessions older than 7 days? ?');">
                     <input type="hidden" name="_token" value="{{ csrf_token('cleanup_abandoned') }}">
-                    <button type="submit" class="bg-yellow-100 text-yellow-700 px-3 py-1.5 rounded-lg text-sm hover:bg-yellow-200 transition">
-                        <i class="fas fa-broom mr-1"></i> Cleanup Abandoned
+                    <button type="submit" class="bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 px-3 py-1.5 rounded-xl text-sm hover:bg-amber-200 dark:hover:bg-amber-900/40 transition font-medium">
+                        <i class="fas fa-broom mr-1"></i> Clean up
                     </button>
                 </form>
             </div>
         </div>
 
-        <!-- Sessions Table -->
+        <!-- Table -->
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-gray-50">
+                <thead class="bg-gray-50 dark:bg-gray-800/50">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase"></th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Questions</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Mode</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Started</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Duration</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase"></th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">ID</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Category</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Questions</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Score</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Status</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Mode</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Started on</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Duration</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200">
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
                     {% for session in sessions %}
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-3">
-                            <input type="checkbox" name="session_id" value="{{ session.id }}" class="session-checkbox rounded text-indigo-600">
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-900 font-mono">#{{ session.id }}</td>
-                        <td class="px-4 py-3 text-sm text-gray-600">
-                            {{ session.sessionLabel }}
-                        </td>
-                        <td class="px-4 py-3 text-sm">
-                            <span class="text-green-600">{{ session.correctAnswers }}</span>
-                            <span class="text-gray-400">/</span>
-                            <span class="text-gray-600">{{ session.totalQuestions }}</span>
-                        </td>
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition">
+                        <td class="px-4 py-3"><input type="checkbox" name="session_id" value="{{ session.id }}" class="session-checkbox rounded text-primary-500 border-gray-300 dark:border-gray-600"></td>
+                        <td class="px-4 py-3 text-sm text-gray-500 font-mono">#{{ session.id }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-700 dark:text-gray-300">{{ session.sessionLabel }}</td>
+                        <td class="px-4 py-3 text-sm"><span class="text-emerald-600">{{ session.correctAnswers }}</span><span class="text-gray-400">/</span><span class="text-gray-600 dark:text-gray-400">{{ session.totalQuestions }}</span></td>
                         <td class="px-4 py-3">
                             {% if session.isCompleted %}
-                                <span class="font-semibold {% if session.score >= 80 %}text-green-600{% elseif session.score >= 60 %}text-yellow-600{% else %}text-red-600{% endif %}">
-                                    {{ session.score|number_format(1) }}%
-                                </span>
-                            {% else %}
-                                <span class="text-gray-400">-</span>
-                            {% endif %}
+                                <span class="font-bold {% if session.score >= 80 %}text-emerald-600{% elseif session.score >= 60 %}text-amber-600{% else %}text-red-600{% endif %}">{{ session.score|number_format(1) }}%</span>
+                            {% else %}<span class="text-gray-400">-</span>{% endif %}
                         </td>
                         <td class="px-4 py-3">
-                            {% if session.status == 'completed' %}
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                    <i class="fas fa-check mr-1"></i> Completed
-                                </span>
-                            {% elseif session.status == 'in_progress' %}
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                    <i class="fas fa-spinner mr-1"></i> In Progress
-                                </span>
-                            {% else %}
-                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                    <i class="fas fa-ban mr-1"></i> Abandoned
-                                </span>
-                            {% endif %}
+                            {% if session.status == 'completed' %}<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400"><i class="fas fa-check mr-1"></i> Completed</span>
+                            {% elseif session.status == 'in_progress' %}<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400"><i class="fas fa-spinner mr-1"></i> In progress</span>
+                            {% else %}<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-400"><i class="fas fa-ban mr-1"></i> Abandoned</span>{% endif %}
                         </td>
-                        <td class="px-4 py-3 text-sm text-gray-600">
-                            <span class="capitalize">{{ session.mode }}</span>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-600">
-                            {{ session.startedAt|date('Y-m-d H:i') }}
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-600">
-                            {% if session.timeSpentSeconds %}
-                                {{ session.formattedTimeSpent }}
-                            {% else %}
-                                <span class="text-gray-400">-</span>
-                            {% endif %}
-                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400 capitalize">{{ session.mode }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">{{ session.startedAt|date('d/m/Y H:i') }}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">{% if session.timeSpentSeconds %}{{ session.formattedTimeSpent }}{% else %}<span class="text-gray-400">-</span>{% endif %}</td>
                         <td class="px-4 py-3 text-sm">
                             <div class="flex items-center gap-2">
-                                <a href="{{ path('admin_quiz_show', {id: session.id}) }}" 
-                                   class="text-indigo-600 hover:text-indigo-800" title="View Details">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <form action="{{ path('admin_quiz_delete', {id: session.id}) }}" method="POST" 
-                                      class="inline" onsubmit="return confirm('Delete this quiz session?');">
+                                <a href="{{ path('admin_quiz_show', {id: session.id}) }}" class="text-primary-500 hover:text-primary-400 transition" title="View"><i class="fas fa-eye"></i></a>
+                                <form action="{{ path('admin_quiz_delete', {id: session.id}) }}" method="POST" class="inline" onsubmit="return confirm('Delete this session? ?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ session.id) }}">
-                                    <button type="submit" class="text-red-600 hover:text-red-800" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    <button type="submit" class="text-red-500 hover:text-red-400 transition" title="Delete"><i class="fas fa-trash"></i></button>
                                 </form>
                             </div>
                         </td>
                     </tr>
                     {% else %}
-                    <tr>
-                        <td colspan="10" class="px-4 py-12 text-center">
-                            <i class="fas fa-inbox text-gray-300 text-4xl mb-3"></i>
-                            <p class="text-gray-500">No quiz sessions found</p>
-                        </td>
-                    </tr>
+                    <tr><td colspan="10" class="px-4 py-12 text-center">
+                        <i class="fas fa-inbox text-gray-300 dark:text-gray-600 text-4xl mb-3"></i>
+                        <p class="text-gray-500 dark:text-gray-400">No sessions found</p>
+                    </td></tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
 
-        <!-- Pagination -->
         {% if pagination.pages > 1 %}
-        <div class="px-4 py-3 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
-            <div class="text-sm text-gray-500">
-                Showing {{ ((pagination.page - 1) * pagination.limit) + 1 }} to {{ min(pagination.page * pagination.limit, pagination.total) }} of {{ pagination.total }} results
-            </div>
+        <div class="px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-700/50 flex items-center justify-between">
+            <div class="text-sm text-gray-500 dark:text-gray-400">{{ ((pagination.page - 1) * pagination.limit) + 1 }} to {{ min(pagination.page * pagination.limit, pagination.total) }} of {{ pagination.total }}</div>
             <div class="flex gap-1">
-                {% if pagination.page > 1 %}
-                    <a href="{{ path('admin_quiz_index', filters|merge({page: pagination.page - 1})) }}" 
-                       class="px-3 py-1 rounded bg-white border border-gray-300 text-sm hover:bg-gray-50">
-                        <i class="fas fa-chevron-left"></i>
-                    </a>
-                {% endif %}
-
+                {% if pagination.page > 1 %}<a href="{{ path('admin_quiz_index', filters|merge({page: pagination.page - 1})) }}" class="px-3 py-1 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition"><i class="fas fa-chevron-left"></i></a>{% endif %}
                 {% for p in range(max(1, pagination.page - 2), min(pagination.pages, pagination.page + 2)) %}
-                    <a href="{{ path('admin_quiz_index', filters|merge({page: p})) }}" 
-                       class="px-3 py-1 rounded text-sm {{ p == pagination.page ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-300 hover:bg-gray-50' }}">
-                        {{ p }}
-                    </a>
+                    <a href="{{ path('admin_quiz_index', filters|merge({page: p})) }}" class="px-3 py-1 rounded-lg text-sm {{ p == pagination.page ? 'bg-gradient-to-r from-primary-500 to-violet-500 text-white' : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700' }} transition">{{ p }}</a>
                 {% endfor %}
-
-                {% if pagination.page < pagination.pages %}
-                    <a href="{{ path('admin_quiz_index', filters|merge({page: pagination.page + 1})) }}" 
-                       class="px-3 py-1 rounded bg-white border border-gray-300 text-sm hover:bg-gray-50">
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                {% endif %}
+                {% if pagination.page < pagination.pages %}<a href="{{ path('admin_quiz_index', filters|merge({page: pagination.page + 1})) }}" class="px-3 py-1 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition"><i class="fas fa-chevron-right"></i></a>{% endif %}
             </div>
         </div>
         {% endif %}
@@ -313,29 +200,12 @@ document.addEventListener('DOMContentLoaded', function() {
         selectedCount.textContent = checked.length + ' selected';
         bulkDeleteBtn.disabled = checked.length === 0;
     }
-
-    selectAll.addEventListener('change', function() {
-        checkboxes.forEach(cb => cb.checked = this.checked);
-        updateSelection();
-    });
-
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', updateSelection);
-    });
-
+    selectAll.addEventListener('change', function() { checkboxes.forEach(cb => cb.checked = this.checked); updateSelection(); });
+    checkboxes.forEach(cb => cb.addEventListener('change', updateSelection));
     bulkDeleteForm.addEventListener('submit', function(e) {
         e.preventDefault();
-        if (!confirm('Delete selected quiz sessions?')) return;
-
-        const checked = document.querySelectorAll('.session-checkbox:checked');
-        checked.forEach(cb => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'ids[]';
-            input.value = cb.value;
-            this.appendChild(input);
-        });
-
+        if (!confirm('Delete selected sessions?')) return;
+        document.querySelectorAll('.session-checkbox:checked').forEach(cb => { const i = document.createElement('input'); i.type='hidden'; i.name='ids[]'; i.value=cb.value; this.appendChild(i); });
         this.submit();
     });
 });
