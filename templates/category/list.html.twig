@@ -1,102 +1,100 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Categories - Symfony & PHP Quiz Trainer{% endblock %}
+{% block title %}Categories - Quiz Trainer{% endblock %}
 
 {% block body %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">
-            <i class="fas fa-folder-open text-indigo-600 mr-2"></i> Categories
+    <div class="mb-8 animate-fade-in-up">
+        <h1 class="text-2xl font-extrabold text-gray-800 flex items-center gap-2">
+            <span class="w-10 h-10 bg-gradient-to-br from-primary-500 to-violet-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-500/20">
+                <i class="fas fa-folder-open text-sm"></i>
+            </span>
+            Categories
         </h1>
-        <p class="text-gray-500">Browse all available quiz categories and topics</p>
+        <p class="text-gray-400 text-sm mt-1">Browse all available categories and topics</p>
     </div>
 
-    <!-- Search Bar -->
-    <div class="mb-6">
-        <div class="max-w-md mx-auto">
-            <div class="relative">
-                <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-                <input type="text" id="categorySearch" placeholder="Search categories..." 
-                       class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
-            </div>
+    <!-- Search -->
+    <div class="mb-6 max-w-md mx-auto animate-fade-in-up stagger-1">
+        <div class="relative">
+            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+            <input type="text" id="categorySearch" placeholder="Search for a category..." 
+                   class="w-full pl-11 pr-4 py-3 border-2 border-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400 transition bg-white text-sm">
         </div>
     </div>
 
     <!-- Categories Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {% for category in categories %}
-        <div class="bg-white rounded-2xl shadow-lg overflow-hidden card-hover">
-            <div class="bg-gradient-to-r {% if category.name == 'Symfony' %}from-gray-900 to-gray-700{% else %}from-indigo-600 to-purple-600{% endif %} px-6 py-4">
+        <div class="card-modern overflow-hidden animate-fade-in-up stagger-{{ loop.index <= 4 ? loop.index : 4 }}">
+            <div class="bg-gradient-to-r {% if category.name == 'Symfony' %}from-gray-900 to-gray-700{% else %}from-primary-500 to-violet-500{% endif %} px-5 py-4">
                 <div class="flex items-center justify-between text-white">
-                    <div class="flex items-center">
-                        <i class="fas fa-{{ category.icon ?? 'book' }} text-2xl mr-3"></i>
-                        <h2 class="text-xl font-bold">{{ category.name }}</h2>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white/15 backdrop-blur rounded-xl flex items-center justify-center">
+                            <i class="fas fa-{{ category.icon ?? 'book' }} text-lg"></i>
+                        </div>
+                        <h2 class="text-lg font-bold">{{ category.name }}</h2>
                     </div>
-                    <span class="bg-white/20 px-3 py-1 rounded-full text-sm">
+                    <span class="bg-white/20 px-3 py-1 rounded-lg text-xs font-bold">
                         {{ questionCounts[category.id] ?? 0 }} questions
                     </span>
                 </div>
             </div>
             
-            <div class="p-6">
+            <div class="p-5">
                 {% if category.description %}
-                <p class="text-gray-600 mb-4">{{ category.description }}</p>
+                <p class="text-gray-500 text-sm mb-4">{{ category.description }}</p>
                 {% endif %}
 
-                <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">
                     Subcategories ({{ category.subcategories|length }})
                 </h3>
 
-                <!-- Subcategory search -->
                 {% if category.subcategories|length > 5 %}
-                <div class="mb-3">
-                    <div class="relative">
-                        <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"></i>
-                        <input type="text" class="subcategory-search" placeholder="Search subcategories..." data-category-id="{{ category.id }}"
-                               style="width: 100%; padding: 6px 8px 6px 28px; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 0.875rem;">
-                    </div>
+                <div class="mb-3 relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-300 text-xs"></i>
+                    <input type="text" class="subcategory-search w-full pl-8 pr-3 py-2 border border-gray-100 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-400" 
+                           placeholder="Filter..." data-category-id="{{ category.id }}">
                 </div>
                 {% endif %}
                 
-                <div class="subcategory-list max-h-80 overflow-y-auto space-y-2 mb-6" data-category-id="{{ category.id }}">
+                <div class="subcategory-list max-h-72 overflow-y-auto space-y-1.5 mb-5" data-category-id="{{ category.id }}">
                     {% for subcategory in category.subcategories %}
-                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                        <div class="flex items-center">
-                            <i class="fas fa-tag text-gray-400 mr-2"></i>
-                            <span class="text-gray-700">{{ subcategory.name }}</span>
+                    <div class="flex items-center justify-between p-2.5 bg-gray-50 rounded-lg hover:bg-gray-100 transition group">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-tag text-gray-300 text-xs"></i>
+                            <span class="text-gray-600 text-sm">{{ subcategory.name }}</span>
                         </div>
-                        <div class="flex items-center space-x-2">
-                            <span class="text-gray-400 text-sm">
-                                {{ subcategoryCounts[subcategory.id] ?? 0 }} Q
-                            </span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-gray-300 text-xs font-medium">{{ subcategoryCounts[subcategory.id] ?? 0 }}</span>
                             <a href="{{ path('quiz_by_subcategory', {id: subcategory.id}) }}" 
-                               class="text-indigo-600 hover:text-indigo-800">
-                                <i class="fas fa-play-circle"></i>
+                               class="text-primary-400 hover:text-primary-600 opacity-0 group-hover:opacity-100 transition">
+                                <i class="fas fa-play-circle text-sm"></i>
                             </a>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
 
-                <div class="flex space-x-3">
+                <div class="flex gap-2">
                     <a href="{{ path('quiz_by_category', {id: category.id}) }}" 
-                       class="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-lg text-center font-semibold hover:bg-indigo-700 transition">
-                        <i class="fas fa-play mr-2"></i> Practice All
+                       class="flex-1 bg-gradient-to-r from-primary-500 to-primary-600 text-white py-2.5 px-4 rounded-xl text-center font-bold text-sm hover:shadow-lg hover:shadow-primary-500/25 hover:-translate-y-0.5 transition-all">
+                        <i class="fas fa-play mr-1"></i> Practice
                     </a>
                     <a href="{{ path('statistics_category', {id: category.id}) }}" 
-                       class="bg-gray-100 text-gray-700 py-2 px-4 rounded-lg font-semibold hover:bg-gray-200 transition">
+                       class="bg-gray-100 text-gray-500 py-2.5 px-4 rounded-xl font-bold hover:bg-gray-200 hover:-translate-y-0.5 transition-all">
                         <i class="fas fa-chart-bar"></i>
                     </a>
                 </div>
             </div>
         </div>
         {% else %}
-        <div class="col-span-2 bg-white rounded-xl shadow p-12 text-center">
-            <i class="fas fa-database text-gray-300 text-6xl mb-4"></i>
-            <h3 class="text-xl font-semibold text-gray-800 mb-2">No Categories Yet</h3>
-            <p class="text-gray-500 mb-4">Run the fixtures to populate the database with sample questions.</p>
-            <code class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg inline-block">
+        <div class="col-span-2 card-modern p-12 text-center">
+            <div class="text-5xl mb-4">📦</div>
+            <h3 class="text-lg font-bold text-gray-700 mb-2">No categories</h3>
+            <p class="text-gray-400 text-sm mb-4">Load fixtures to populate the database.</p>
+            <code class="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg inline-block text-sm">
                 php bin/console doctrine:fixtures:load
             </code>
         </div>
@@ -106,44 +104,28 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Search categories
     const categorySearch = document.getElementById('categorySearch');
-    const categoryCards = document.querySelectorAll('.card-hover');
+    const cards = document.querySelectorAll('.card-modern');
 
     categorySearch.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        
-        categoryCards.forEach(card => {
-            const categoryName = card.querySelector('h2').textContent.toLowerCase();
-            const categoryDesc = card.querySelector('p');
-            const description = categoryDesc ? categoryDesc.textContent.toLowerCase() : '';
-            
-            if (categoryName.includes(searchTerm) || description.includes(searchTerm)) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
+        const term = this.value.toLowerCase();
+        cards.forEach(card => {
+            const h2 = card.querySelector('h2');
+            if (!h2) return;
+            const name = h2.textContent.toLowerCase();
+            const desc = card.querySelector('p')?.textContent.toLowerCase() || '';
+            card.style.display = (name.includes(term) || desc.includes(term)) ? 'block' : 'none';
         });
     });
 
-    // Search subcategories
-    const subcategorySearches = document.querySelectorAll('.subcategory-search');
-    
-    subcategorySearches.forEach(search => {
+    document.querySelectorAll('.subcategory-search').forEach(search => {
         search.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const categoryId = this.getAttribute('data-category-id');
-            const subcategoryList = document.querySelector(`.subcategory-list[data-category-id="${categoryId}"]`);
-            const subcategoryItems = subcategoryList.querySelectorAll('.flex.items-center.justify-between');
-            
-            subcategoryItems.forEach(item => {
-                const subcategoryName = item.querySelector('span.text-gray-700').textContent.toLowerCase();
-                
-                if (subcategoryName.includes(searchTerm)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
+            const term = this.value.toLowerCase();
+            const id = this.dataset.categoryId;
+            const list = document.querySelector(`.subcategory-list[data-category-id="${id}"]`);
+            list.querySelectorAll('.flex.items-center.justify-between').forEach(item => {
+                const name = item.querySelector('span.text-gray-600')?.textContent.toLowerCase() || '';
+                item.style.display = name.includes(term) ? 'flex' : 'none';
             });
         });
     });

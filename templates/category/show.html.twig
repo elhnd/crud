@@ -1,68 +1,64 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ category.name }} - Symfony & PHP Quiz Trainer{% endblock %}
+{% block title %}{{ category.name }} - Quiz Trainer{% endblock %}
 
 {% block body %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Header -->
-    <div class="mb-8">
-        <div class="flex items-center mb-4">
-            <a href="{{ path('category_list') }}" class="text-gray-400 hover:text-gray-600 mr-4">
-                <i class="fas fa-arrow-left"></i>
+    <div class="mb-8 animate-fade-in-up">
+        <div class="flex items-center gap-3 mb-4">
+            <a href="{{ path('category_list') }}" class="w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-200 transition">
+                <i class="fas fa-arrow-left text-sm"></i>
             </a>
             <div>
-                <h1 class="text-3xl font-bold text-gray-800">
-                    {{ category.name }}
-                </h1>
+                <h1 class="text-2xl font-extrabold text-gray-800">{{ category.name }}</h1>
                 {% if category.description %}
-                <p class="text-gray-500">{{ category.description }}</p>
+                <p class="text-gray-400 text-sm">{{ category.description }}</p>
                 {% endif %}
             </div>
         </div>
     </div>
 
     <!-- Quick Action -->
-    <div class="bg-gradient-to-r {% if category.name == 'Symfony' %}from-gray-900 to-gray-700{% else %}from-indigo-600 to-purple-600{% endif %} rounded-xl p-6 mb-8 text-white">
+    <div class="bg-gradient-to-r {% if category.name == 'Symfony' %}from-gray-900 to-gray-700{% else %}from-primary-500 to-violet-500{% endif %} rounded-2xl p-6 mb-8 text-white animate-fade-in-up stagger-1">
         <div class="flex items-center justify-between">
             <div>
-                <h2 class="text-xl font-bold mb-2">Practice {{ category.name }}</h2>
-                <p class="text-white/80">Take a quiz with questions from all subcategories</p>
+                <h2 class="text-lg font-bold mb-1">Practice {{ category.name }}</h2>
+                <p class="text-white/70 text-sm">Quiz with questions from all subcategories</p>
             </div>
             <a href="{{ path('quiz_by_category', {id: category.id}) }}" 
-               class="bg-white text-gray-800 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
-                <i class="fas fa-play mr-2"></i> Start Quiz
+               class="bg-white text-gray-800 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-gray-100 hover:-translate-y-0.5 transition-all shadow-lg">
+                <i class="fas fa-play mr-2"></i> Start
             </a>
         </div>
     </div>
 
     <!-- Subcategories -->
-    <h2 class="text-xl font-bold text-gray-800 mb-4">
-        <i class="fas fa-tags text-indigo-600 mr-2"></i> Subcategories
+    <h2 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2 animate-fade-in-up stagger-2">
+        <i class="fas fa-tags text-primary-500"></i> Subcategories
     </h2>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {% for subcategory in subcategories %}
-        <div class="bg-white rounded-xl shadow p-6 card-hover">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-bold text-gray-800">{{ subcategory.name }}</h3>
-                <span class="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm">
-                    {{ questionCounts[subcategory.id] ?? 0 }} questions
+        <div class="card-modern p-5 animate-fade-in-up stagger-{{ loop.index <= 6 ? loop.index : 6 }}">
+            <div class="flex items-center justify-between mb-3">
+                <h3 class="text-sm font-bold text-gray-800">{{ subcategory.name }}</h3>
+                <span class="bg-primary-50 text-primary-600 px-2.5 py-1 rounded-lg text-xs font-bold">
+                    {{ questionCounts[subcategory.id] ?? 0 }} Q
                 </span>
             </div>
-            
             {% if subcategory.description %}
-            <p class="text-gray-600 text-sm mb-4">{{ subcategory.description }}</p>
+            <p class="text-gray-400 text-xs mb-3 line-clamp-2">{{ subcategory.description }}</p>
             {% endif %}
-            
             <a href="{{ path('quiz_by_subcategory', {id: subcategory.id}) }}" 
-               class="block w-full text-center bg-indigo-50 text-indigo-600 py-2 rounded-lg font-medium hover:bg-indigo-100 transition">
+               class="block w-full text-center bg-primary-50 text-primary-600 py-2 rounded-xl font-bold text-xs hover:bg-primary-100 transition">
                 <i class="fas fa-play mr-1"></i> Practice
             </a>
         </div>
         {% else %}
-        <div class="col-span-3 text-center py-12">
-            <i class="fas fa-folder-open text-gray-300 text-5xl mb-4"></i>
-            <p class="text-gray-500">No subcategories available for this category.</p>
+        <div class="col-span-3 text-center py-10">
+            <div class="text-4xl mb-3">📂</div>
+            <p class="text-gray-400 text-sm">No subcategories available.</p>
         </div>
         {% endfor %}
     </div>
