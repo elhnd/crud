@@ -1,148 +1,151 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Review Quiz - Symfony & PHP Quiz Trainer{% endblock %}
+{% block title %}Quiz Review - Quiz Trainer{% endblock %}
 
 {% block body %}
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Header -->
-    <div class="flex items-center justify-between mb-8">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4 animate-fade-in-up">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800">
-                <i class="fas fa-eye text-indigo-600 mr-2"></i> Quiz Review
+            <h1 class="text-2xl font-extrabold text-gray-800 flex items-center gap-2">
+                <span class="w-10 h-10 bg-gradient-to-br from-primary-500 to-violet-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-500/20">
+                    <i class="fas fa-eye text-sm"></i>
+                </span>
+                Quiz Review
             </h1>
-            <p class="text-gray-500">{{ session.sessionLabel }} - {{ session.completedAt|date('F d, Y') }}</p>
+            <p class="text-gray-400 text-sm mt-1">{{ session.sessionLabel }} — {{ session.completedAt|date('d/m/Y') }}</p>
         </div>
-        <div class="text-right">
-            <div class="text-3xl font-bold 
-                {% if session.score >= 80 %}text-green-600
-                {% elseif session.score >= 60 %}text-yellow-600
-                {% else %}text-red-600{% endif %}">
-                {{ session.score|number_format(0) }}%
+        <div class="flex items-center gap-3">
+            <div class="text-right">
+                <div class="text-3xl font-black 
+                    {% if session.score >= 80 %}text-emerald-600
+                    {% elseif session.score >= 60 %}text-amber-500
+                    {% else %}text-red-500{% endif %}">
+                    {{ session.score|number_format(0) }}%
+                </div>
+                <div class="text-gray-400 text-xs font-medium">{{ session.correctAnswers }}/{{ session.totalQuestions }} correct</div>
             </div>
-            <div class="text-gray-500">{{ session.correctAnswers }}/{{ session.totalQuestions }} correct</div>
         </div>
     </div>
 
-    <!-- Navigation -->
-    <div class="bg-white rounded-xl shadow p-4 mb-6 flex flex-wrap gap-2">
-        {% for answer in answers %}
-        <a href="#question-{{ loop.index }}" 
-           class="w-10 h-10 flex items-center justify-center rounded-lg font-medium
-                  {{ answer.isCorrect ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-700 hover:bg-red-200' }}
-                  transition">
-            {{ loop.index }}
-        </a>
-        {% endfor %}
+    <!-- Quick Navigation -->
+    <div class="card-modern p-4 mb-6 animate-fade-in-up stagger-1">
+        <div class="flex flex-wrap gap-1.5">
+            {% for answer in answers %}
+            <a href="#question-{{ loop.index }}" 
+               class="w-9 h-9 flex items-center justify-center rounded-lg font-bold text-xs transition-all hover:-translate-y-0.5 hover:shadow-md
+                      {{ answer.isCorrect ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200' : 'bg-red-100 text-red-600 hover:bg-red-200' }}">
+                {{ loop.index }}
+            </a>
+            {% endfor %}
+        </div>
     </div>
 
     <!-- Questions Review -->
     <div class="space-y-6">
         {% for answer in answers %}
         <div id="question-{{ loop.index }}" 
-             class="bg-white rounded-2xl shadow-lg overflow-hidden scroll-mt-24">
+             class="card-modern overflow-hidden scroll-mt-24 animate-fade-in-up stagger-{{ loop.index <= 5 ? loop.index : 5 }}">
+            
             <!-- Question Header -->
-            <div class="px-6 py-4 {{ answer.isCorrect ? 'bg-green-500' : 'bg-red-500' }} text-white">
-                <div class="flex items-center justify-between">
-                    <span class="font-semibold">
-                        Question {{ loop.index }} of {{ answers|length }}
-                    </span>
-                    <span class="flex items-center">
-                        {% if answer.isCorrect %}
-                            <i class="fas fa-check-circle mr-2"></i> Correct
-                        {% else %}
-                            <i class="fas fa-times-circle mr-2"></i> Incorrect
-                        {% endif %}
-                    </span>
-                </div>
+            <div class="px-5 py-3 {{ answer.isCorrect ? 'bg-gradient-to-r from-emerald-500 to-teal-500' : 'bg-gradient-to-r from-red-500 to-rose-500' }} text-white flex items-center justify-between">
+                <span class="font-bold text-sm">Question {{ loop.index }} / {{ answers|length }}</span>
+                <span class="flex items-center gap-1.5 text-sm font-medium">
+                    <i class="fas {{ answer.isCorrect ? 'fa-check-circle' : 'fa-times-circle' }}"></i>
+                    {{ answer.isCorrect ? 'Correct' : 'Incorrect' }}
+                </span>
             </div>
 
-            <!-- Question Content -->
-            <div class="p-6">
-                <!-- Question Text -->
-                <div class="mb-6">
-                    <div class="flex items-start justify-between">
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2 question-text flex-1">
+            <div class="p-5">
+                <!-- Question Text + Actions -->
+                <div class="mb-5">
+                    <div class="flex items-start gap-3">
+                        <h3 class="text-base font-semibold text-gray-800 flex-1 question-text leading-relaxed">
                             {{ answer.question.text|format_code }}
                         </h3>
-                        <div class="flex items-center space-x-2 ml-4">
+                        <div class="flex items-center gap-1.5 flex-shrink-0">
                             <button type="button" onclick="toggleQuestionActive({{ answer.question.id }}, this)" 
-                                    class="toggle-active-btn {{ answer.question.isActive ? 'text-green-600 hover:text-red-600' : 'text-red-600 hover:text-green-600' }} transition"
-                                    title="{{ answer.question.isActive ? 'Click to deactivate this question' : 'Click to activate this question' }}">
-                                <i class="fas {{ answer.question.isActive ? 'fa-eye' : 'fa-eye-slash' }} text-lg"></i>
+                                    class="toggle-active-btn w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110
+                                    {{ answer.question.isActive ? 'text-emerald-500 bg-emerald-50 hover:bg-red-50 hover:text-red-500' : 'text-red-400 bg-red-50 hover:bg-emerald-50 hover:text-emerald-500' }}"
+                                    title="{{ answer.question.isActive ? 'Deactivate this question' : 'Activate this question' }}">
+                                <i class="fas {{ answer.question.isActive ? 'fa-eye' : 'fa-eye-slash' }} text-sm"></i>
                             </button>
                             <button type="button" onclick="openReportModal({{ answer.question.id }})" 
-                                    class="text-gray-400 hover:text-red-600 transition"
-                                    title="Report an issue with this question">
-                                <i class="fas fa-flag text-lg"></i>
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 bg-gray-50 hover:bg-red-50 hover:text-red-500 transition-all hover:scale-110"
+                                    title="Report an issue">
+                                <i class="fas fa-flag text-sm"></i>
                             </button>
                             <button type="button" onclick="openEditModal({{ answer.question.id }})" 
-                                    class="text-gray-400 hover:text-indigo-600 transition"
-                                    title="Edit question or answers">
-                                <i class="fas fa-edit text-lg"></i>
+                                    class="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 bg-gray-50 hover:bg-primary-50 hover:text-primary-500 transition-all hover:scale-110"
+                                    title="Edit question">
+                                <i class="fas fa-edit text-sm"></i>
                             </button>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-3 text-sm text-gray-500">
-                        <span class="bg-gray-100 px-2 py-1 rounded">
+                    <div class="flex flex-wrap items-center gap-2 mt-3">
+                        <span class="bg-gray-100 text-gray-600 px-2.5 py-1 rounded-lg text-xs font-medium">
                             {{ answer.question.category.name }}
                         </span>
-                        <span class="bg-gray-100 px-2 py-1 rounded">
+                        <span class="bg-violet-50 text-violet-600 px-2.5 py-1 rounded-lg text-xs font-medium">
                             {{ answer.question.subcategory.name }}
                         </span>
-                        <span>
+                        <span class="text-gray-400 text-xs">
                             {% if answer.question.type == 'single_choice' %}
-                                <i class="far fa-circle-dot mr-1"></i> Single Choice
+                                <i class="far fa-circle-dot mr-0.5"></i> Single choice
                             {% elseif answer.question.type == 'multiple_choice' %}
-                                <i class="far fa-square-check mr-1"></i> Multiple Choice
+                                <i class="far fa-square-check mr-0.5"></i> Multiple choice
                             {% else %}
-                                <i class="fas fa-toggle-on mr-1"></i> True/False
+                                <i class="fas fa-toggle-on mr-0.5"></i> True/False
                             {% endif %}
                         </span>
-                        <span class="toggle-status-text {{ answer.question.isActive ? 'text-green-600' : 'text-red-600' }}">
-                            <i class="fas {{ answer.question.isActive ? 'fa-check-circle' : 'fa-times-circle' }} mr-1"></i>
+                        <span class="toggle-status-text text-xs font-medium {{ answer.question.isActive ? 'text-emerald-500' : 'text-red-400' }}">
+                            <i class="fas {{ answer.question.isActive ? 'fa-check-circle' : 'fa-times-circle' }} mr-0.5"></i>
                             {{ answer.question.isActive ? 'Active' : 'Inactive' }}
                         </span>
                     </div>
                 </div>
 
                 <!-- Answers -->
-                <div class="space-y-3">
+                <div class="space-y-2.5">
                     {% for questionAnswer in answer.question.answers %}
                     {% set wasSelected = questionAnswer.id in answer.selectedAnswerIds %}
-                    <div class="flex items-center p-4 rounded-xl border-2
+                    <div class="flex items-center p-3.5 rounded-xl border-2 transition-all
                         {% if questionAnswer.isCorrect and wasSelected %}
-                            border-green-500 bg-green-50
+                            border-emerald-400 bg-emerald-50/60
                         {% elseif questionAnswer.isCorrect %}
-                            border-green-500 bg-green-50
+                            border-emerald-400 bg-emerald-50/60
                         {% elseif wasSelected %}
-                            border-red-500 bg-red-50
+                            border-red-400 bg-red-50/60
                         {% else %}
-                            border-gray-200 bg-gray-50
+                            border-gray-100 bg-gray-50/50
                         {% endif %}">
                         
-                        <div class="w-6 h-6 flex items-center justify-center mr-4">
+                        <div class="w-7 h-7 flex items-center justify-center mr-3 rounded-lg flex-shrink-0
+                            {% if questionAnswer.isCorrect %}bg-emerald-100
+                            {% elseif wasSelected %}bg-red-100
+                            {% else %}bg-gray-100{% endif %}">
                             {% if questionAnswer.isCorrect %}
-                                <i class="fas fa-check text-green-600"></i>
+                                <i class="fas fa-check text-emerald-600 text-xs"></i>
                             {% elseif wasSelected %}
-                                <i class="fas fa-times text-red-600"></i>
+                                <i class="fas fa-times text-red-600 text-xs"></i>
                             {% else %}
-                                <i class="far fa-circle text-gray-400"></i>
+                                <i class="far fa-circle text-gray-300 text-xs"></i>
                             {% endif %}
                         </div>
                         
-                        <span class="flex-1 answer-text {{ questionAnswer.isCorrect ? 'text-green-800 font-medium' : 'text-gray-700' }}">
+                        <span class="flex-1 answer-text text-sm {{ questionAnswer.isCorrect ? 'text-emerald-800 font-medium' : 'text-gray-600' }}">
                             {{ questionAnswer.text|format_code }}
                         </span>
                         
                         {% if wasSelected %}
-                        <span class="ml-2 text-sm px-2 py-1 rounded
-                            {{ questionAnswer.isCorrect ? 'bg-green-200 text-green-800' : 'bg-red-200 text-red-800' }}">
+                        <span class="ml-2 text-xs px-2 py-0.5 rounded-md font-medium
+                            {{ questionAnswer.isCorrect ? 'bg-emerald-200 text-emerald-800' : 'bg-red-200 text-red-800' }}">
                             Your answer
                         </span>
                         {% endif %}
                         
-                        {% if questionAnswer.isCorrect %}
-                        <span class="ml-2 text-sm px-2 py-1 rounded bg-green-200 text-green-800">
+                        {% if questionAnswer.isCorrect and not wasSelected %}
+                        <span class="ml-2 text-xs px-2 py-0.5 rounded-md font-medium bg-emerald-200 text-emerald-800">
                             Correct answer
                         </span>
                         {% endif %}
@@ -152,12 +155,14 @@
 
                 <!-- Explanation -->
                 {% if answer.question.explanation %}
-                <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl">
-                    <div class="flex items-start">
-                        <i class="fas fa-lightbulb text-blue-500 text-xl mr-3 mt-1"></i>
+                <div class="mt-5 p-4 bg-amber-50/80 border border-amber-200 rounded-xl">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-lightbulb text-amber-500"></i>
+                        </div>
                         <div>
-                            <h4 class="font-semibold text-blue-800 mb-1">Explanation</h4>
-                            <p class="text-blue-700">{{ answer.question.explanation|format_code }}</p>
+                            <h4 class="font-bold text-amber-800 text-sm mb-1">Explanation</h4>
+                            <p class="text-amber-700 text-sm leading-relaxed">{{ answer.question.explanation|format_code }}</p>
                         </div>
                     </div>
                 </div>
@@ -166,20 +171,19 @@
                 <!-- Resource Links -->
                 {% set urls = answer.question.resourceUrl|parse_urls %}
                 {% if urls|length > 0 %}
-                <div class="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-xl">
-                    <div class="flex items-start">
-                        <i class="fas fa-book-open text-purple-500 text-xl mr-3 mt-1"></i>
+                <div class="mt-3 p-4 bg-violet-50/80 border border-violet-200 rounded-xl">
+                    <div class="flex items-start gap-3">
+                        <div class="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-book-open text-violet-500"></i>
+                        </div>
                         <div class="flex-1">
-                            <h4 class="font-semibold text-purple-800 mb-2">Learn More</h4>
-                            <div class="space-y-2">
+                            <h4 class="font-bold text-violet-800 text-sm mb-2">Learn more</h4>
+                            <div class="space-y-1">
                                 {% for url in urls %}
-                                <div>
-                                    <a href="{{ url }}" target="_blank" rel="noopener noreferrer"
-                                       class="text-purple-700 hover:text-purple-900 underline break-all text-sm">
-                                        <i class="fas fa-external-link-alt mr-1"></i>
-                                        {{ url }}
-                                    </a>
-                                </div>
+                                <a href="{{ url }}" target="_blank" rel="noopener noreferrer"
+                                   class="block text-violet-600 hover:text-violet-800 text-xs break-all transition">
+                                    <i class="fas fa-external-link-alt mr-1"></i>{{ url }}
+                                </a>
                                 {% endfor %}
                             </div>
                         </div>
@@ -187,21 +191,22 @@
                 </div>
                 {% endif %}
 
-                <!-- AI Explanation Link -->
-                <div class="mt-4 p-4 bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200 rounded-xl">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <i class="fas fa-robot text-cyan-600 text-xl mr-3"></i>
+                <!-- AI Explanation -->
+                <div class="mt-3 p-4 bg-gradient-to-r from-cyan-50 to-primary-50 border border-cyan-200 rounded-xl">
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-gradient-to-br from-cyan-500 to-primary-500 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                                <i class="fas fa-robot text-white text-sm"></i>
+                            </div>
                             <div>
-                                <h4 class="font-semibold text-cyan-800">AI-Powered Deep Explanation</h4>
-                                <p class="text-cyan-600 text-sm">Get a detailed AI explanation with examples and best practices</p>
+                                <h4 class="font-bold text-cyan-800 text-sm">Detailed AI Explanation</h4>
+                                <p class="text-cyan-600 text-xs">Examples, best practices and more</p>
                             </div>
                         </div>
                         <a href="{{ path('statistics_question_detail', {id: answer.question.id, backUrl: app.request.uri}) }}" 
-                           class="bg-gradient-to-r from-cyan-600 to-blue-600 text-white px-5 py-2.5 rounded-lg font-medium hover:from-cyan-700 hover:to-blue-700 transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center space-x-2">
-                            <i class="fas fa-brain"></i>
-                            <span>View AI Explanation</span>
-                            <i class="fas fa-arrow-right text-sm"></i>
+                           class="bg-gradient-to-r from-cyan-500 to-primary-500 text-white px-4 py-2 rounded-xl font-bold text-xs hover:shadow-lg hover:shadow-cyan-500/25 hover:-translate-y-0.5 transition-all flex items-center gap-1.5">
+                            <i class="fas fa-brain"></i> View
+                            <i class="fas fa-arrow-right text-xs"></i>
                         </a>
                     </div>
                 </div>
@@ -211,95 +216,95 @@
     </div>
 
     <!-- Bottom Actions -->
-    <div class="mt-8 flex justify-center space-x-4">
+    <div class="mt-8 flex justify-center gap-3 animate-fade-in-up">
         <a href="{{ path('app_home') }}" 
-           class="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-semibold hover:bg-gray-200 transition">
-            <i class="fas fa-home mr-2"></i> Home
+           class="bg-gray-100 text-gray-600 px-5 py-3 rounded-xl font-bold text-sm hover:bg-gray-200 hover:-translate-y-0.5 transition-all flex items-center gap-2">
+            <i class="fas fa-home"></i> Home
         </a>
         <a href="{{ path('quiz_start_form') }}" 
-           class="bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-indigo-700 transition">
-            <i class="fas fa-redo mr-2"></i> New Quiz
+           class="bg-gradient-to-r from-primary-500 to-primary-600 text-white px-5 py-3 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-primary-500/25 hover:-translate-y-0.5 transition-all flex items-center gap-2">
+            <i class="fas fa-redo"></i> New Quiz
         </a>
     </div>
 </div>
 
 <!-- Report Modal -->
-<div id="report-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
-        <div class="bg-gradient-to-r from-red-500 to-orange-500 px-6 py-4 flex justify-between items-center">
-            <h3 class="text-xl font-bold text-white">
-                <i class="fas fa-flag mr-2"></i> Report Question
+<div id="report-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden">
+        <div class="bg-gradient-to-r from-red-500 to-rose-500 px-6 py-4 flex justify-between items-center">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fas fa-flag"></i> Report question
             </h3>
-            <button onclick="closeReportModal()" class="text-white/80 hover:text-white">
-                <i class="fas fa-times text-xl"></i>
+            <button onclick="closeReportModal()" class="text-white/70 hover:text-white transition">
+                <i class="fas fa-times text-lg"></i>
             </button>
         </div>
         <div class="p-6 space-y-4">
-            <p class="text-gray-600 text-sm">
-                <i class="fas fa-info-circle text-blue-500 mr-1"></i>
-                Found an issue with this question? Let us know so we can fix it.
+            <p class="text-gray-500 text-sm flex items-center gap-2">
+                <i class="fas fa-info-circle text-primary-500"></i>
+                Found an issue with this question? Let us know.
             </p>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Issue Type</label>
-                <select id="report-type" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 text-sm">
-                    <option value="">Select an issue type...</option>
-                    <option value="wrong_answer">🔴 Wrong Answer - The correct answer is marked incorrectly</option>
-                    <option value="typo">✏️ Typo / Grammar - There's a spelling or grammar error</option>
-                    <option value="unclear">❓ Unclear Question - The question is confusing or ambiguous</option>
-                    <option value="duplicate">📋 Duplicate Question - This question appears more than once</option>
-                    <option value="outdated">📅 Outdated Content - Information is no longer current</option>
-                    <option value="other">💬 Other - Something else</option>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Issue type</label>
+                <select id="report-type" class="w-full border-gray-200 rounded-xl shadow-sm focus:ring-red-500 focus:border-red-500 text-sm py-2.5">
+                    <option value="">Select...</option>
+                    <option value="wrong_answer">🔴 Wrong answer</option>
+                    <option value="typo">✏️ Typo / Grammar</option>
+                    <option value="unclear">❓ Unclear question</option>
+                    <option value="duplicate">📋 Duplicate question</option>
+                    <option value="outdated">📅 Outdated content</option>
+                    <option value="other">💬 Other</option>
                 </select>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Description</label>
                 <textarea id="report-message" rows="4" 
-                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 text-sm"
-                    placeholder="Please describe the issue in detail. For example: 'The answer marked as correct is actually wrong because...'"></textarea>
+                    class="w-full border-gray-200 rounded-xl shadow-sm focus:ring-red-500 focus:border-red-500 text-sm"
+                    placeholder="Describe the issue in detail..."></textarea>
                 <p class="text-xs text-gray-400 mt-1">Minimum 10 characters</p>
             </div>
-            <div id="report-feedback" class="hidden rounded-lg p-3 text-sm"></div>
+            <div id="report-feedback" class="hidden rounded-xl p-3 text-sm"></div>
         </div>
-        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+        <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3">
             <button onclick="closeReportModal()" 
-                class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition">
+                class="bg-gray-200 text-gray-600 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-gray-300 transition">
                 Cancel
             </button>
             <button onclick="submitReport()" id="report-submit-btn"
-                class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition">
-                <i class="fas fa-paper-plane mr-1"></i> Submit Report
+                class="bg-gradient-to-r from-red-500 to-rose-500 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-red-500/25 transition-all">
+                <i class="fas fa-paper-plane mr-1"></i> Send
             </button>
         </div>
     </div>
 </div>
 
 <!-- Edit Modal -->
-<div id="edit-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
+<div id="edit-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4 flex justify-between items-center">
-            <h3 class="text-xl font-bold text-white">
-                <i class="fas fa-edit mr-2"></i> Edit Question & Answers
+        <div class="bg-gradient-to-r from-primary-500 to-violet-500 px-6 py-4 flex justify-between items-center sticky top-0 z-10">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fas fa-edit"></i> Edit Question & Answers
             </h3>
-            <button onclick="closeEditModal()" class="text-white/80 hover:text-white">
-                <i class="fas fa-times text-xl"></i>
+            <button onclick="closeEditModal()" class="text-white/70 hover:text-white transition">
+                <i class="fas fa-times text-lg"></i>
             </button>
         </div>
         
         <div class="p-6 space-y-6" id="edit-modal-content">
             <div class="text-center py-8">
-                <i class="fas fa-spinner fa-spin text-4xl text-indigo-600"></i>
-                <p class="mt-4 text-gray-500">Loading question...</p>
+                <i class="fas fa-spinner fa-spin text-4xl text-primary-500"></i>
+                <p class="mt-4 text-gray-400">Loading...</p>
             </div>
         </div>
         
-        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+        <div class="bg-gray-50 px-6 py-4 flex justify-end gap-3 sticky bottom-0">
             <button onclick="closeEditModal()" 
-                class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition">
+                class="bg-gray-200 text-gray-600 px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-gray-300 transition">
                 Close
             </button>
             <button onclick="location.reload()" 
-                class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition">
-                <i class="fas fa-sync mr-1"></i> Refresh Page
+                class="bg-gradient-to-r from-primary-500 to-violet-500 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-primary-500/25 transition-all">
+                <i class="fas fa-sync mr-1"></i> Refresh
             </button>
         </div>
     </div>
@@ -311,8 +316,6 @@
 const editModal = document.getElementById('edit-modal');
 const editModalContent = document.getElementById('edit-modal-content');
 let currentQuestionId = null;
-
-// Report Modal Functions
 const reportModal = document.getElementById('report-modal');
 let reportQuestionId = null;
 
@@ -324,7 +327,7 @@ function openReportModal(questionId) {
     document.getElementById('report-message').value = '';
     document.getElementById('report-feedback').classList.add('hidden');
     document.getElementById('report-submit-btn').disabled = false;
-    document.getElementById('report-submit-btn').innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Submit Report';
+    document.getElementById('report-submit-btn').innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Send';
 }
 
 function closeReportModal() {
@@ -332,9 +335,7 @@ function closeReportModal() {
     document.body.style.overflow = '';
 }
 
-reportModal.addEventListener('click', function(e) {
-    if (e.target === reportModal) closeReportModal();
-});
+reportModal.addEventListener('click', function(e) { if (e.target === reportModal) closeReportModal(); });
 
 async function submitReport() {
     const type = document.getElementById('report-type').value;
@@ -343,21 +344,20 @@ async function submitReport() {
     const submitBtn = document.getElementById('report-submit-btn');
 
     if (!type) {
-        feedback.className = 'rounded-lg p-3 text-sm bg-red-50 text-red-700 border border-red-200';
-        feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Please select an issue type.';
+        feedback.className = 'rounded-xl p-3 text-sm bg-red-50 text-red-700 border border-red-200';
+        feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Please select a type.';
         feedback.classList.remove('hidden');
         return;
     }
-
     if (message.trim().length < 10) {
-        feedback.className = 'rounded-lg p-3 text-sm bg-red-50 text-red-700 border border-red-200';
-        feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Please provide a more detailed description (at least 10 characters).';
+        feedback.className = 'rounded-xl p-3 text-sm bg-red-50 text-red-700 border border-red-200';
+        feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Description too short (10 characters min).';
         feedback.classList.remove('hidden');
         return;
     }
 
     submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Submitting...';
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Sending...';
 
     try {
         const response = await fetch(`/api/question/${reportQuestionId}/report`, {
@@ -365,28 +365,26 @@ async function submitReport() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type, message })
         });
-
         const data = await response.json();
-
         if (data.success) {
-            feedback.className = 'rounded-lg p-3 text-sm bg-green-50 text-green-700 border border-green-200';
+            feedback.className = 'rounded-xl p-3 text-sm bg-emerald-50 text-emerald-700 border border-emerald-200';
             feedback.innerHTML = '<i class="fas fa-check-circle mr-1"></i> ' + data.message;
             feedback.classList.remove('hidden');
-            showNotification('Report submitted successfully!', 'success');
+            showNotification('Report sent!', 'success');
             setTimeout(() => closeReportModal(), 2000);
         } else {
-            feedback.className = 'rounded-lg p-3 text-sm bg-red-50 text-red-700 border border-red-200';
-            feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> ' + (data.error || 'Failed to submit report');
+            feedback.className = 'rounded-xl p-3 text-sm bg-red-50 text-red-700 border border-red-200';
+            feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> ' + (data.error || 'Error');
             feedback.classList.remove('hidden');
             submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Submit Report';
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Send';
         }
     } catch (error) {
-        feedback.className = 'rounded-lg p-3 text-sm bg-red-50 text-red-700 border border-red-200';
-        feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Error submitting report. Please try again.';
+        feedback.className = 'rounded-xl p-3 text-sm bg-red-50 text-red-700 border border-red-200';
+        feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Erreur lors de l\'envoi.';
         feedback.classList.remove('hidden');
         submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Submit Report';
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Send';
     }
 }
 
@@ -395,7 +393,6 @@ async function openEditModal(questionId) {
     editModal.classList.remove('hidden');
     document.body.style.overflow = 'hidden';
     
-    // Load question data
     try {
         const response = await fetch(`/api/question/${questionId}`);
         const question = await response.json();
@@ -403,17 +400,17 @@ async function openEditModal(questionId) {
         let answersHtml = '';
         question.answers.forEach(answer => {
             answersHtml += `
-                <div class="flex items-start space-x-3 p-3 border rounded-lg ${answer.isCorrect ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200'}">
+                <div class="flex items-start gap-3 p-3 border rounded-xl ${answer.isCorrect ? 'bg-emerald-50 border-emerald-200' : 'bg-gray-50 border-gray-200'}">
                     <div class="flex-shrink-0 pt-2">
                         <input type="checkbox" id="correct-${answer.id}" ${answer.isCorrect ? 'checked' : ''}
-                            class="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                            class="w-5 h-5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500">
                     </div>
                     <div class="flex-1">
                         <textarea id="answer-${answer.id}" rows="2" 
-                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm">${escapeHtml(answer.text)}</textarea>
+                            class="w-full border-gray-200 rounded-xl shadow-sm focus:ring-primary-500 focus:border-primary-500 font-mono text-sm">${escapeHtml(answer.text)}</textarea>
                     </div>
                     <button onclick="saveAnswer(${answer.id})" 
-                        class="flex-shrink-0 bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-300 transition">
+                        class="flex-shrink-0 bg-gray-200 text-gray-600 w-9 h-9 rounded-xl text-sm hover:bg-gray-300 transition flex items-center justify-center">
                         <i class="fas fa-save"></i>
                     </button>
                 </div>
@@ -421,197 +418,125 @@ async function openEditModal(questionId) {
         });
         
         editModalContent.innerHTML = `
-            <!-- Question Text -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-question-circle text-indigo-600 mr-1"></i> Question Text
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                    <i class="fas fa-question-circle text-primary-500 mr-1"></i> Question text
                 </label>
                 <textarea id="edit-question-text" rows="4" 
-                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm">${escapeHtml(question.text)}</textarea>
+                    class="w-full border-gray-200 rounded-xl shadow-sm focus:ring-primary-500 focus:border-primary-500 font-mono text-sm">${escapeHtml(question.text)}</textarea>
                 <button onclick="saveQuestion()" 
-                    class="mt-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700 transition">
-                    <i class="fas fa-save mr-1"></i> Save Question
+                    class="mt-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white px-4 py-2 rounded-xl text-sm font-bold hover:shadow-lg hover:shadow-primary-500/25 transition-all">
+                    <i class="fas fa-save mr-1"></i> Save
                 </button>
             </div>
-            
-            <!-- Explanation -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-lightbulb text-yellow-500 mr-1"></i> Explanation (shown after answer)
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                    <i class="fas fa-lightbulb text-amber-500 mr-1"></i> Explanation
                 </label>
                 <textarea id="edit-explanation-text" rows="2" 
-                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">${escapeHtml(question.explanation || '')}</textarea>
+                    class="w-full border-gray-200 rounded-xl shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm">${escapeHtml(question.explanation || '')}</textarea>
             </div>
-            
-            <!-- Resource URL -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-book-open text-purple-500 mr-1"></i> Learn More URLs (optional)
-                    <span class="text-gray-400 font-normal ml-1">- separate multiple URLs with commas</span>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                    <i class="fas fa-book-open text-violet-500 mr-1"></i> URLs (comma-separated)
                 </label>
                 <textarea id="edit-resource-url" rows="2"
-                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                    placeholder="https://symfony.com/doc/..., https://php.net/...">${escapeHtml(question.resourceUrl || '')}</textarea>
+                    class="w-full border-gray-200 rounded-xl shadow-sm focus:ring-primary-500 focus:border-primary-500 text-sm"
+                    placeholder="https://symfony.com/doc/...">${escapeHtml(question.resourceUrl || '')}</textarea>
             </div>
-            
-            <!-- Answers -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-3">
-                    <i class="fas fa-list text-indigo-600 mr-1"></i> Answers
+                <label class="block text-sm font-bold text-gray-700 mb-3">
+                    <i class="fas fa-list text-primary-500 mr-1"></i> Answers
                 </label>
-                <div class="space-y-3" id="edit-answers-container">
-                    ${answersHtml}
-                </div>
-                <p class="text-xs text-gray-500 mt-2">
-                    <i class="fas fa-info-circle mr-1"></i> Check the box to mark an answer as correct. Changes are saved individually.
+                <div class="space-y-3" id="edit-answers-container">${answersHtml}</div>
+                <p class="text-xs text-gray-400 mt-2">
+                    <i class="fas fa-info-circle mr-1"></i> Check the box to mark as correct.
                 </p>
             </div>
         `;
     } catch (error) {
         editModalContent.innerHTML = `
-            <div class="text-center py-8 text-red-600">
+            <div class="text-center py-8 text-red-500">
                 <i class="fas fa-exclamation-triangle text-4xl"></i>
-                <p class="mt-4">Failed to load question. Please try again.</p>
+                <p class="mt-4">Unable to load question.</p>
             </div>
         `;
     }
 }
 
-function closeEditModal() {
-    editModal.classList.add('hidden');
-    document.body.style.overflow = '';
-}
+function closeEditModal() { editModal.classList.add('hidden'); document.body.style.overflow = ''; }
+function escapeHtml(text) { const d = document.createElement('div'); d.textContent = text || ''; return d.innerHTML; }
 
-function escapeHtml(text) {
-    const div = document.createElement('div');
-    div.textContent = text || '';
-    return div.innerHTML;
-}
-
-// Close modal on escape key
 document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         if (!editModal.classList.contains('hidden')) closeEditModal();
         if (!reportModal.classList.contains('hidden')) closeReportModal();
     }
 });
-
-// Close modal on backdrop click
-editModal.addEventListener('click', function(e) {
-    if (e.target === editModal) {
-        closeEditModal();
-    }
-});
+editModal.addEventListener('click', function(e) { if (e.target === editModal) closeEditModal(); });
 
 async function saveQuestion() {
     const text = document.getElementById('edit-question-text').value;
     const explanation = document.getElementById('edit-explanation-text').value;
     const resourceUrl = document.getElementById('edit-resource-url').value;
-    
     try {
         const response = await fetch(`/api/question/${currentQuestionId}/edit`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text, explanation, resourceUrl })
         });
-        
         const data = await response.json();
-        
-        if (data.success) {
-            showNotification('Question saved successfully!', 'success');
-        } else {
-            showNotification(data.error || 'Failed to save question', 'error');
-        }
-    } catch (error) {
-        showNotification('Error saving question', 'error');
-        console.error(error);
-    }
+        showNotification(data.success ? 'Question saved!' : (data.error || 'Error'), data.success ? 'success' : 'error');
+    } catch (error) { showNotification('Save error', 'error'); }
 }
 
 async function saveAnswer(answerId) {
     const text = document.getElementById(`answer-${answerId}`).value;
     const isCorrect = document.getElementById(`correct-${answerId}`).checked;
-    
     try {
         const response = await fetch(`/api/answer/${answerId}/edit`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text, isCorrect })
         });
-        
         const data = await response.json();
-        
-        if (data.success) {
-            showNotification('Answer saved successfully!', 'success');
-        } else {
-            showNotification(data.error || 'Failed to save answer', 'error');
-        }
-    } catch (error) {
-        showNotification('Error saving answer', 'error');
-        console.error(error);
-    }
+        showNotification(data.success ? 'Answer saved!' : (data.error || 'Error'), data.success ? 'success' : 'error');
+    } catch (error) { showNotification('Save error', 'error'); }
 }
 
 function showNotification(message, type) {
-    const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-[60] text-white font-medium ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
-    notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>${message}`;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+    const n = document.createElement('div');
+    n.className = `fixed top-4 right-4 px-5 py-3 rounded-xl shadow-2xl z-[100] text-white font-medium text-sm backdrop-blur-sm ${type === 'success' ? 'bg-emerald-600/95' : 'bg-red-600/95'}`;
+    n.style.animation = 'fadeInUp 0.3s ease-out';
+    n.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>${message}`;
+    document.body.appendChild(n);
+    setTimeout(() => { n.style.opacity = '0'; n.style.transition = 'opacity 0.3s'; setTimeout(() => n.remove(), 300); }, 3000);
 }
 
 async function toggleQuestionActive(questionId, button) {
     try {
         const response = await fetch(`/api/question/${questionId}/toggle-active`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            method: 'POST', headers: { 'Content-Type': 'application/json' }
         });
-        
         const data = await response.json();
-        
         if (data.success) {
             const icon = button.querySelector('i');
-            
             if (data.isActive) {
-                button.classList.remove('text-red-600', 'hover:text-green-600');
-                button.classList.add('text-green-600', 'hover:text-red-600');
-                button.title = 'Click to deactivate this question';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
+                button.className = 'toggle-active-btn w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110 text-emerald-500 bg-emerald-50 hover:bg-red-50 hover:text-red-500';
+                button.title = 'Deactivate this question';
+                icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye');
             } else {
-                button.classList.remove('text-green-600', 'hover:text-red-600');
-                button.classList.add('text-red-600', 'hover:text-green-600');
-                button.title = 'Click to activate this question';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
+                button.className = 'toggle-active-btn w-8 h-8 rounded-lg flex items-center justify-center transition-all hover:scale-110 text-red-400 bg-red-50 hover:bg-emerald-50 hover:text-emerald-500';
+                button.title = 'Activate this question';
+                icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash');
             }
-            
-            // Update the status text in the same question block
-            const questionBlock = button.closest('.bg-white');
-            const statusText = questionBlock.querySelector('.toggle-status-text');
+            const questionBlock = button.closest('.card-modern');
+            const statusText = questionBlock?.querySelector('.toggle-status-text');
             if (statusText) {
-                if (data.isActive) {
-                    statusText.classList.remove('text-red-600');
-                    statusText.classList.add('text-green-600');
-                    statusText.innerHTML = '<i class="fas fa-check-circle mr-1"></i> Active';
-                } else {
-                    statusText.classList.remove('text-green-600');
-                    statusText.classList.add('text-red-600');
-                    statusText.innerHTML = '<i class="fas fa-times-circle mr-1"></i> Inactive';
-                }
+                statusText.className = `toggle-status-text text-xs font-medium ${data.isActive ? 'text-emerald-500' : 'text-red-400'}`;
+                statusText.innerHTML = `<i class="fas ${data.isActive ? 'fa-check-circle' : 'fa-times-circle'} mr-0.5"></i> ${data.isActive ? 'Active' : 'Inactive'}`;
             }
-            
             showNotification(data.message, 'success');
-        } else {
-            showNotification('Failed to toggle question status', 'error');
         }
-    } catch (error) {
-        showNotification('Error toggling question status', 'error');
-        console.error(error);
-    }
+    } catch (error) { showNotification('Error', 'error'); }
 }
 </script>
 {% endblock %}
