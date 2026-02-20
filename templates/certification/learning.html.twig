@@ -11,211 +11,12 @@
         padding: 0 1rem;
     }
 
-    /* Hero Section */
-    .hero-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 1rem;
-        padding: 3rem 2rem;
-        margin-bottom: 2rem;
-        text-align: center;
-        color: white;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .hero-section::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        opacity: 0.5;
-    }
-
-    .hero-content {
-        position: relative;
-        z-index: 1;
-    }
-
-    .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
-        padding: 0.5rem 1rem;
-        border-radius: 2rem;
-        font-size: 0.875rem;
-        margin-bottom: 1rem;
-    }
-
-    .hero-title {
-        font-size: 2.5rem;
-        font-weight: 800;
-        margin-bottom: 0.75rem;
-    }
-
-    .hero-subtitle {
-        font-size: 1.1rem;
-        opacity: 0.9;
-        max-width: 500px;
-        margin: 0 auto 1.5rem;
-    }
-
-    .stats-row {
-        display: flex;
-        justify-content: center;
-        gap: 3rem;
-        margin-top: 1.5rem;
-    }
-
-    .stat-item {
-        text-align: center;
-    }
-
-    .stat-value {
-        font-size: 2rem;
-        font-weight: 700;
-    }
-
-    .stat-label {
-        font-size: 0.85rem;
-        opacity: 0.8;
-    }
-
-    /* Search */
-    .search-wrapper {
-        position: relative;
-        margin-bottom: 1.5rem;
-    }
-
-    .search-input {
-        width: 100%;
-        padding: 1rem 1rem 1rem 3rem;
-        border: 2px solid #e5e7eb;
-        border-radius: 0.75rem;
-        font-size: 1rem;
-        transition: all 0.2s;
-        background: white;
-    }
-
-    .search-input:focus {
-        outline: none;
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    .search-icon {
-        position: absolute;
-        left: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #9ca3af;
-    }
-
-    /* Filter Pills */
-    .filter-pills {
-        display: flex;
-        gap: 0.75rem;
-        margin-bottom: 1.5rem;
-        flex-wrap: wrap;
-    }
-
-    .filter-pill {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.625rem 1rem;
-        background: white;
-        border: 2px solid #e5e7eb;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        font-weight: 500;
-        font-size: 0.875rem;
-        transition: all 0.2s;
-        color: #4b5563;
-    }
-
-    .filter-pill:hover {
-        border-color: #667eea;
-        background: #f9fafb;
-    }
-
-    .filter-pill.active {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-color: transparent;
-        color: white;
-    }
-
-    .filter-dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-    }
-
-    .filter-dot.beginner { background: #22c55e; }
-    .filter-dot.intermediate { background: #f59e0b; }
-    .filter-dot.advanced { background: #ef4444; }
-
     /* Level Cards */
     .level-card {
-        background: white;
         border-radius: 1rem;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        margin-bottom: 1.5rem;
         overflow: hidden;
-        border: 1px solid #e5e7eb;
-    }
-
-    .level-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1.25rem 1.5rem;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-
-    .level-header:hover {
-        background: #f9fafb;
-    }
-
-    .level-info {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .level-icon {
-        width: 48px;
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0.75rem;
-        font-size: 1.5rem;
-    }
-
-    .level-icon.beginner { background: rgba(34, 197, 94, 0.1); }
-    .level-icon.intermediate { background: rgba(245, 158, 11, 0.1); }
-    .level-icon.advanced { background: rgba(239, 68, 68, 0.1); }
-
-    .level-title {
-        font-size: 1.25rem;
-        font-weight: 600;
-        color: #1f2937;
-    }
-
-    .level-count {
-        font-size: 0.875rem;
-        color: #6b7280;
-    }
-
-    .level-chevron {
-        color: #9ca3af;
-        transition: transform 0.3s;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(255,255,255,0.1);
     }
 
     .level-header.expanded .level-chevron {
@@ -224,8 +25,6 @@
 
     .level-content {
         display: none;
-        padding: 0 1.5rem 1.5rem;
-        border-top: 1px solid #e5e7eb;
     }
 
     .level-content.show {
@@ -238,91 +37,29 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
-    /* Section Cards */
-    .section-card {
-        background: #f9fafb;
-        border-radius: 0.75rem;
-        padding: 1.25rem;
-        margin-top: 1rem;
-    }
-
-    .section-title {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #374151;
-        margin-bottom: 1rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 1px solid #e5e7eb;
-    }
-
     /* Topic Cards */
     .topic-card {
-        background: white;
-        border: 1px solid #e5e7eb;
-        border-radius: 0.5rem;
+        border: 1px solid rgba(99, 102, 241, 0.1);
+        border-radius: 0.75rem;
         margin-bottom: 0.75rem;
         overflow: hidden;
-        transition: all 0.2s;
+        transition: all 0.3s;
+        background: white;
     }
 
     .topic-card:hover {
-        border-color: #667eea;
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-    }
-
-    .topic-card:last-child {
-        margin-bottom: 0;
-    }
-
-    .topic-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 1rem;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
-
-    .topic-header:hover {
-        background: #f9fafb;
-    }
-
-    .topic-name {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-weight: 500;
-        color: #374151;
-    }
-
-    .topic-icon {
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        border-radius: 0.5rem;
-        color: white;
-        font-size: 0.875rem;
-    }
-
-    .topic-arrow {
-        color: #9ca3af;
-        transition: transform 0.3s;
+        border-color: rgba(99, 102, 241, 0.3);
+        box-shadow: 0 4px 20px rgba(99, 102, 241, 0.1);
+        transform: translateY(-1px);
     }
 
     .topic-card.expanded .topic-arrow {
         transform: rotate(90deg);
-        color: #667eea;
+        color: var(--primary, #6366f1);
     }
 
     .topic-content {
         display: none;
-        padding: 0 1rem 1rem;
     }
 
     .topic-content.show {
@@ -335,100 +72,25 @@
         to { opacity: 1; }
     }
 
-    /* Subtopics */
-    .subtopic {
-        padding: 0.875rem 0;
-        border-top: 1px solid #f3f4f6;
-    }
-
-    .subtopic:first-child {
-        border-top: none;
-        padding-top: 0;
-    }
-
-    .subtopic-title {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #667eea;
-        margin-bottom: 0.5rem;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    .subtopic-title::before {
-        content: '';
-        width: 6px;
-        height: 6px;
-        background: #667eea;
-        border-radius: 50%;
-    }
-
     /* Links */
-    .links-list {
-        display: flex;
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
     .link-item {
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        padding: 0.75rem;
-        background: #f9fafb;
-        border: 1px solid #e5e7eb;
+        padding: 0.75rem 1rem;
         border-radius: 0.5rem;
         text-decoration: none;
-        transition: all 0.2s;
+        transition: all 0.25s;
+        border: 1px solid transparent;
     }
 
     .link-item:hover {
-        background: white;
-        border-color: #667eea;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+        border-color: rgba(99, 102, 241, 0.15);
         transform: translateX(4px);
-        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
-    }
-
-    .link-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.25rem;
-        padding: 0.25rem 0.5rem;
-        border-radius: 0.25rem;
-        font-size: 0.7rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        flex-shrink: 0;
-    }
-
-    .link-badge.doc {
-        background: rgba(59, 130, 246, 0.1);
-        color: #3b82f6;
-    }
-
-    .link-badge.video {
-        background: rgba(239, 68, 68, 0.1);
-        color: #ef4444;
-    }
-
-    .link-badge.code {
-        background: rgba(34, 197, 94, 0.1);
-        color: #22c55e;
-    }
-
-    .link-text {
-        flex: 1;
-        color: #4b5563;
-        font-size: 0.875rem;
-    }
-
-    .link-item:hover .link-text {
-        color: #1f2937;
     }
 
     .link-external {
-        color: #9ca3af;
         opacity: 0;
         transition: opacity 0.2s;
     }
@@ -442,30 +104,17 @@
         position: fixed;
         bottom: 1.5rem;
         right: 1.5rem;
-        background: white;
-        border: 1px solid #e5e7eb;
         border-radius: 1rem;
         padding: 1rem 1.25rem;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         z-index: 100;
         display: flex;
         align-items: center;
         gap: 1rem;
     }
 
-    .progress-circle {
-        width: 50px;
-        height: 50px;
-        position: relative;
-    }
-
-    .progress-circle svg {
-        transform: rotate(-90deg);
-    }
-
     .progress-circle-bg {
         fill: none;
-        stroke: #e5e7eb;
+        stroke: rgba(99, 102, 241, 0.15);
         stroke-width: 4;
     }
 
@@ -485,44 +134,11 @@
         left: 50%;
         transform: translate(-50%, -50%);
         font-size: 0.75rem;
-        font-weight: 600;
-        color: #374151;
-    }
-
-    .progress-info {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .progress-label {
-        font-size: 0.75rem;
-        color: #6b7280;
-    }
-
-    .progress-value {
-        font-size: 0.875rem;
-        font-weight: 600;
-        color: #1f2937;
+        font-weight: 700;
     }
 
     /* Responsive */
     @media (max-width: 768px) {
-        .hero-title {
-            font-size: 1.75rem;
-        }
-
-        .stats-row {
-            gap: 1.5rem;
-        }
-
-        .stat-value {
-            font-size: 1.5rem;
-        }
-
-        .filter-pills {
-            justify-content: center;
-        }
-
         .progress-tracker {
             bottom: 1rem;
             right: 1rem;
@@ -534,116 +150,147 @@
 {% endblock %}
 
 {% block body %}
-<div class="learning-container">
+<div class="learning-container py-8">
     <!-- Hero Section -->
-    <div class="hero-section">
-        <div class="hero-content">
-            <div class="hero-badge">
+    <div class="relative rounded-2xl overflow-hidden mb-10 animate-fade-in-up">
+        <div class="absolute inset-0 bg-gradient-to-br from-primary-600 via-violet-600 to-purple-700"></div>
+        <div class="absolute inset-0 opacity-10">
+            <svg width="100%" height="100%"><defs><pattern id="certPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="1.5" fill="white"/></pattern></defs><rect fill="url(#certPattern)" width="100%" height="100%"/></svg>
+        </div>
+        <!-- Floating orbs -->
+        <div class="absolute top-10 right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+        <div class="absolute bottom-10 left-20 w-24 h-24 bg-cyan-400/10 rounded-full blur-xl"></div>
+
+        <div class="relative z-10 px-8 py-12 text-center">
+            <div class="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm px-4 py-2 rounded-full text-sm text-white/90 mb-4">
                 <span>🚀</span>
                 <span>Symfony 7 Certification</span>
             </div>
-            <h1 class="hero-title">Learning Guide</h1>
-            <p class="hero-subtitle">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-3">
+                Learning Guide
+            </h1>
+            <p class="text-lg text-white/80 max-w-lg mx-auto mb-8">
                 All official resources to prepare and pass your Symfony certification
             </p>
             
-            <div class="stats-row">
-                <div class="stat-item">
-                    <div class="stat-value">3</div>
-                    <div class="stat-label">Levels</div>
+            <div class="flex justify-center gap-10">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white">3</div>
+                    <div class="text-sm text-white/70">Levels</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value">{{ curriculum|length > 0 ? curriculum[0].sections|length + curriculum[1].sections|length + curriculum[2].sections|length : 0 }}</div>
-                    <div class="stat-label">Modules</div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white">{{ curriculum|length > 0 ? curriculum[0].sections|length + curriculum[1].sections|length + curriculum[2].sections|length : 0 }}</div>
+                    <div class="text-sm text-white/70">Modules</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-value">100+</div>
-                    <div class="stat-label">Resources</div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-white">100+</div>
+                    <div class="text-sm text-white/70">Resources</div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Search -->
-    <div class="search-wrapper">
-        <i class="fas fa-search search-icon"></i>
-        <input type="text" class="search-input" id="searchInput" placeholder="Search a topic... (Forms, Routing, Twig, DI...)">
+    <div class="relative mb-6 animate-fade-in-up stagger-1">
+        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+        <input type="text" id="searchInput" placeholder="Search for a topic... (Forms, Routing, Twig, DI...)"
+               class="w-full pl-12 pr-4 py-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-xl text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent shadow-sm transition-all">
+        <div class="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+            Press <kbd class="font-mono">/</kbd> to search
+        </div>
     </div>
 
     <!-- Filter Pills -->
-    <div class="filter-pills">
-        <div class="filter-pill active" data-target="all">
+    <div class="flex gap-3 mb-8 flex-wrap animate-fade-in-up stagger-2">
+        <button class="filter-pill active inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer bg-gradient-to-r from-primary-500 to-violet-500 text-white shadow-md" data-target="all">
             <i class="fas fa-layer-group"></i>
-            <span>View All</span>
-        </div>
-        <div class="filter-pill" data-target="beginner">
-            <span class="filter-dot beginner"></span>
+            <span>View all</span>
+        </button>
+        <button class="filter-pill inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-emerald-400" data-target="beginner">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
             <span>Beginner</span>
-        </div>
-        <div class="filter-pill" data-target="intermediate">
-            <span class="filter-dot intermediate"></span>
+        </button>
+        <button class="filter-pill inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-amber-400" data-target="intermediate">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
             <span>Intermediate</span>
-        </div>
-        <div class="filter-pill" data-target="advanced">
-            <span class="filter-dot advanced"></span>
+        </button>
+        <button class="filter-pill inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all cursor-pointer bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-red-400" data-target="advanced">
+            <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
             <span>Advanced</span>
-        </div>
+        </button>
     </div>
 
     <!-- Levels -->
     {% for level in curriculum %}
-    <div class="level-card" data-level="{{ level.level|lower }}">
-        <div class="level-header {% if loop.first %}expanded{% endif %}" onclick="toggleLevel(this)">
-            <div class="level-info">
-                <div class="level-icon {{ level.level|lower }}">
+    <div class="level-card card-modern animate-fade-in-up stagger-{{ loop.index + 2 }}" data-level="{{ level.level|lower }}">
+        <div class="level-header flex items-center justify-between p-5 cursor-pointer hover:bg-gray-50/50 dark:hover:bg-gray-700/30 transition {% if loop.first %}expanded{% endif %}" onclick="toggleLevel(this)">
+            <div class="flex items-center gap-4">
+                <div class="w-14 h-14 flex items-center justify-center rounded-xl text-2xl
+                    {% if level.level|lower == 'beginner' %}bg-emerald-100 dark:bg-emerald-900/30
+                    {% elseif level.level|lower == 'intermediate' %}bg-amber-100 dark:bg-amber-900/30
+                    {% else %}bg-red-100 dark:bg-red-900/30{% endif %}">
                     {{ level.icon }}
                 </div>
                 <div>
-                    <div class="level-title">{{ level.level }}</div>
-                    <div class="level-count">{{ level.sections|length }} modules</div>
+                    <div class="text-xl font-bold text-gray-900 dark:text-white">{{ level.level }}</div>
+                    <div class="text-sm text-gray-500 dark:text-gray-400">{{ level.sections|length }} modules</div>
                 </div>
             </div>
-            <i class="fas fa-chevron-down level-chevron"></i>
+            <div class="flex items-center gap-3">
+                <span class="hidden sm:inline-flex items-center gap-1 text-xs font-medium px-3 py-1 rounded-full
+                    {% if level.level|lower == 'beginner' %}bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400
+                    {% elseif level.level|lower == 'intermediate' %}bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400
+                    {% else %}bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400{% endif %}">
+                    {% if level.level|lower == 'beginner' %}Fundamentals{% elseif level.level|lower == 'intermediate' %}Practice{% else %}Expert{% endif %}
+                </span>
+                <i class="fas fa-chevron-down level-chevron text-gray-400 transition-transform duration-300"></i>
+            </div>
         </div>
         
-        <div class="level-content {% if loop.first %}show{% endif %}">
+        <div class="level-content {% if loop.first %}show{% endif %} px-5 pb-5 border-t border-gray-100 dark:border-gray-700/50">
             {% for section in level.sections %}
-            <div class="section-card">
-                <h3 class="section-title">
-                    <i class="fas fa-book-open text-purple-500"></i>
+            <div class="mt-5 bg-gray-50/80 dark:bg-gray-800/50 rounded-xl p-5">
+                <h3 class="flex items-center gap-3 text-base font-bold text-gray-800 dark:text-gray-200 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
+                    <span class="w-8 h-8 flex items-center justify-center bg-gradient-to-br from-primary-500 to-violet-500 rounded-lg text-white text-sm">
+                        <i class="fas fa-book-open"></i>
+                    </span>
                     {{ section.title }}
                 </h3>
                 
                 {% for topic in section.topics %}
                 <div class="topic-card">
-                    <div class="topic-header" onclick="toggleTopic(this)">
-                        <div class="topic-name">
-                            <div class="topic-icon">
+                    <div class="topic-header flex items-center justify-between p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/30 transition" onclick="toggleTopic(this)">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 flex items-center justify-center bg-gradient-to-br from-primary-500 to-violet-500 rounded-lg text-white text-sm">
                                 <i class="fas fa-bookmark"></i>
                             </div>
-                            <span>{{ topic.name }}</span>
+                            <span class="font-medium text-gray-800 dark:text-gray-200">{{ topic.name }}</span>
                         </div>
-                        <i class="fas fa-chevron-right topic-arrow"></i>
+                        <i class="fas fa-chevron-right topic-arrow text-gray-400 transition-transform duration-300 text-sm"></i>
                     </div>
                     
-                    <div class="topic-content">
+                    <div class="topic-content px-4 pb-4">
                         {% for subtopic in topic.subtopics %}
-                        <div class="subtopic">
-                            <div class="subtopic-title">{{ subtopic.title }}</div>
-                            <div class="links-list">
+                        <div class="py-3 {{ not loop.first ? 'border-t border-gray-100 dark:border-gray-700/50' : '' }}">
+                            <div class="flex items-center gap-2 text-sm font-semibold text-primary-600 dark:text-primary-400 mb-3">
+                                <span class="w-1.5 h-1.5 rounded-full bg-primary-500"></span>
+                                {{ subtopic.title }}
+                            </div>
+                            <div class="flex flex-col gap-2">
                                 {% for link in subtopic.links %}
-                                <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" class="link-item">
-                                    <span class="link-badge {{ link.type }}">
-                                        {% if link.type == 'doc' %}
-                                            <i class="fas fa-book"></i> Doc
-                                        {% elseif link.type == 'video' %}
-                                            <i class="fas fa-play-circle"></i> Video
-                                        {% elseif link.type == 'code' %}
-                                            <i class="fas fa-code"></i> Code
+                                <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer" class="link-item group">
+                                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded text-[0.65rem] font-bold uppercase tracking-wider flex-shrink-0
+                                        {% if link.type == 'doc' %}bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400
+                                        {% elseif link.type == 'video' %}bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400
+                                        {% elseif link.type == 'code' %}bg-emerald-100 text-emerald-600 dark:bg-emerald-900/30 dark:text-emerald-400
+                                        {% endif %}">
+                                        {% if link.type == 'doc' %}<i class="fas fa-book"></i> Doc
+                                        {% elseif link.type == 'video' %}<i class="fas fa-play-circle"></i> Video
+                                        {% elseif link.type == 'code' %}<i class="fas fa-code"></i> Code
                                         {% endif %}
                                     </span>
-                                    <span class="link-text">{{ link.title }}</span>
-                                    <i class="fas fa-external-link-alt link-external"></i>
+                                    <span class="flex-1 text-sm text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors">{{ link.title }}</span>
+                                    <i class="fas fa-external-link-alt link-external text-gray-400 text-xs"></i>
                                 </a>
                                 {% endfor %}
                             </div>
@@ -660,23 +307,23 @@
 </div>
 
 <!-- Progress Tracker -->
-<div class="progress-tracker">
-    <div class="progress-circle">
-        <svg width="50" height="50" viewBox="0 0 50 50">
+<div class="progress-tracker glass shadow-glass">
+    <div class="relative w-[50px] h-[50px]">
+        <svg width="50" height="50" viewBox="0 0 50 50" style="transform: rotate(-90deg)">
             <defs>
                 <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stop-color="#667eea"/>
-                    <stop offset="100%" stop-color="#764ba2"/>
+                    <stop offset="0%" stop-color="#6366f1"/>
+                    <stop offset="100%" stop-color="#8b5cf6"/>
                 </linearGradient>
             </defs>
             <circle class="progress-circle-bg" cx="25" cy="25" r="20"/>
             <circle class="progress-circle-fill" cx="25" cy="25" r="20" id="progressCircle"/>
         </svg>
-        <span class="progress-text" id="progressPercent">0%</span>
+        <span class="progress-text text-gray-800 dark:text-white" id="progressPercent">0%</span>
     </div>
-    <div class="progress-info">
-        <span class="progress-label">Topics explored</span>
-        <span class="progress-value" id="progressCount">0 / 0</span>
+    <div class="flex flex-col">
+        <span class="text-xs text-gray-500 dark:text-gray-400">Topics explored</span>
+        <span class="text-sm font-bold text-gray-900 dark:text-white" id="progressCount">0 / 0</span>
     </div>
 </div>
 {% endblock %}
@@ -703,8 +350,17 @@ document.querySelectorAll('.filter-pill').forEach(pill => {
     pill.addEventListener('click', function() {
         const target = this.dataset.target;
         
-        document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.filter-pill').forEach(p => {
+            p.classList.remove('active');
+            p.className = p.className.replace(/bg-gradient-to-r from-primary-500 to-violet-500 text-white shadow-md/g, '');
+            if (!p.classList.contains('bg-white')) {
+                p.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-300', 'border', 'border-gray-200', 'dark:border-gray-700');
+            }
+        });
+        
         this.classList.add('active');
+        this.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-300', 'border', 'border-gray-200', 'dark:border-gray-700');
+        this.classList.add('bg-gradient-to-r', 'from-primary-500', 'to-violet-500', 'text-white', 'shadow-md');
         
         document.querySelectorAll('.level-card').forEach(card => {
             if (target === 'all' || card.dataset.level === target) {
@@ -736,7 +392,7 @@ document.getElementById('searchInput').addEventListener('input', function(e) {
         }
     });
     
-    document.querySelectorAll('.section-card').forEach(section => {
+    document.querySelectorAll('.level-content > div').forEach(section => {
         const visibleTopics = section.querySelectorAll('.topic-card');
         const hasVisible = Array.from(visibleTopics).some(t => window.getComputedStyle(t).display !== 'none');
         section.style.display = hasVisible || term.length === 0 ? 'block' : 'none';
@@ -768,6 +424,7 @@ document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
         document.getElementById('searchInput').value = '';
         document.getElementById('searchInput').dispatchEvent(new Event('input'));
+        document.getElementById('searchInput').blur();
     }
 });
 </script>

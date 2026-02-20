@@ -5,101 +5,93 @@
 {% block body %}
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Progress Bar -->
-    <div class="bg-white rounded-xl shadow p-4 mb-6">
+    <div class="card-modern p-4 mb-5 animate-fade-in-down">
         <div class="flex items-center justify-between mb-2">
-            <span class="text-sm font-medium text-gray-600">
-                Question {{ questionNumber }} of {{ session.totalQuestions }}
+            <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Question {{ questionNumber }} / {{ session.totalQuestions }}
             </span>
-            <span class="text-sm font-medium text-gray-600">
-                {{ progress.percentage|number_format(0) }}% Complete
+            <span class="text-xs font-bold text-primary-600 bg-primary-50 px-2.5 py-1 rounded-lg">
+                {{ progress.percentage|number_format(0) }}%
             </span>
         </div>
-        <div class="w-full bg-gray-200 rounded-full h-3">
-            <div class="bg-indigo-600 h-3 rounded-full progress-bar" 
+        <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+            <div class="bg-gradient-to-r from-primary-500 to-accent-500 h-2.5 rounded-full progress-bar progress-shimmer" 
                  style="width: {{ progress.percentage }}%"></div>
         </div>
-        <div class="flex justify-between mt-2 text-xs text-gray-500">
-            <span>
-                <i class="fas fa-check-circle text-green-500 mr-1"></i>
+        <div class="flex justify-between mt-2.5 text-xs text-gray-400 font-medium">
+            <span class="flex items-center gap-1">
+                <span class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
                 {{ session.correctAnswers }} correct
             </span>
-            <span>
-                <i class="fas fa-times-circle text-red-500 mr-1"></i>
+            <span class="flex items-center gap-1">
+                <span class="w-1.5 h-1.5 bg-red-400 rounded-full"></span>
                 {{ session.incorrectAnswers }} incorrect
             </span>
-            <span>
-                <i class="fas fa-clock text-gray-400 mr-1"></i>
+            <span class="flex items-center gap-1">
+                <i class="fas fa-clock text-gray-300"></i>
                 Total: <span id="quiz-timer">{{ quizElapsedTime }}</span>s
             </span>
-            <span>
-                <i class="fas fa-stopwatch text-indigo-400 mr-1"></i>
-                Question: <span id="question-timer">{{ questionElapsedTime }}</span>s
+            <span class="flex items-center gap-1">
+                <i class="fas fa-stopwatch text-primary-300"></i>
+                Q: <span id="question-timer">{{ questionElapsedTime }}</span>s
             </span>
         </div>
     </div>
 
     <!-- Session Info -->
-    <div class="flex items-center justify-between mb-6">
-        <div class="flex items-center space-x-2">
+    <div class="flex items-center justify-between mb-5 animate-fade-in-up">
+        <div class="flex items-center gap-2 flex-wrap">
             {% if session.mode == 'certification' %}
-            <span class="bg-amber-100 text-amber-800 px-3 py-1 rounded-full text-sm font-semibold">
-                <i class="fas fa-certificate mr-1"></i> Certification Exam
+            <span class="inline-flex items-center gap-1 bg-amber-50 text-amber-700 px-3 py-1 rounded-lg text-xs font-bold">
+                <i class="fas fa-certificate"></i> Certification Exam
             </span>
             {% endif %}
             {% if session.category %}
-            <span class="bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm font-medium">
-                {{ session.category.name }}
-            </span>
+            <span class="bg-primary-50 text-primary-700 px-2.5 py-1 rounded-lg text-xs font-semibold">{{ session.category.name }}</span>
             {% endif %}
             {% if session.subcategory %}
-            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
-                {{ session.subcategory.name }}
-            </span>
+            <span class="bg-violet-50 text-violet-700 px-2.5 py-1 rounded-lg text-xs font-semibold">{{ session.subcategory.name }}</span>
             {% endif %}
         </div>
         <form action="{{ path('quiz_abandon') }}" method="post" class="inline">
-            <button type="submit" 
-                    class="text-gray-400 hover:text-red-500 text-sm"
-                    onclick="return confirm('Are you sure you want to abandon this quiz?')">
-                <i class="fas fa-times mr-1"></i> Abandon
+            <button type="submit" class="text-gray-300 hover:text-red-500 text-xs font-medium transition-colors flex items-center gap-1"
+                    onclick="return confirm('Abandon this quiz?')">
+                <i class="fas fa-times"></i> Abandon
             </button>
         </form>
     </div>
 
     <!-- Question Card -->
-    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+    <div class="card-modern overflow-hidden animate-scale-in">
         <!-- Question Header -->
-        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4">
+        <div class="bg-gradient-to-r from-primary-600 via-violet-600 to-purple-600 px-6 py-3.5">
             <div class="flex items-center justify-between text-white">
-                <span class="font-semibold">
+                <span class="font-semibold text-sm flex items-center gap-2">
                     {% if question.type == 'single_choice' %}
-                        <i class="far fa-circle-dot mr-2"></i> Single Choice
+                        <i class="far fa-circle-dot"></i> Single choice
                     {% elseif question.type == 'multiple_choice' %}
-                        <i class="far fa-square-check mr-2"></i> Multiple Choice
+                        <i class="far fa-square-check"></i> Multiple choice
                     {% else %}
-                        <i class="fas fa-toggle-on mr-2"></i> True / False
+                        <i class="fas fa-toggle-on"></i> True / False
                     {% endif %}
                 </span>
-                <div class="flex items-center space-x-3">
+                <div class="flex items-center gap-2">
                     <button type="button" onclick="toggleQuestionActive({{ question.id }})" 
                             id="toggle-active-btn"
-                            class="{{ question.isActive ? 'bg-green-500/80 hover:bg-red-500/80' : 'bg-red-500/80 hover:bg-green-500/80' }} px-3 py-1 rounded-full text-sm transition"
-                            title="{{ question.isActive ? 'Click to deactivate this question' : 'Click to activate this question' }}">
-                        <i class="fas {{ question.isActive ? 'fa-eye' : 'fa-eye-slash' }} mr-1" id="toggle-active-icon"></i>
+                            class="{{ question.isActive ? 'bg-emerald-500/30 hover:bg-red-500/30' : 'bg-red-500/30 hover:bg-emerald-500/30' }} px-2.5 py-1 rounded-lg text-xs transition-all"
+                            title="{{ question.isActive ? 'Deactivate' : 'Activate' }}">
+                        <i class="fas {{ question.isActive ? 'fa-eye' : 'fa-eye-slash' }}" id="toggle-active-icon"></i>
                         <span id="toggle-active-text">{{ question.isActive ? 'Active' : 'Inactive' }}</span>
                     </button>
                     <button type="button" onclick="openReportModal()" 
-                            class="bg-red-500/80 hover:bg-red-600/80 px-3 py-1 rounded-full text-sm transition"
-                            title="Report an issue with this question">
-                        <i class="fas fa-flag mr-1"></i> Report
+                            class="bg-white/10 hover:bg-red-500/30 px-2.5 py-1 rounded-lg text-xs transition-all">
+                        <i class="fas fa-flag"></i>
                     </button>
                     <button type="button" onclick="openEditModal()" 
-                            class="bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full text-sm transition"
-                            title="Edit question or answers">
-                        <i class="fas fa-edit mr-1"></i> Edit
+                            class="bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded-lg text-xs transition-all">
+                        <i class="fas fa-edit"></i>
                     </button>
-                    <span class="bg-white/20 px-3 py-1 rounded-full text-sm">
-                        Difficulty: 
+                    <span class="bg-white/10 px-2.5 py-1 rounded-lg text-xs">
                         {% for i in 1..question.difficulty %}⭐{% endfor %}
                     </span>
                 </div>
@@ -109,33 +101,31 @@
         <!-- Question Body -->
         <form action="{{ path('quiz_submit') }}" method="post" id="quiz-form">
             <div class="p-6 md:p-8">
-                <!-- Question Text -->
                 <div class="mb-8 question-text">
-                    <h2 class="text-xl md:text-2xl font-semibold text-gray-800 leading-relaxed">
+                    <h2 class="text-lg md:text-xl font-bold text-gray-800 leading-relaxed">
                         {{ question.text|format_code }}
                     </h2>
                     {% if question.type == 'multiple_choice' %}
-                    <p class="text-gray-500 text-sm mt-2">
-                        <i class="fas fa-info-circle mr-1"></i> Select all correct answers
+                    <p class="text-gray-400 text-xs mt-3 flex items-center gap-1.5 bg-gray-50 px-3 py-2 rounded-lg w-fit">
+                        <i class="fas fa-info-circle text-primary-400"></i> Select all correct answers
                     </p>
                     {% endif %}
                 </div>
 
-                <!-- Answers -->
                 <div class="space-y-3">
                     {% for answer in answers %}
                     <label class="block cursor-pointer group">
-                        <div class="flex items-center p-4 border-2 rounded-xl transition
-                                    hover:border-indigo-400 hover:bg-indigo-50
-                                    has-[:checked]:border-indigo-600 has-[:checked]:bg-indigo-50">
+                        <div class="flex items-start p-4 border-2 border-gray-100 rounded-xl transition-all duration-200
+                                    hover:border-primary-300 hover:bg-primary-50/30
+                                    has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50 has-[:checked]:shadow-sm">
                             {% if question.type == 'multiple_choice' %}
                             <input type="checkbox" name="answers[]" value="{{ answer.id }}" 
-                                   class="w-5 h-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 mr-4">
+                                   class="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-primary-500/20 mr-4 mt-0.5">
                             {% else %}
                             <input type="radio" name="answers[]" value="{{ answer.id }}" 
-                                   class="w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500 mr-4">
+                                   class="w-5 h-5 text-primary-600 border-gray-300 focus:ring-primary-500/20 mr-4 mt-0.5">
                             {% endif %}
-                            <span class="text-gray-700 group-hover:text-gray-900 answer-text">
+                            <span class="text-gray-600 group-hover:text-gray-800 answer-text leading-relaxed text-sm">
                                 {{ answer.text|format_code }}
                             </span>
                         </div>
@@ -144,163 +134,130 @@
                 </div>
             </div>
 
-            <!-- Submit Button -->
-            <div class="bg-gray-50 px-6 py-4 flex justify-between items-center">
-                <span class="text-gray-500 text-sm">
-                    <i class="fas fa-lightbulb text-yellow-500 mr-1"></i>
-                    Take your time to read the question carefully
+            <!-- Submit -->
+            <div class="bg-gray-50/80 px-6 py-4 flex justify-between items-center border-t border-gray-100">
+                <span class="text-gray-400 text-xs flex items-center gap-1.5">
+                    <i class="fas fa-lightbulb text-amber-400"></i>
+                    Take time to read the question carefully
                 </span>
                 <button type="submit" id="submit-btn"
-                        class="bg-indigo-600 text-white px-8 py-3 rounded-xl font-semibold
-                               hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition
-                               disabled:opacity-50 disabled:cursor-not-allowed">
-                    Submit Answer <i class="fas fa-arrow-right ml-2"></i>
+                        class="bg-gradient-to-r from-primary-500 to-primary-600 text-white px-7 py-3 rounded-xl font-bold text-sm
+                               hover:from-primary-600 hover:to-primary-700 focus:ring-4 focus:ring-primary-500/20 transition-all duration-300
+                               shadow-lg shadow-primary-500/20 hover:shadow-primary-500/35 hover:-translate-y-0.5
+                               disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0
+                               flex items-center gap-2">
+                    Submit <i class="fas fa-arrow-right text-xs"></i>
                 </button>
             </div>
         </form>
     </div>
 
     <!-- Keyboard Shortcuts -->
-    <div class="text-center mt-4 text-gray-400 text-sm">
-        <i class="fas fa-keyboard mr-1"></i>
-        Press <kbd class="bg-gray-200 px-2 py-1 rounded">1-4</kbd> to select, 
-        <kbd class="bg-gray-200 px-2 py-1 rounded">Enter</kbd> to submit
+    <div class="text-center mt-4 text-gray-300 text-xs flex items-center justify-center gap-2">
+        <i class="fas fa-keyboard"></i>
+        <kbd class="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded text-[10px] font-mono">1-4</kbd> select
+        <kbd class="bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded text-[10px] font-mono">Enter</kbd> submit
     </div>
 </div>
 
 <!-- Report Modal -->
-<div id="report-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg">
-        <div class="bg-gradient-to-r from-red-500 to-orange-500 px-6 py-4 flex justify-between items-center">
-            <h3 class="text-xl font-bold text-white">
-                <i class="fas fa-flag mr-2"></i> Report Question
+<div id="report-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg animate-scale-in">
+        <div class="bg-gradient-to-r from-red-500 to-orange-500 px-6 py-4 rounded-t-2xl flex justify-between items-center">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fas fa-flag"></i> Report an issue
             </h3>
-            <button onclick="closeReportModal()" class="text-white/80 hover:text-white">
-                <i class="fas fa-times text-xl"></i>
+            <button onclick="closeReportModal()" class="text-white/70 hover:text-white transition w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center">
+                <i class="fas fa-times"></i>
             </button>
         </div>
         <div class="p-6 space-y-4">
-            <p class="text-gray-600 text-sm">
-                <i class="fas fa-info-circle text-blue-500 mr-1"></i>
-                Found an issue with this question? Let us know so we can fix it.
-            </p>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Issue Type</label>
-                <select id="report-type" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 text-sm">
-                    <option value="">Select an issue type...</option>
-                    <option value="wrong_answer">🔴 Wrong Answer - The correct answer is marked incorrectly</option>
-                    <option value="typo">✏️ Typo / Grammar - There's a spelling or grammar error</option>
-                    <option value="unclear">❓ Unclear Question - The question is confusing or ambiguous</option>
-                    <option value="duplicate">📋 Duplicate Question - This question appears more than once</option>
-                    <option value="outdated">📅 Outdated Content - Information is no longer current</option>
-                    <option value="other">💬 Other - Something else</option>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Issue type</label>
+                <select id="report-type" class="w-full border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-500">
+                    <option value="">Select...</option>
+                    <option value="wrong_answer">🔴 Wrong answer</option>
+                    <option value="typo">✏️ Typo / Grammar</option>
+                    <option value="unclear">❓ Unclear question</option>
+                    <option value="duplicate">📋 Duplicate question</option>
+                    <option value="outdated">📅 Outdated content</option>
+                    <option value="other">💬 Other</option>
                 </select>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                <textarea id="report-message" rows="4" 
-                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-red-500 focus:border-red-500 text-sm"
-                    placeholder="Please describe the issue in detail. For example: 'The answer marked as correct is actually wrong because...'"></textarea>
-                <p class="text-xs text-gray-400 mt-1">Minimum 10 characters</p>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+                <textarea id="report-message" rows="3" 
+                    class="w-full border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-red-500/20 focus:border-red-500"
+                    placeholder="Describe the issue..."></textarea>
             </div>
-            <div id="report-feedback" class="hidden rounded-lg p-3 text-sm"></div>
+            <div id="report-feedback" class="hidden rounded-xl p-3 text-sm"></div>
         </div>
-        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
-            <button onclick="closeReportModal()" 
-                class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition">
-                Cancel
-            </button>
+        <div class="bg-gray-50 px-6 py-4 rounded-b-2xl flex justify-end gap-2">
+            <button onclick="closeReportModal()" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition">Cancel</button>
             <button onclick="submitReport()" id="report-submit-btn"
-                class="bg-red-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-red-700 transition">
-                <i class="fas fa-paper-plane mr-1"></i> Submit Report
+                class="bg-red-600 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-red-700 transition shadow-lg shadow-red-500/20">
+                <i class="fas fa-paper-plane mr-1"></i> Send
             </button>
         </div>
     </div>
 </div>
 
 <!-- Edit Modal -->
-<div id="edit-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-        <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-6 py-4 flex justify-between items-center">
-            <h3 class="text-xl font-bold text-white">
-                <i class="fas fa-edit mr-2"></i> Edit Question & Answers
+<div id="edit-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-3xl max-h-[90vh] overflow-y-auto animate-scale-in">
+        <div class="bg-gradient-to-r from-primary-600 to-violet-600 px-6 py-4 rounded-t-2xl flex justify-between items-center sticky top-0 z-10">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i class="fas fa-edit"></i> Edit question
             </h3>
-            <button onclick="closeEditModal()" class="text-white/80 hover:text-white">
-                <i class="fas fa-times text-xl"></i>
+            <button onclick="closeEditModal()" class="text-white/70 hover:text-white transition w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center">
+                <i class="fas fa-times"></i>
             </button>
         </div>
         
-        <div class="p-6 space-y-6">
-            <!-- Question Text -->
+        <div class="p-6 space-y-5">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-question-circle text-indigo-600 mr-1"></i> Question Text
-                </label>
-                <textarea id="edit-question-text" rows="4" 
-                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm">{{ question.text }}</textarea>
-                <button onclick="saveQuestion()" 
-                    class="mt-2 bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700 transition">
-                    <i class="fas fa-save mr-1"></i> Save Question
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Question text</label>
+                <textarea id="edit-question-text" rows="3" class="w-full border-gray-200 rounded-xl text-sm font-mono focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500">{{ question.text }}</textarea>
+                <button onclick="saveQuestion()" class="mt-2 bg-primary-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-700 transition">
+                    <i class="fas fa-save mr-1"></i> Save
                 </button>
             </div>
             
-            <!-- Explanation -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-lightbulb text-yellow-500 mr-1"></i> Explanation (shown after answer)
-                </label>
-                <textarea id="edit-explanation-text" rows="2" 
-                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm">{{ question.explanation }}</textarea>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Explanation</label>
+                <textarea id="edit-explanation-text" rows="2" class="w-full border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500">{{ question.explanation }}</textarea>
             </div>
             
-            <!-- Resource URL -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-2">
-                    <i class="fas fa-book-open text-purple-500 mr-1"></i> Learn More URLs (optional)
-                    <span class="text-gray-400 font-normal ml-1">- separate multiple URLs with commas</span>
-                </label>
-                <textarea id="edit-resource-url" rows="2"
-                    class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm"
-                    placeholder="https://symfony.com/doc/..., https://php.net/...">{{ question.resourceUrl }}</textarea>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Resource URLs</label>
+                <textarea id="edit-resource-url" rows="2" class="w-full border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500" placeholder="https://...">{{ question.resourceUrl }}</textarea>
             </div>
             
-            <!-- Answers -->
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-3">
-                    <i class="fas fa-list text-indigo-600 mr-1"></i> Answers
-                </label>
-                <div class="space-y-3" id="edit-answers-container">
+                <label class="block text-sm font-semibold text-gray-700 mb-3">Answers</label>
+                <div class="space-y-2.5">
                     {% for answer in answers %}
-                    <div class="flex items-start space-x-3 p-3 border rounded-lg {{ answer.isCorrect ? 'bg-green-50 border-green-200' : 'bg-gray-50 border-gray-200' }}">
+                    <div class="flex items-start gap-3 p-3 border border-gray-100 rounded-xl {{ answer.isCorrect ? 'bg-emerald-50/50 border-emerald-200' : '' }}">
                         <div class="flex-shrink-0 pt-2">
                             <input type="checkbox" id="correct-{{ answer.id }}" {{ answer.isCorrect ? 'checked' : '' }}
-                                class="w-5 h-5 text-green-600 border-gray-300 rounded focus:ring-green-500">
+                                class="w-5 h-5 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500/20">
                         </div>
                         <div class="flex-1">
-                            <textarea id="answer-{{ answer.id }}" rows="2" 
-                                class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 font-mono text-sm">{{ answer.text }}</textarea>
+                            <textarea id="answer-{{ answer.id }}" rows="2" class="w-full border-gray-200 rounded-lg text-sm font-mono focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500">{{ answer.text }}</textarea>
                         </div>
-                        <button onclick="saveAnswer({{ answer.id }})" 
-                            class="flex-shrink-0 bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-300 transition">
+                        <button onclick="saveAnswer({{ answer.id }})" class="flex-shrink-0 bg-gray-100 text-gray-600 px-3 py-2 rounded-lg text-sm hover:bg-gray-200 transition">
                             <i class="fas fa-save"></i>
                         </button>
                     </div>
                     {% endfor %}
                 </div>
-                <p class="text-xs text-gray-500 mt-2">
-                    <i class="fas fa-info-circle mr-1"></i> Check the box to mark an answer as correct. Changes are saved individually.
-                </p>
             </div>
         </div>
         
-        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
-            <button onclick="closeEditModal()" 
-                class="bg-gray-200 text-gray-700 px-6 py-2 rounded-lg font-medium hover:bg-gray-300 transition">
-                Close
-            </button>
-            <button onclick="location.reload()" 
-                class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 transition">
-                <i class="fas fa-sync mr-1"></i> Refresh Page
+        <div class="bg-gray-50 px-6 py-4 rounded-b-2xl flex justify-end gap-2 sticky bottom-0">
+            <button onclick="closeEditModal()" class="px-4 py-2 rounded-xl text-sm font-medium text-gray-600 hover:bg-gray-100 transition">Close</button>
+            <button onclick="location.reload()" class="bg-primary-600 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-primary-700 transition">
+                <i class="fas fa-sync mr-1"></i> Refresh
             </button>
         </div>
     </div>
@@ -313,23 +270,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('quiz-form');
     const submitBtn = document.getElementById('submit-btn');
     const answers = document.querySelectorAll('input[name="answers"], input[name="answers[]"]');
-    
-    // Timer elements
     const quizTimerEl = document.getElementById('quiz-timer');
     const questionTimerEl = document.getElementById('question-timer');
-    
-    // Initial times from server
     let quizElapsed = {{ quizElapsedTime }};
     let questionElapsed = {{ questionElapsedTime }};
     
-    // Format time as mm:ss
     function formatTime(seconds) {
         const mins = Math.floor(seconds / 60);
         const secs = seconds % 60;
         return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
     }
     
-    // Update timers every second
     setInterval(function() {
         quizElapsed++;
         questionElapsed++;
@@ -337,234 +288,93 @@ document.addEventListener('DOMContentLoaded', function() {
         questionTimerEl.textContent = formatTime(questionElapsed);
     }, 1000);
 
-    // Keyboard shortcuts
     document.addEventListener('keydown', function(e) {
         const key = parseInt(e.key);
         if (key >= 1 && key <= answers.length) {
             const answer = answers[key - 1];
-            if (answer.type === 'radio') {
-                answer.checked = true;
-            } else {
-                answer.checked = !answer.checked;
-            }
+            answer.checked = answer.type === 'radio' ? true : !answer.checked;
         }
-        
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            form.submit();
-        }
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); form.submit(); }
     });
 
-    // Prevent double submission
     form.addEventListener('submit', function() {
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Submitting...';
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending...';
     });
 });
 
-// Edit Modal Functions
 const editModal = document.getElementById('edit-modal');
+const reportModal = document.getElementById('report-modal');
 const questionId = {{ question.id }};
 
-function openEditModal() {
-    editModal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-}
+function openEditModal() { editModal.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+function closeEditModal() { editModal.classList.add('hidden'); document.body.style.overflow = ''; }
+function openReportModal() { reportModal.classList.remove('hidden'); document.body.style.overflow = 'hidden'; document.getElementById('report-type').value = ''; document.getElementById('report-message').value = ''; document.getElementById('report-feedback').classList.add('hidden'); }
+function closeReportModal() { reportModal.classList.add('hidden'); document.body.style.overflow = ''; }
 
-function closeEditModal() {
-    editModal.classList.add('hidden');
-    document.body.style.overflow = '';
-}
-
-// Close modal on escape key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && !editModal.classList.contains('hidden')) {
-        closeEditModal();
-    }
-});
-
-// Close modal on backdrop click
-editModal.addEventListener('click', function(e) {
-    if (e.target === editModal) {
-        closeEditModal();
-    }
-});
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { closeEditModal(); closeReportModal(); } });
+editModal.addEventListener('click', function(e) { if (e.target === editModal) closeEditModal(); });
+reportModal.addEventListener('click', function(e) { if (e.target === reportModal) closeReportModal(); });
 
 async function saveQuestion() {
     const text = document.getElementById('edit-question-text').value;
     const explanation = document.getElementById('edit-explanation-text').value;
     const resourceUrl = document.getElementById('edit-resource-url').value;
-    
     try {
-        const response = await fetch(`/api/question/${questionId}/edit`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, explanation, resourceUrl })
-        });
-        
+        const response = await fetch(`/api/question/${questionId}/edit`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, explanation, resourceUrl }) });
         const data = await response.json();
-        
-        if (data.success) {
-            showNotification('Question saved successfully!', 'success');
-        } else {
-            showNotification(data.error || 'Failed to save question', 'error');
-        }
-    } catch (error) {
-        showNotification('Error saving question', 'error');
-        console.error(error);
-    }
+        showNotification(data.success ? 'Question saved!' : (data.error || 'Error'), data.success ? 'success' : 'error');
+    } catch (error) { showNotification('Save error', 'error'); }
 }
 
 async function saveAnswer(answerId) {
     const text = document.getElementById(`answer-${answerId}`).value;
     const isCorrect = document.getElementById(`correct-${answerId}`).checked;
-    
     try {
-        const response = await fetch(`/api/answer/${answerId}/edit`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text, isCorrect })
-        });
-        
+        const response = await fetch(`/api/answer/${answerId}/edit`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text, isCorrect }) });
         const data = await response.json();
-        
-        if (data.success) {
-            showNotification('Answer saved successfully!', 'success');
-        } else {
-            showNotification(data.error || 'Failed to save answer', 'error');
-        }
-    } catch (error) {
-        showNotification('Error saving answer', 'error');
-        console.error(error);
-    }
+        showNotification(data.success ? 'Answer saved!' : (data.error || 'Error'), data.success ? 'success' : 'error');
+    } catch (error) { showNotification('Save error', 'error'); }
 }
-
-function showNotification(message, type) {
-    const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 text-white font-medium ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
-    notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>${message}`;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
-}
-
-// Report Modal Functions
-const reportModal = document.getElementById('report-modal');
-
-function openReportModal() {
-    reportModal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-    // Reset form
-    document.getElementById('report-type').value = '';
-    document.getElementById('report-message').value = '';
-    document.getElementById('report-feedback').classList.add('hidden');
-    document.getElementById('report-submit-btn').disabled = false;
-    document.getElementById('report-submit-btn').innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Submit Report';
-}
-
-function closeReportModal() {
-    reportModal.classList.add('hidden');
-    document.body.style.overflow = '';
-}
-
-reportModal.addEventListener('click', function(e) {
-    if (e.target === reportModal) closeReportModal();
-});
 
 async function submitReport() {
     const type = document.getElementById('report-type').value;
     const message = document.getElementById('report-message').value;
     const feedback = document.getElementById('report-feedback');
     const submitBtn = document.getElementById('report-submit-btn');
-
-    if (!type) {
-        feedback.className = 'rounded-lg p-3 text-sm bg-red-50 text-red-700 border border-red-200';
-        feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Please select an issue type.';
-        feedback.classList.remove('hidden');
-        return;
-    }
-
-    if (message.trim().length < 10) {
-        feedback.className = 'rounded-lg p-3 text-sm bg-red-50 text-red-700 border border-red-200';
-        feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Please provide a more detailed description (at least 10 characters).';
-        feedback.classList.remove('hidden');
-        return;
-    }
-
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Submitting...';
-
+    if (!type) { feedback.className = 'rounded-xl p-3 text-sm bg-red-50 text-red-700'; feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Select a type.'; feedback.classList.remove('hidden'); return; }
+    if (message.trim().length < 10) { feedback.className = 'rounded-xl p-3 text-sm bg-red-50 text-red-700'; feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Description too short (min 10 chars)'; feedback.classList.remove('hidden'); return; }
+    submitBtn.disabled = true; submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> Sending...';
     try {
-        const response = await fetch(`/api/question/${questionId}/report`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ type, message })
-        });
-
+        const response = await fetch(`/api/question/${questionId}/report`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ type, message }) });
         const data = await response.json();
-
-        if (data.success) {
-            feedback.className = 'rounded-lg p-3 text-sm bg-green-50 text-green-700 border border-green-200';
-            feedback.innerHTML = '<i class="fas fa-check-circle mr-1"></i> ' + data.message;
-            feedback.classList.remove('hidden');
-            showNotification('Report submitted successfully!', 'success');
-            setTimeout(() => closeReportModal(), 2000);
-        } else {
-            feedback.className = 'rounded-lg p-3 text-sm bg-red-50 text-red-700 border border-red-200';
-            feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> ' + (data.error || 'Failed to submit report');
-            feedback.classList.remove('hidden');
-            submitBtn.disabled = false;
-            submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Submit Report';
-        }
-    } catch (error) {
-        feedback.className = 'rounded-lg p-3 text-sm bg-red-50 text-red-700 border border-red-200';
-        feedback.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> Error submitting report. Please try again.';
-        feedback.classList.remove('hidden');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Submit Report';
-    }
+        if (data.success) { showNotification('Report sent!', 'success'); setTimeout(() => closeReportModal(), 1500); }
+        else { feedback.className = 'rounded-xl p-3 text-sm bg-red-50 text-red-700'; feedback.innerHTML = data.error || 'Error'; feedback.classList.remove('hidden'); submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Send'; }
+    } catch (error) { submitBtn.disabled = false; submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-1"></i> Send'; }
 }
 
 async function toggleQuestionActive(questionId) {
     try {
-        const response = await fetch(`/api/question/${questionId}/toggle-active`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-        
+        const response = await fetch(`/api/question/${questionId}/toggle-active`, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
         const data = await response.json();
-        
         if (data.success) {
             const btn = document.getElementById('toggle-active-btn');
             const icon = document.getElementById('toggle-active-icon');
             const text = document.getElementById('toggle-active-text');
-            
-            if (data.isActive) {
-                btn.classList.remove('bg-red-500/80', 'hover:bg-green-500/80');
-                btn.classList.add('bg-green-500/80', 'hover:bg-red-500/80');
-                btn.title = 'Click to deactivate this question';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-                text.textContent = 'Active';
-            } else {
-                btn.classList.remove('bg-green-500/80', 'hover:bg-red-500/80');
-                btn.classList.add('bg-red-500/80', 'hover:bg-green-500/80');
-                btn.title = 'Click to activate this question';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-                text.textContent = 'Inactive';
-            }
-            
+            if (data.isActive) { btn.className = 'bg-emerald-500/30 hover:bg-red-500/30 px-2.5 py-1 rounded-lg text-xs transition-all'; icon.className = 'fas fa-eye'; text.textContent = 'Active'; }
+            else { btn.className = 'bg-red-500/30 hover:bg-emerald-500/30 px-2.5 py-1 rounded-lg text-xs transition-all'; icon.className = 'fas fa-eye-slash'; text.textContent = 'Inactive'; }
             showNotification(data.message, 'success');
-        } else {
-            showNotification('Failed to toggle question status', 'error');
         }
-    } catch (error) {
-        showNotification('Error toggling question status', 'error');
-        console.error(error);
-    }
+    } catch (error) { showNotification('Error', 'error'); }
+}
+
+function showNotification(message, type) {
+    const n = document.createElement('div');
+    n.className = `fixed top-4 right-4 px-5 py-3 rounded-xl shadow-2xl z-[100] text-white font-medium text-sm backdrop-blur-sm ${type === 'success' ? 'bg-emerald-600/95' : 'bg-red-600/95'}`;
+    n.style.animation = 'fadeInUp 0.3s ease-out';
+    n.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>${message}`;
+    document.body.appendChild(n);
+    setTimeout(() => { n.style.opacity = '0'; n.style.transition = 'opacity 0.3s'; setTimeout(() => n.remove(), 300); }, 3000);
 }
 </script>
 {% endblock %}

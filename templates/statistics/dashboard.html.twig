@@ -1,198 +1,170 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Statistics Dashboard - Symfony & PHP Quiz Trainer{% endblock %}
+{% block title %}Dashboard - Quiz Trainer{% endblock %}
 
 {% block body %}
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- Header -->
-    <div class="mb-8">
-        <div class="flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                    <i class="fas fa-chart-bar text-indigo-600 mr-2"></i> Statistics Dashboard
-                </h1>
-                <p class="text-gray-500">Track your progress and identify areas for improvement</p>
-            </div>
-            <a href="{{ path('statistics_revision_strategy') }}" 
-               class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-lg hover:from-indigo-700 hover:to-purple-700 transition shadow-lg">
-                <i class="fas fa-graduation-cap mr-2"></i>
-                Revision Strategy
-            </a>
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 gap-4 animate-fade-in-up">
+        <div>
+            <h1 class="text-2xl font-extrabold text-gray-800 flex items-center gap-2">
+                <span class="w-10 h-10 bg-gradient-to-br from-primary-500 to-violet-500 rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary-500/20">
+                    <i class="fas fa-chart-bar text-sm"></i>
+                </span>
+                Dashboard
+            </h1>
+            <p class="text-gray-400 text-sm mt-1">Track your progress and identify areas for improvement</p>
         </div>
+        <a href="{{ path('statistics_revision_strategy') }}" 
+           class="bg-gradient-to-r from-primary-500 to-violet-500 text-white px-5 py-2.5 rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-primary-500/25 hover:-translate-y-0.5 transition-all flex items-center gap-2">
+            <i class="fas fa-graduation-cap"></i> Revision Strategy
+        </a>
     </div>
 
     <!-- Overview Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow p-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div class="card-modern p-5 animate-fade-in-up stagger-1">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Total Sessions</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ stats.overall.totalSessions }}</p>
+                    <p class="text-gray-400 text-xs font-medium mb-1">Total Sessions</p>
+                    <p class="text-2xl font-black text-gray-800">{{ stats.overall.totalSessions }}</p>
                 </div>
-                <div class="bg-indigo-100 p-3 rounded-lg">
-                    <i class="fas fa-clipboard-list text-indigo-600 text-xl"></i>
+                <div class="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-clipboard-list text-primary-500"></i>
                 </div>
             </div>
         </div>
-        
-        <div class="bg-white rounded-xl shadow p-6">
+        <div class="card-modern p-5 animate-fade-in-up stagger-2">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Questions Answered</p>
-                    <p class="text-3xl font-bold text-gray-800">{{ stats.overall.totalQuestions }}</p>
+                    <p class="text-gray-400 text-xs font-medium mb-1">Questions Answered</p>
+                    <p class="text-2xl font-black text-gray-800">{{ stats.overall.totalQuestions }}</p>
                 </div>
-                <div class="bg-green-100 p-3 rounded-lg">
-                    <i class="fas fa-question-circle text-green-600 text-xl"></i>
+                <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-question-circle text-emerald-500"></i>
                 </div>
             </div>
         </div>
-        
-        <div class="bg-white rounded-xl shadow p-6">
+        <div class="card-modern p-5 animate-fade-in-up stagger-3">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Correct Answers</p>
-                    <p class="text-3xl font-bold text-green-600">{{ stats.overall.correctAnswers }}</p>
+                    <p class="text-gray-400 text-xs font-medium mb-1">Correct Answers</p>
+                    <p class="text-2xl font-black text-emerald-600">{{ stats.overall.correctAnswers }}</p>
                 </div>
-                <div class="bg-emerald-100 p-3 rounded-lg">
-                    <i class="fas fa-check-circle text-emerald-600 text-xl"></i>
+                <div class="w-10 h-10 bg-emerald-50 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-check-circle text-emerald-500"></i>
                 </div>
             </div>
         </div>
-        
-        <div class="bg-white rounded-xl shadow p-6">
+        <div class="card-modern p-5 animate-fade-in-up stagger-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-sm">Average Score</p>
-                    <p class="text-3xl font-bold {% if stats.overall.averageScore >= 80 %}text-green-600{% elseif stats.overall.averageScore >= 60 %}text-yellow-600{% else %}text-red-600{% endif %}">
+                    <p class="text-gray-400 text-xs font-medium mb-1">Average Score</p>
+                    <p class="text-2xl font-black {% if stats.overall.averageScore >= 80 %}text-emerald-600{% elseif stats.overall.averageScore >= 60 %}text-amber-500{% else %}text-red-500{% endif %}">
                         {{ stats.overall.averageScore|number_format(1) }}%
                     </p>
                 </div>
-                <div class="bg-purple-100 p-3 rounded-lg">
-                    <i class="fas fa-chart-line text-purple-600 text-xl"></i>
+                <div class="w-10 h-10 bg-violet-50 rounded-xl flex items-center justify-center">
+                    <i class="fas fa-chart-line text-violet-500"></i>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Charts Row -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <!-- Success Rate by Category -->
-        <div class="bg-white rounded-xl shadow p-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">
-                <i class="fas fa-chart-bar text-indigo-600 mr-2"></i> Success Rate by Category
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="card-modern p-6 animate-fade-in-up stagger-2">
+            <h2 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <i class="fas fa-chart-bar text-primary-500"></i> Success Rate by Category
             </h2>
-            <div class="h-80">
-                <canvas id="categoryChart"></canvas>
-            </div>
+            <div class="h-72"><canvas id="categoryChart"></canvas></div>
         </div>
-
-        <!-- Progress Over Time -->
-        <div class="bg-white rounded-xl shadow p-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">
-                <i class="fas fa-chart-line text-indigo-600 mr-2"></i> Progress Over Time
+        <div class="card-modern p-6 animate-fade-in-up stagger-3">
+            <h2 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <i class="fas fa-chart-line text-primary-500"></i> Progress Over Time
             </h2>
-            <div class="h-80">
-                <canvas id="progressChart"></canvas>
-            </div>
+            <div class="h-72"><canvas id="progressChart"></canvas></div>
         </div>
     </div>
 
-    <!-- More Charts Row -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <!-- Mistake Distribution -->
-        <div class="bg-white rounded-xl shadow p-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">
-                <i class="fas fa-chart-pie text-indigo-600 mr-2"></i> Mistake Distribution
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="card-modern p-6 animate-fade-in-up stagger-4">
+            <h2 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <i class="fas fa-chart-pie text-primary-500"></i> Mistake Distribution
             </h2>
-            <div class="h-80">
-                <canvas id="mistakeChart"></canvas>
-            </div>
+            <div class="h-72"><canvas id="mistakeChart"></canvas></div>
         </div>
-
-        <!-- Subcategory Performance -->
-        <div class="bg-white rounded-xl shadow p-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">
-                <i class="fas fa-chart-bar text-indigo-600 mr-2"></i> Subcategory Performance
+        <div class="card-modern p-6 animate-fade-in-up stagger-5">
+            <h2 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <i class="fas fa-chart-bar text-primary-500"></i> Performance by Subcategory
             </h2>
-            <div class="h-80">
-                <canvas id="subcategoryChart"></canvas>
-            </div>
+            <div class="h-72"><canvas id="subcategoryChart"></canvas></div>
         </div>
     </div>
 
     <!-- Weak & Strong Areas -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-        <!-- Weak Areas -->
-        <div class="bg-white rounded-xl shadow overflow-hidden">
-            <div class="bg-red-50 px-6 py-4 border-b border-red-100">
-                <h2 class="text-xl font-bold text-red-800">
-                    <i class="fas fa-exclamation-triangle mr-2"></i> Areas to Improve
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <div class="card-modern overflow-hidden animate-fade-in-up">
+            <div class="bg-red-50/80 px-5 py-3 border-b border-red-100">
+                <h2 class="text-base font-bold text-red-700 flex items-center gap-2">
+                    <i class="fas fa-exclamation-triangle"></i> Needs Improvement
                 </h2>
             </div>
-            <div class="p-6">
+            <div class="p-5">
                 {% if stats.weakAreas|length > 0 %}
-                <div class="space-y-4">
+                <div class="space-y-3">
                     {% for area in stats.weakAreas|slice(0, 5) %}
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <span class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs mr-3">
-                                {{ area.type }}
-                            </span>
-                            <span class="text-gray-800">{{ area.name }}</span>
+                    <div class="flex items-center justify-between p-3 bg-red-50/50 rounded-xl">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-red-100 text-red-600 px-2 py-0.5 rounded-lg text-xs font-bold">{{ area.type }}</span>
+                            <span class="text-gray-700 text-sm font-medium">{{ area.name }}</span>
                         </div>
-                        <div class="flex items-center">
-                            <span class="text-red-600 font-semibold mr-2">
-                                {{ area.averageScore|number_format(1) }}%
-                            </span>
-                            <span class="text-gray-400 text-sm">({{ area.totalAttempts }} attempts)</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-red-500 font-bold text-sm">{{ area.averageScore|number_format(1) }}%</span>
+                            <span class="text-gray-300 text-xs">({{ area.totalAttempts }})</span>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
                 {% else %}
-                <div class="text-center py-8">
-                    <i class="fas fa-smile text-green-400 text-4xl mb-3"></i>
-                    <p class="text-gray-500">No weak areas identified yet. Keep practicing!</p>
+                <div class="text-center py-6">
+                    <div class="text-4xl mb-2">😊</div>
+                    <p class="text-gray-400 text-sm">No weaknesses identified!</p>
                 </div>
                 {% endif %}
                 <a href="{{ path('statistics_weak_areas') }}" 
-                   class="block mt-6 text-center text-red-600 hover:text-red-800 font-medium">
-                    View All Weak Areas <i class="fas fa-arrow-right ml-1"></i>
+                   class="block mt-4 text-center text-red-500 hover:text-red-700 font-bold text-sm transition">
+                    View all <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
         </div>
 
-        <!-- Strong Areas -->
-        <div class="bg-white rounded-xl shadow overflow-hidden">
-            <div class="bg-green-50 px-6 py-4 border-b border-green-100">
-                <h2 class="text-xl font-bold text-green-800">
-                    <i class="fas fa-trophy mr-2"></i> Strong Areas
+        <div class="card-modern overflow-hidden animate-fade-in-up">
+            <div class="bg-emerald-50/80 px-5 py-3 border-b border-emerald-100">
+                <h2 class="text-base font-bold text-emerald-700 flex items-center gap-2">
+                    <i class="fas fa-trophy"></i> Strengths
                 </h2>
             </div>
-            <div class="p-6">
+            <div class="p-5">
                 {% if stats.strongAreas|length > 0 %}
-                <div class="space-y-4">
+                <div class="space-y-3">
                     {% for area in stats.strongAreas|slice(0, 5) %}
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs mr-3">
-                                {{ area.type }}
-                            </span>
-                            <span class="text-gray-800">{{ area.name }}</span>
+                    <div class="flex items-center justify-between p-3 bg-emerald-50/50 rounded-xl">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-lg text-xs font-bold">{{ area.type }}</span>
+                            <span class="text-gray-700 text-sm font-medium">{{ area.name }}</span>
                         </div>
-                        <div class="flex items-center">
-                            <span class="text-green-600 font-semibold mr-2">
-                                {{ area.averageScore|number_format(1) }}%
-                            </span>
-                            <span class="text-gray-400 text-sm">({{ area.totalAttempts }} attempts)</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-emerald-600 font-bold text-sm">{{ area.averageScore|number_format(1) }}%</span>
+                            <span class="text-gray-300 text-xs">({{ area.totalAttempts }})</span>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
                 {% else %}
-                <div class="text-center py-8">
-                    <i class="fas fa-seedling text-gray-300 text-4xl mb-3"></i>
-                    <p class="text-gray-500">Complete more quizzes to identify your strengths!</p>
+                <div class="text-center py-6">
+                    <div class="text-4xl mb-2">🌱</div>
+                    <p class="text-gray-400 text-sm">Keep practicing to identify your strengths!</p>
                 </div>
                 {% endif %}
             </div>
@@ -201,52 +173,46 @@
 
     <!-- Recent Sessions -->
     {% if stats.recentSessions|length > 0 %}
-    <div class="bg-white rounded-xl shadow overflow-hidden">
-        <div class="px-6 py-4 border-b">
-            <h2 class="text-xl font-bold text-gray-800">
-                <i class="fas fa-history text-indigo-600 mr-2"></i> Recent Sessions
+    <div class="card-modern overflow-hidden animate-fade-in-up">
+        <div class="bg-gray-50/80 px-5 py-3 border-b border-gray-100">
+            <h2 class="text-base font-bold text-gray-800 flex items-center gap-2">
+                <i class="fas fa-history text-primary-500"></i> Recent Sessions
             </h2>
         </div>
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
+            <table class="min-w-full">
+                <thead class="bg-gray-50/50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Session</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Questions</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Score</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Time</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                        <th class="px-5 py-3 text-left text-xs font-bold text-gray-400 uppercase">Session</th>
+                        <th class="px-5 py-3 text-left text-xs font-bold text-gray-400 uppercase">Date</th>
+                        <th class="px-5 py-3 text-left text-xs font-bold text-gray-400 uppercase">Questions</th>
+                        <th class="px-5 py-3 text-left text-xs font-bold text-gray-400 uppercase">Score</th>
+                        <th class="px-5 py-3 text-left text-xs font-bold text-gray-400 uppercase">Time</th>
+                        <th class="px-5 py-3 text-left text-xs font-bold text-gray-400 uppercase">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="divide-y divide-gray-50">
                     {% for session in stats.recentSessions %}
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm font-medium text-gray-900">{{ session.sessionLabel }}</div>
+                    <tr class="hover:bg-gray-50/50 transition">
+                        <td class="px-5 py-3 text-sm font-medium text-gray-700">{{ session.sessionLabel }}</td>
+                        <td class="px-5 py-3 text-sm text-gray-400">{{ session.completedAt|date('d/m/Y H:i') }}</td>
+                        <td class="px-5 py-3 text-sm">
+                            <span class="text-emerald-600 font-bold">{{ session.correctAnswers }}</span>
+                            <span class="text-gray-300">/</span>
+                            <span class="text-gray-500">{{ session.totalQuestions }}</span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ session.completedAt|date('M d, Y H:i') }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="text-green-600">{{ session.correctAnswers }}</span>
-                            <span class="text-gray-400">/</span>
-                            <span class="text-gray-600">{{ session.totalQuestions }}</span>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium 
-                                {% if session.score >= 80 %}bg-green-100 text-green-800
-                                {% elseif session.score >= 60 %}bg-yellow-100 text-yellow-800
-                                {% else %}bg-red-100 text-red-800{% endif %}">
+                        <td class="px-5 py-3">
+                            <span class="px-2.5 py-1 rounded-lg text-xs font-bold 
+                                {% if session.score >= 80 %}bg-emerald-100 text-emerald-700
+                                {% elseif session.score >= 60 %}bg-amber-100 text-amber-700
+                                {% else %}bg-red-100 text-red-700{% endif %}">
                                 {{ session.score|number_format(0) }}%
                             </span>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {{ session.formattedTimeSpent }}
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <td class="px-5 py-3 text-sm text-gray-400">{{ session.formattedTimeSpent }}</td>
+                        <td class="px-5 py-3">
                             <a href="{{ path('quiz_review', {id: session.id}) }}" 
-                               class="text-indigo-600 hover:text-indigo-900">
+                               class="text-primary-500 hover:text-primary-700 font-bold text-sm transition">
                                 Review
                             </a>
                         </td>
@@ -263,138 +229,46 @@
 {% block javascripts %}
 <script>
 document.addEventListener('DOMContentLoaded', async function() {
-    // Category Success Rate Chart
+    const chartFont = { family: 'Inter, sans-serif' };
+    Chart.defaults.font.family = 'Inter, sans-serif';
+    
     try {
         const categoryData = await fetch('{{ path("api_category_success_rate") }}').then(r => r.json());
         new Chart(document.getElementById('categoryChart'), {
             type: 'bar',
-            data: {
-                labels: categoryData.labels,
-                datasets: [{
-                    label: 'Success Rate (%)',
-                    data: categoryData.data,
-                    backgroundColor: categoryData.colors,
-                    borderRadius: 8,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            callback: value => value + '%'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: { display: false }
-                }
-            }
+            data: { labels: categoryData.labels, datasets: [{ label: 'Success rate (%)', data: categoryData.data, backgroundColor: categoryData.colors, borderRadius: 10, barThickness: 40 }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } }, plugins: { legend: { display: false } } }
         });
-    } catch (e) {
-        console.log('No category data available');
-    }
+    } catch (e) {}
 
-    // Progress Over Time Chart
     try {
         const progressData = await fetch('{{ path("api_progress_over_time") }}').then(r => r.json());
         new Chart(document.getElementById('progressChart'), {
             type: 'line',
-            data: {
-                labels: progressData.labels,
-                datasets: [{
-                    label: 'Average Score',
-                    data: progressData.data,
-                    borderColor: '#4F46E5',
-                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
-                    fill: true,
-                    tension: 0.4,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            callback: value => value + '%'
-                        }
-                    }
-                }
-            }
+            data: { labels: progressData.labels, datasets: [{ label: 'Average score', data: progressData.data, borderColor: '#6366f1', backgroundColor: 'rgba(99, 102, 241, 0.08)', fill: true, tension: 0.4, pointRadius: 4, pointBackgroundColor: '#6366f1' }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
         });
-    } catch (e) {
-        console.log('No progress data available');
-    }
+    } catch (e) {}
 
-    // Mistake Distribution Pie Chart
     try {
         const mistakeData = await fetch('{{ path("api_mistake_distribution") }}').then(r => r.json());
         if (mistakeData.labels.length > 0) {
             new Chart(document.getElementById('mistakeChart'), {
                 type: 'doughnut',
-                data: {
-                    labels: mistakeData.labels,
-                    datasets: [{
-                        data: mistakeData.data,
-                        backgroundColor: mistakeData.colors,
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                        }
-                    }
-                }
+                data: { labels: mistakeData.labels, datasets: [{ data: mistakeData.data, backgroundColor: mistakeData.colors, borderWidth: 0, hoverOffset: 8 }] },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '65%', plugins: { legend: { position: 'right', labels: { padding: 15, usePointStyle: true, pointStyle: 'circle' } } } }
             });
         }
-    } catch (e) {
-        console.log('No mistake data available');
-    }
+    } catch (e) {}
 
-    // Subcategory Performance Chart
     try {
         const subcategoryData = await fetch('{{ path("api_subcategory_success_rate") }}').then(r => r.json());
         new Chart(document.getElementById('subcategoryChart'), {
             type: 'bar',
-            data: {
-                labels: subcategoryData.labels,
-                datasets: [{
-                    label: 'Success Rate (%)',
-                    data: subcategoryData.data,
-                    backgroundColor: subcategoryData.colors,
-                    borderRadius: 8,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                indexAxis: 'y',
-                scales: {
-                    x: {
-                        beginAtZero: true,
-                        max: 100,
-                        ticks: {
-                            callback: value => value + '%'
-                        }
-                    }
-                },
-                plugins: {
-                    legend: { display: false }
-                }
-            }
+            data: { labels: subcategoryData.labels, datasets: [{ label: 'Success rate (%)', data: subcategoryData.data, backgroundColor: subcategoryData.colors, borderRadius: 10 }] },
+            options: { responsive: true, maintainAspectRatio: false, indexAxis: 'y', scales: { x: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' }, grid: { color: '#f1f5f9' } }, y: { grid: { display: false } } }, plugins: { legend: { display: false } } }
         });
-    } catch (e) {
-        console.log('No subcategory data available');
-    }
+    } catch (e) {}
 });
 </script>
 {% endblock %}

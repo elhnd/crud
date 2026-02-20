@@ -1,307 +1,197 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Questions Management - Admin{% endblock %}
+{% block title %}Question management - Admin{% endblock %}
 
 {% block body %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
-    <div class="mb-8 flex items-center justify-between">
+    <div class="mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 animate-fade-in-up">
         <div>
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">
-                <i class="fas fa-question-circle text-indigo-600 mr-2"></i> Questions Management
+            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white flex items-center gap-3">
+                <span class="w-10 h-10 flex items-center justify-center bg-gradient-to-br from-primary-500 to-violet-500 rounded-xl text-white">
+                    <i class="fas fa-question-circle"></i>
+                </span>
+                Question management
             </h1>
-            <p class="text-gray-500">Create, edit and manage quiz questions</p>
+            <p class="text-gray-500 dark:text-gray-400 mt-1">Create, edit and manage quiz questions</p>
         </div>
-        <div class="flex gap-3">
-            <a href="{{ path('admin_category_index') }}" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition">
-                <i class="fas fa-folder-tree mr-2"></i> Categories
-            </a>
-            <a href="{{ path('admin_quiz_index') }}" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition">
-                <i class="fas fa-clipboard-list mr-2"></i> Quiz Sessions
-            </a>
-            <a href="{{ path('admin_question_new') }}" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition">
-                <i class="fas fa-plus mr-2"></i> New Question
-            </a>
+        <div class="flex gap-3 flex-wrap">
+            <a href="{{ path('admin_category_index') }}" class="btn-ghost px-4 py-2 rounded-xl text-sm"><i class="fas fa-folder-tree mr-2"></i> Categories</a>
+            <a href="{{ path('admin_quiz_index') }}" class="btn-ghost px-4 py-2 rounded-xl text-sm"><i class="fas fa-clipboard-list mr-2"></i> Sessions</a>
+            <a href="{{ path('admin_question_new') }}" class="btn-primary px-4 py-2 rounded-xl text-sm"><i class="fas fa-plus mr-2"></i> New question</a>
         </div>
     </div>
 
-    <!-- Stats Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-8">
-        <div class="bg-white rounded-xl shadow p-4">
+    <!-- Stats -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8 animate-fade-in-up stagger-1">
+        {% set statItems = [
+            {label: 'Total', value: stats.total, color: 'primary', icon: 'fa-database'},
+            {label: 'Single choice', value: stats.byType['single_choice'] ?? 0, color: 'blue', icon: 'fa-circle-dot'},
+            {label: 'Multiple choice', value: stats.byType['multiple_choice'] ?? 0, color: 'violet', icon: 'fa-square-check'},
+            {label: 'True / False', value: stats.byType['true_false'] ?? 0, color: 'amber', icon: 'fa-toggle-on'},
+            {label: 'Certification', value: stats.certification, color: 'emerald', icon: 'fa-certificate'}
+        ] %}
+        {% for item in statItems %}
+        <div class="card-modern p-4">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-gray-500 text-xs uppercase">Total Questions</p>
-                    <p class="text-2xl font-bold text-gray-800">{{ stats.total }}</p>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider font-semibold">{{ item.label }}</p>
+                    <p class="text-2xl font-extrabold text-{{ item.color }}-600 dark:text-{{ item.color }}-400 mt-1">{{ item.value }}</p>
                 </div>
-                <div class="bg-indigo-100 p-2 rounded-lg">
-                    <i class="fas fa-database text-indigo-600"></i>
+                <div class="w-10 h-10 flex items-center justify-center bg-{{ item.color }}-100 dark:bg-{{ item.color }}-900/30 rounded-xl">
+                    <i class="fas {{ item.icon }} text-{{ item.color }}-500"></i>
                 </div>
             </div>
         </div>
-
-        <div class="bg-white rounded-xl shadow p-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-xs uppercase">Single Choice</p>
-                    <p class="text-2xl font-bold text-blue-600">{{ stats.byType['single_choice'] ?? 0 }}</p>
-                </div>
-                <div class="bg-blue-100 p-2 rounded-lg">
-                    <i class="fas fa-circle-dot text-blue-600"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow p-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-xs uppercase">Multiple Choice</p>
-                    <p class="text-2xl font-bold text-purple-600">{{ stats.byType['multiple_choice'] ?? 0 }}</p>
-                </div>
-                <div class="bg-purple-100 p-2 rounded-lg">
-                    <i class="fas fa-square-check text-purple-600"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow p-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-xs uppercase">True / False</p>
-                    <p class="text-2xl font-bold text-orange-600">{{ stats.byType['true_false'] ?? 0 }}</p>
-                </div>
-                <div class="bg-orange-100 p-2 rounded-lg">
-                    <i class="fas fa-toggle-on text-orange-600"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow p-4">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-gray-500 text-xs uppercase">Certification</p>
-                    <p class="text-2xl font-bold text-green-600">{{ stats.certification }}</p>
-                </div>
-                <div class="bg-green-100 p-2 rounded-lg">
-                    <i class="fas fa-certificate text-green-600"></i>
-                </div>
-            </div>
-        </div>
+        {% endfor %}
     </div>
 
     <!-- Filters -->
-    <div class="bg-white rounded-xl shadow mb-6">
-        <div class="p-4 border-b border-gray-200">
+    <div class="card-modern mb-6 animate-fade-in-up stagger-2">
+        <div class="p-4 border-b border-gray-100 dark:border-gray-700/50">
             <form method="GET" class="flex flex-wrap gap-4 items-end">
                 <div class="flex-1 min-w-[200px]">
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Search</label>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Search</label>
                     <input type="text" name="search" value="{{ filters.search }}" placeholder="Search in questions..."
-                           class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                           class="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent transition text-gray-900 dark:text-white">
                 </div>
-
                 <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Category</label>
-                    <select name="category" id="categoryFilter" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
-                        <option value="">All Categories</option>
-                        {% for category in categories %}
-                            <option value="{{ category.id }}" {{ filters.category == category.id ? 'selected' : '' }}>
-                                {{ category.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Subcategory</label>
-                    <select name="subcategory" id="subcategoryFilter" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
-                        <option value="">All Subcategories</option>
-                        {% for sub in subcategories %}
-                            <option value="{{ sub.id }}" {{ filters.subcategory == sub.id ? 'selected' : '' }}>
-                                {{ sub.name }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Type</label>
-                    <select name="type" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
-                        <option value="">All Types</option>
-                        {% for qType in questionTypes %}
-                            <option value="{{ qType.value }}" {{ filters.type == qType.value ? 'selected' : '' }}>
-                                {{ qType.label }}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Difficulty</label>
-                    <select name="difficulty" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
-                        <option value="">All Levels</option>
-                        {% for i in 1..5 %}
-                            <option value="{{ i }}" {{ filters.difficulty == i ? 'selected' : '' }}>
-                                {{ i }} - {% if i == 1 %}Easy{% elseif i == 2 %}Medium{% elseif i == 3 %}Hard{% elseif i == 4 %}Very Hard{% else %}Expert{% endif %}
-                            </option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Certification</label>
-                    <select name="certification" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Category</label>
+                    <select name="category" id="categoryFilter" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white">
                         <option value="">All</option>
-                        <option value="1" {{ filters.certification == '1' ? 'selected' : '' }}>Certification Only</option>
-                        <option value="0" {{ filters.certification == '0' ? 'selected' : '' }}>Regular Only</option>
+                        {% for category in categories %}<option value="{{ category.id }}" {{ filters.category == category.id ? 'selected' : '' }}>{{ category.name }}</option>{% endfor %}
                     </select>
                 </div>
-
                 <div>
-                    <label class="block text-xs font-medium text-gray-500 mb-1">Status</label>
-                    <select name="active" class="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-500">
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Subcategory</label>
+                    <select name="subcategory" id="subcategoryFilter" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white">
                         <option value="">All</option>
-                        <option value="1" {{ filters.active == '1' ? 'selected' : '' }}>Active Only</option>
-                        <option value="0" {{ filters.active == '0' ? 'selected' : '' }}>Inactive Only</option>
+                        {% for sub in subcategories %}<option value="{{ sub.id }}" {{ filters.subcategory == sub.id ? 'selected' : '' }}>{{ sub.name }}</option>{% endfor %}
                     </select>
                 </div>
-
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Type</label>
+                    <select name="type" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white">
+                        <option value="">All</option>
+                        {% for qType in questionTypes %}<option value="{{ qType.value }}" {{ filters.type == qType.value ? 'selected' : '' }}>{{ qType.label }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Difficulty</label>
+                    <select name="difficulty" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white">
+                        <option value="">All</option>
+                        {% for i in 1..5 %}<option value="{{ i }}" {{ filters.difficulty == i ? 'selected' : '' }}>{{ i }} - {% if i == 1 %}Easy{% elseif i == 2 %}Medium{% elseif i == 3 %}Hard{% elseif i == 4 %}Very hard{% else %}Expert{% endif %}</option>{% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Certif</label>
+                    <select name="certification" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white">
+                        <option value="">All</option>
+                        <option value="1" {{ filters.certification == '1' ? 'selected' : '' }}>Certification only</option>
+                        <option value="0" {{ filters.certification == '0' ? 'selected' : '' }}>Regular only</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Status</label>
+                    <select name="active" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white">
+                        <option value="">All</option>
+                        <option value="1" {{ filters.active == '1' ? 'selected' : '' }}>Active only</option>
+                        <option value="0" {{ filters.active == '0' ? 'selected' : '' }}>Inactive only</option>
+                    </select>
+                </div>
                 <div class="flex gap-2">
-                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-indigo-700 transition">
-                        <i class="fas fa-filter mr-1"></i> Filter
-                    </button>
-                    <a href="{{ path('admin_question_index') }}" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg text-sm hover:bg-gray-300 transition">
-                        <i class="fas fa-times mr-1"></i> Clear
-                    </a>
+                    <button type="submit" class="btn-primary px-4 py-2 rounded-xl text-sm"><i class="fas fa-filter mr-1"></i> Filter</button>
+                    <a href="{{ path('admin_question_index') }}" class="btn-ghost px-4 py-2 rounded-xl text-sm"><i class="fas fa-times mr-1"></i> Clear</a>
                 </div>
             </form>
         </div>
 
         <!-- Bulk Actions -->
-        <div class="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+        <div class="p-4 bg-gray-50 dark:bg-gray-800/50 border-b border-gray-100 dark:border-gray-700/50 flex items-center justify-between">
             <div class="flex items-center gap-4">
-                <label class="flex items-center">
-                    <input type="checkbox" id="selectAll" class="rounded text-indigo-600 mr-2">
-                    <span class="text-sm text-gray-600">Select All</span>
+                <label class="flex items-center cursor-pointer">
+                    <input type="checkbox" id="selectAll" class="rounded text-primary-500 mr-2 border-gray-300 dark:border-gray-600">
+                    <span class="text-sm text-gray-600 dark:text-gray-400">Select all</span>
                 </label>
-                <span class="text-sm text-gray-400" id="selectedCount">0 selected</span>
+                <span class="text-sm text-gray-400 dark:text-gray-500" id="selectedCount">0 selected</span>
             </div>
-
             <form action="{{ path('admin_question_bulk_delete') }}" method="POST" id="bulkDeleteForm" class="inline">
                 <input type="hidden" name="_token" value="{{ csrf_token('bulk_delete') }}">
-                <button type="submit" class="bg-red-100 text-red-600 px-3 py-1.5 rounded-lg text-sm hover:bg-red-200 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled id="bulkDeleteBtn">
-                    <i class="fas fa-trash mr-1"></i> Delete Selected
+                <button type="submit" class="bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400 px-3 py-1.5 rounded-xl text-sm hover:bg-red-200 dark:hover:bg-red-900/40 transition disabled:opacity-50 disabled:cursor-not-allowed font-medium" disabled id="bulkDeleteBtn">
+                    <i class="fas fa-trash mr-1"></i> Delete selection
                 </button>
             </form>
         </div>
 
-        <!-- Questions Table -->
+        <!-- Table -->
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-gray-50">
+                <thead class="bg-gray-50 dark:bg-gray-800/50">
                     <tr>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-10"></th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-16">ID</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">Question</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-32">Category</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-24">Type</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-20">Diff.</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-20">Answers</th>
-                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase w-28">Actions</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-10"></th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-16">ID</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Question</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-32">Category</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-24">Type</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-20">Diff.</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-20">Ans.</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-28">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200">
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-700/50">
                     {% for question in questions %}
-                    <tr class="hover:bg-gray-50 {{ not question.isActive ? 'opacity-60' : '' }}">
-                        <td class="px-4 py-3">
-                            <input type="checkbox" name="question_id" value="{{ question.id }}" class="question-checkbox rounded text-indigo-600">
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-600 font-mono">#{{ question.id }}</td>
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition {{ not question.isActive ? 'opacity-60' : '' }}">
+                        <td class="px-4 py-3"><input type="checkbox" name="question_id" value="{{ question.id }}" class="question-checkbox rounded text-primary-500 border-gray-300 dark:border-gray-600"></td>
+                        <td class="px-4 py-3 text-sm text-gray-500 font-mono">#{{ question.id }}</td>
                         <td class="px-4 py-3">
                             <div class="flex items-start gap-2">
-                                {% if not question.isActive %}
-                                    <span class="bg-red-100 text-red-700 px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0" title="Inactive">
-                                        <i class="fas fa-eye-slash"></i>
-                                    </span>
-                                {% endif %}
-                                {% if question.isCertification %}
-                                    <span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0">
-                                        <i class="fas fa-certificate"></i>
-                                    </span>
-                                {% endif %}
+                                {% if not question.isActive %}<span class="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0"><i class="fas fa-eye-slash"></i></span>{% endif %}
+                                {% if question.isCertification %}<span class="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0"><i class="fas fa-certificate"></i></span>{% endif %}
                                 <div class="min-w-0">
-                                    <a href="{{ path('admin_question_show', {id: question.id}) }}" class="text-gray-900 hover:text-indigo-600 font-medium block truncate max-w-md" title="{{ question.text|striptags }}">
+                                    <a href="{{ path('admin_question_show', {id: question.id}) }}" class="text-gray-900 dark:text-white hover:text-primary-500 font-medium block truncate max-w-md transition" title="{{ question.text|striptags }}">
                                         {{ question.text|striptags|slice(0, 80) }}{% if question.text|length > 80 %}...{% endif %}
                                     </a>
-                                    <div class="text-xs text-gray-400 mt-0.5">
-                                        {{ question.subcategory.name }}
-                                    </div>
+                                    <div class="text-xs text-gray-400 mt-0.5">{{ question.subcategory.name }}</div>
                                 </div>
                             </div>
                         </td>
-                        <td class="px-4 py-3 text-sm text-gray-600">
-                            {{ question.category.name }}
-                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">{{ question.category.name }}</td>
                         <td class="px-4 py-3">
-                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium 
-                                {% if question.type == 'single_choice' %}bg-blue-100 text-blue-700
-                                {% elseif question.type == 'multiple_choice' %}bg-purple-100 text-purple-700
-                                {% else %}bg-gray-100 text-gray-700{% endif %}">
-                                <i class="fas {{ question.typeEnum.icon }} mr-1"></i>
-                                {{ question.typeEnum.label|split(' ')|first }}
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-lg text-xs font-medium 
+                                {% if question.type == 'single_choice' %}bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400
+                                {% elseif question.type == 'multiple_choice' %}bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400
+                                {% else %}bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400{% endif %}">
+                                <i class="fas {{ question.typeEnum.icon }} mr-1"></i>{{ question.typeEnum.label|split(' ')|first }}
                             </span>
                         </td>
                         <td class="px-4 py-3">
-                            <div class="flex gap-0.5">
-                                {% for i in 1..5 %}
-                                    <i class="fas fa-star text-xs {{ i <= question.difficulty ? 'text-yellow-400' : 'text-gray-200' }}"></i>
-                                {% endfor %}
-                            </div>
+                            <div class="flex gap-0.5">{% for i in 1..5 %}<i class="fas fa-star text-xs {{ i <= question.difficulty ? 'text-amber-400' : 'text-gray-200 dark:text-gray-600' }}"></i>{% endfor %}</div>
                         </td>
-                        <td class="px-4 py-3 text-sm text-gray-600">
-                            <span class="text-green-600">{{ question.correctAnswers|length }}</span>
-                            <span class="text-gray-400">/</span>
-                            {{ question.answers|length }}
-                        </td>
+                        <td class="px-4 py-3 text-sm"><span class="text-emerald-600">{{ question.correctAnswers|length }}</span><span class="text-gray-400">/</span>{{ question.answers|length }}</td>
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-1">
-                                <button type="button" onclick="toggleQuestionActive({{ question.id }}, this)" 
-                                   class="p-1.5 {{ question.isActive ? 'text-green-600 hover:text-red-600 hover:bg-red-50' : 'text-red-600 hover:text-green-600 hover:bg-green-50' }} rounded transition" 
-                                   title="{{ question.isActive ? 'Click to deactivate' : 'Click to activate' }}">
+                                <button type="button" onclick="toggleQuestionActive({{ question.id }}, this)" class="p-1.5 {{ question.isActive ? 'text-emerald-500 hover:text-red-500' : 'text-red-500 hover:text-emerald-500' }} rounded-lg transition" title="{{ question.isActive ? 'Deactivate' : 'Activate' }}">
                                     <i class="fas {{ question.isActive ? 'fa-eye' : 'fa-eye-slash' }}"></i>
                                 </button>
-                                <a href="{{ path('admin_question_show', {id: question.id}) }}" 
-                                   class="p-1.5 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 rounded" title="View">
-                                    <i class="fas fa-search"></i>
-                                </a>
-                                <a href="{{ path('admin_question_edit', {id: question.id}) }}" 
-                                   class="p-1.5 text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded" title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
+                                <a href="{{ path('admin_question_show', {id: question.id}) }}" class="p-1.5 text-gray-400 hover:text-primary-500 rounded-lg transition"><i class="fas fa-search"></i></a>
+                                <a href="{{ path('admin_question_edit', {id: question.id}) }}" class="p-1.5 text-gray-400 hover:text-blue-500 rounded-lg transition"><i class="fas fa-edit"></i></a>
                                 <form action="{{ path('admin_question_duplicate', {id: question.id}) }}" method="POST" class="inline">
                                     <input type="hidden" name="_token" value="{{ csrf_token('duplicate' ~ question.id) }}">
-                                    <button type="submit" class="p-1.5 text-gray-500 hover:text-green-600 hover:bg-green-50 rounded" title="Duplicate">
-                                        <i class="fas fa-copy"></i>
-                                    </button>
+                                    <button type="submit" class="p-1.5 text-gray-400 hover:text-emerald-500 rounded-lg transition"><i class="fas fa-copy"></i></button>
                                 </form>
-                                <form action="{{ path('admin_question_delete', {id: question.id}) }}" method="POST" class="inline" 
-                                      onsubmit="return confirm('Delete this question?');">
+                                <form action="{{ path('admin_question_delete', {id: question.id}) }}" method="POST" class="inline" onsubmit="return confirm('Delete this question? ?');">
                                     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ question.id) }}">
-                                    <button type="submit" class="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded" title="Delete">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+                                    <button type="submit" class="p-1.5 text-gray-400 hover:text-red-500 rounded-lg transition"><i class="fas fa-trash"></i></button>
                                 </form>
                             </div>
                         </td>
                     </tr>
                     {% else %}
-                    <tr>
-                        <td colspan="8" class="px-4 py-12 text-center">
-                            <i class="fas fa-inbox text-gray-300 text-4xl mb-3"></i>
-                            <p class="text-gray-500 mb-4">No questions found</p>
-                            <a href="{{ path('admin_question_new') }}" class="inline-flex items-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
-                                <i class="fas fa-plus mr-2"></i> Create First Question
-                            </a>
-                        </td>
-                    </tr>
+                    <tr><td colspan="8" class="px-4 py-12 text-center">
+                        <i class="fas fa-inbox text-gray-300 dark:text-gray-600 text-4xl mb-3"></i>
+                        <p class="text-gray-500 dark:text-gray-400 mb-4">No questions found</p>
+                        <a href="{{ path('admin_question_new') }}" class="btn-primary px-4 py-2 rounded-xl inline-flex items-center text-sm"><i class="fas fa-plus mr-2"></i> Create the first question</a>
+                    </td></tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -309,31 +199,16 @@
 
         <!-- Pagination -->
         {% if pagination.pages > 1 %}
-        <div class="px-4 py-3 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
-            <div class="text-sm text-gray-500">
-                Showing {{ ((pagination.page - 1) * pagination.limit) + 1 }} to {{ min(pagination.page * pagination.limit, pagination.total) }} of {{ pagination.total }} results
+        <div class="px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-100 dark:border-gray-700/50 flex items-center justify-between">
+            <div class="text-sm text-gray-500 dark:text-gray-400">
+                {{ ((pagination.page - 1) * pagination.limit) + 1 }} to {{ min(pagination.page * pagination.limit, pagination.total) }} of {{ pagination.total }}
             </div>
             <div class="flex gap-1">
-                {% if pagination.page > 1 %}
-                    <a href="{{ path('admin_question_index', filters|merge({page: pagination.page - 1})) }}" 
-                       class="px-3 py-1 rounded bg-white border border-gray-300 text-sm hover:bg-gray-50">
-                        <i class="fas fa-chevron-left"></i>
-                    </a>
-                {% endif %}
-
+                {% if pagination.page > 1 %}<a href="{{ path('admin_question_index', filters|merge({page: pagination.page - 1})) }}" class="px-3 py-1 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition"><i class="fas fa-chevron-left"></i></a>{% endif %}
                 {% for p in range(max(1, pagination.page - 2), min(pagination.pages, pagination.page + 2)) %}
-                    <a href="{{ path('admin_question_index', filters|merge({page: p})) }}" 
-                       class="px-3 py-1 rounded text-sm {{ p == pagination.page ? 'bg-indigo-600 text-white' : 'bg-white border border-gray-300 hover:bg-gray-50' }}">
-                        {{ p }}
-                    </a>
+                    <a href="{{ path('admin_question_index', filters|merge({page: p})) }}" class="px-3 py-1 rounded-lg text-sm {{ p == pagination.page ? 'bg-gradient-to-r from-primary-500 to-violet-500 text-white' : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700' }} transition">{{ p }}</a>
                 {% endfor %}
-
-                {% if pagination.page < pagination.pages %}
-                    <a href="{{ path('admin_question_index', filters|merge({page: pagination.page + 1})) }}" 
-                       class="px-3 py-1 rounded bg-white border border-gray-300 text-sm hover:bg-gray-50">
-                        <i class="fas fa-chevron-right"></i>
-                    </a>
-                {% endif %}
+                {% if pagination.page < pagination.pages %}<a href="{{ path('admin_question_index', filters|merge({page: pagination.page + 1})) }}" class="px-3 py-1 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition"><i class="fas fa-chevron-right"></i></a>{% endif %}
             </div>
         </div>
         {% endif %}
@@ -343,7 +218,6 @@
 {% block javascripts %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Selection handling
     const selectAll = document.getElementById('selectAll');
     const checkboxes = document.querySelectorAll('.question-checkbox');
     const selectedCount = document.getElementById('selectedCount');
@@ -356,102 +230,56 @@ document.addEventListener('DOMContentLoaded', function() {
         bulkDeleteBtn.disabled = checked.length === 0;
     }
 
-    selectAll.addEventListener('change', function() {
-        checkboxes.forEach(cb => cb.checked = this.checked);
-        updateSelection();
-    });
-
-    checkboxes.forEach(cb => {
-        cb.addEventListener('change', updateSelection);
-    });
+    selectAll.addEventListener('change', function() { checkboxes.forEach(cb => cb.checked = this.checked); updateSelection(); });
+    checkboxes.forEach(cb => cb.addEventListener('change', updateSelection));
 
     bulkDeleteForm.addEventListener('submit', function(e) {
         e.preventDefault();
         if (!confirm('Delete selected questions?')) return;
-
-        const checked = document.querySelectorAll('.question-checkbox:checked');
-        checked.forEach(cb => {
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'ids[]';
-            input.value = cb.value;
+        document.querySelectorAll('.question-checkbox:checked').forEach(cb => {
+            const input = document.createElement('input'); input.type = 'hidden'; input.name = 'ids[]'; input.value = cb.value;
             this.appendChild(input);
         });
-
         this.submit();
     });
 
-    // Category -> Subcategory cascade
     const categoryFilter = document.getElementById('categoryFilter');
     const subcategoryFilter = document.getElementById('subcategoryFilter');
-
     categoryFilter.addEventListener('change', async function() {
-        const categoryId = this.value;
-        subcategoryFilter.innerHTML = '<option value="">All Subcategories</option>';
-
-        if (categoryId) {
+        subcategoryFilter.innerHTML = '<option value="">All</option>';
+        if (this.value) {
             try {
-                const response = await fetch(`/admin/questions/api/subcategories/${categoryId}`);
-                const subcategories = await response.json();
-                
-                subcategories.forEach(sub => {
-                    const option = document.createElement('option');
-                    option.value = sub.id;
-                    option.textContent = sub.name;
-                    subcategoryFilter.appendChild(option);
-                });
-            } catch (e) {
-                console.error('Failed to load subcategories:', e);
-            }
+                const resp = await fetch(`/admin/questions/api/subcategories/${this.value}`);
+                (await resp.json()).forEach(sub => { const o = document.createElement('option'); o.value = sub.id; o.textContent = sub.name; subcategoryFilter.appendChild(o); });
+            } catch(e) { console.error(e); }
         }
     });
 });
 
 async function toggleQuestionActive(questionId, button) {
     try {
-        const response = await fetch(`/api/question/${questionId}/toggle-active`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-        });
-        
+        const response = await fetch(`/api/question/${questionId}/toggle-active`, { method: 'POST', headers: { 'Content-Type': 'application/json' } });
         const data = await response.json();
-        
         if (data.success) {
             const icon = button.querySelector('i');
-            
             if (data.isActive) {
-                button.classList.remove('text-red-600', 'hover:text-green-600', 'hover:bg-green-50');
-                button.classList.add('text-green-600', 'hover:text-red-600', 'hover:bg-red-50');
-                button.title = 'Click to deactivate';
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
+                button.classList.remove('text-red-500', 'hover:text-emerald-500'); button.classList.add('text-emerald-500', 'hover:text-red-500');
+                button.title = 'Deactivate'; icon.classList.remove('fa-eye-slash'); icon.classList.add('fa-eye');
             } else {
-                button.classList.remove('text-green-600', 'hover:text-red-600', 'hover:bg-red-50');
-                button.classList.add('text-red-600', 'hover:text-green-600', 'hover:bg-green-50');
-                button.title = 'Click to activate';
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
+                button.classList.remove('text-emerald-500', 'hover:text-red-500'); button.classList.add('text-red-500', 'hover:text-emerald-500');
+                button.title = 'Activate'; icon.classList.remove('fa-eye'); icon.classList.add('fa-eye-slash');
             }
-            
             showNotification(data.message, 'success');
-        } else {
-            showNotification('Failed to toggle question status', 'error');
         }
-    } catch (error) {
-        showNotification('Error toggling question status', 'error');
-        console.error(error);
-    }
+    } catch (error) { showNotification('Error changing status', 'error'); }
 }
 
 function showNotification(message, type) {
-    const notification = document.createElement('div');
-    notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 text-white font-medium ${type === 'success' ? 'bg-green-600' : 'bg-red-600'}`;
-    notification.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>${message}`;
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
+    const n = document.createElement('div');
+    n.className = `fixed top-4 right-4 px-6 py-3 rounded-xl shadow-lg z-50 text-white font-medium ${type === 'success' ? 'bg-emerald-600' : 'bg-red-600'}`;
+    n.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>${message}`;
+    document.body.appendChild(n);
+    setTimeout(() => n.remove(), 3000);
 }
 </script>
 {% endblock %}
