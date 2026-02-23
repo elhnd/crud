@@ -102,6 +102,11 @@
                             <i class="fas {{ answer.question.isActive ? 'fa-check-circle' : 'fa-times-circle' }} mr-0.5"></i>
                             {{ answer.question.isActive ? 'Active' : 'Inactive' }}
                         </span>
+                        {% if answer.question.symfonyVersion %}
+                        <span class="bg-cyan-50 text-cyan-600 px-2.5 py-1 rounded-lg text-xs font-medium">
+                            <i class="fas fa-bolt mr-0.5"></i> Symfony {{ answer.question.symfonyVersion }}
+                        </span>
+                        {% endif %}
                     </div>
                 </div>
 

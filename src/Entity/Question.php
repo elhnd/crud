@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Enum\QuestionType;
+use App\Enum\SymfonyVersion;
 use App\Repository\QuestionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -68,6 +69,9 @@ class Question
 
     #[ORM\Column(options: ['default' => true])]
     private bool $isActive = true;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $symfonyVersion = null;
 
     /** @var Collection<int, QuestionExplanation> */
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: QuestionExplanation::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
@@ -362,6 +366,30 @@ class Question
     public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function getSymfonyVersion(): ?string
+    {
+        return $this->symfonyVersion;
+    }
+
+    public function setSymfonyVersion(?string $symfonyVersion): static
+    {
+        $this->symfonyVersion = $symfonyVersion;
+
+        return $this;
+    }
+
+    public function getSymfonyVersionEnum(): ?SymfonyVersion
+    {
+        return $this->symfonyVersion ? SymfonyVersion::from($this->symfonyVersion) : null;
+    }
+
+    public function setSymfonyVersionEnum(?SymfonyVersion $version): static
+    {
+        $this->symfonyVersion = $version?->value;
 
         return $this;
     }

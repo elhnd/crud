@@ -100,6 +100,7 @@ class QuizApiController extends AbstractController
             'explanation' => $question->getExplanation(),
             'resourceUrl' => $question->getResourceUrl(),
             'isActive' => $question->isActive(),
+            'symfonyVersion' => $question->getSymfonyVersion(),
             'answers' => $answers,
         ]);
     }

@@ -135,6 +135,7 @@ class QuestionFixtureService
         $question->setCategory($data['category']);
         $question->setSubcategory($data['subcategory']);
         $question->setIsCertification($data['isCertification'] ?? false);
+        $question->setSymfonyVersion($data['symfonyVersion'] ?? null);
         $question->setUpdatedAt(new \DateTimeImmutable());
 
         // Mettre à jour les réponses
@@ -158,6 +159,7 @@ class QuestionFixtureService
         $question->setCategory($data['category']);
         $question->setSubcategory($data['subcategory']);
         $question->setIsCertification($data['isCertification'] ?? false);
+        $question->setSymfonyVersion($data['symfonyVersion'] ?? null);
 
         foreach ($data['answers'] as $a) {
             $answer = new Answer();
