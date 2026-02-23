@@ -94,6 +94,11 @@
                     <span class="bg-white/10 px-2.5 py-1 rounded-lg text-xs">
                         {% for i in 1..question.difficulty %}⭐{% endfor %}
                     </span>
+                    {% if question.symfonyVersion %}
+                    <span class="bg-cyan-500/20 text-cyan-200 px-2.5 py-1 rounded-lg text-xs font-medium">
+                        <i class="fas fa-bolt mr-0.5"></i> Symfony {{ question.symfonyVersion }}
+                    </span>
+                    {% endif %}
                 </div>
             </div>
         </div>

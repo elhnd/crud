@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Question;
 use App\Enum\QuestionType;
+use App\Enum\SymfonyVersion;
 use App\Repository\CategoryRepository;
 use App\Repository\SubcategoryRepository;
 use App\Service\CategoryService;
@@ -42,6 +43,7 @@ class QuestionAdminController extends AbstractController
         $difficulty = $difficultyParam !== null && $difficultyParam !== '' ? (int) $difficultyParam : null;
         $certification = $request->query->get('certification');
         $active = $request->query->get('active');
+        $symfonyVersion = $request->query->get('symfony_version');
 
         $result = $this->questionService->findPaginated(
             $page,
@@ -52,7 +54,8 @@ class QuestionAdminController extends AbstractController
             $type,
             $difficulty,
             $certification,
-            $active
+            $active,
+            $symfonyVersion
         );
 
         $stats = $this->questionService->getStatistics();
@@ -65,6 +68,7 @@ class QuestionAdminController extends AbstractController
                 ? $this->subcategoryRepository->findBy(['category' => $categoryId]) 
                 : [],
             'questionTypes' => QuestionType::cases(),
+            'symfonyVersions' => SymfonyVersion::cases(),
             'filters' => [
                 'search' => $search,
                 'category' => $categoryId,
@@ -73,6 +77,7 @@ class QuestionAdminController extends AbstractController
                 'difficulty' => $difficulty,
                 'certification' => $certification,
                 'active' => $active,
+                'symfony_version' => $symfonyVersion,
             ],
             'pagination' => [
                 'page' => $page,
@@ -222,6 +227,7 @@ class QuestionAdminController extends AbstractController
                 ? $this->subcategoryRepository->findBy(['category' => $question->getCategory()]) 
                 : [],
             'questionTypes' => QuestionType::cases(),
+            'symfonyVersions' => SymfonyVersion::cases(),
         ]);
     }
 
@@ -244,6 +250,7 @@ class QuestionAdminController extends AbstractController
             'answers' => $request->request->all('answers'),
             'difficulty' => $request->request->get('difficulty'),
             'is_certification' => $request->request->get('is_certification'),
+            'symfony_version' => $request->request->get('symfony_version'),
         ];
 
         $result = $this->questionService->saveFromFormData($formData, $question);

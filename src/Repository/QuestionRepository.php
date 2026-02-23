@@ -285,6 +285,7 @@ class QuestionRepository extends ServiceEntityRepository
         ?int $difficulty = null,
         ?string $certification = null,
         ?string $active = null,
+        ?string $symfonyVersion = null,
     ): array {
         $qb = $this->createQueryBuilder('q')
             ->leftJoin('q.category', 'c')
@@ -324,6 +325,15 @@ class QuestionRepository extends ServiceEntityRepository
         if ($active !== null && $active !== '') {
             $qb->andWhere('q.isActive = :isActive')
                 ->setParameter('isActive', $active === '1');
+        }
+
+        if ($symfonyVersion !== null && $symfonyVersion !== '') {
+            if ($symfonyVersion === 'none') {
+                $qb->andWhere('q.symfonyVersion IS NULL');
+            } else {
+                $qb->andWhere('q.symfonyVersion = :symfonyVersion')
+                    ->setParameter('symfonyVersion', $symfonyVersion);
+            }
         }
 
         // Count total
@@ -461,13 +471,47 @@ class QuestionRepository extends ServiceEntityRepository
             return [];
         }
 
-        // Prioritize selection
-        $selectedIds = $this->selectSmartQuestionIds(
-            $allIds,
-            $seenQuestionIds,
-            $questionFailureRates,
-            $limit
+        // Apply 75/25 split: 75% from Symfony versioned questions, 25% from others
+        $versionedIds = array_column(
+            $this->createQueryBuilder('q')
+                ->select('q.id')
+                ->where('q.id IN (:ids)')
+                ->andWhere('q.symfonyVersion IS NOT NULL')
+                ->setParameter('ids', $allIds)
+                ->getQuery()
+                ->getArrayResult(),
+            'id'
         );
+
+        if (!empty($versionedIds) && count($versionedIds) >= 3) {
+            $nonVersionedIds = array_diff($allIds, $versionedIds);
+            $versionedQuota = (int) ceil($limit * 0.75);
+            $nonVersionedQuota = $limit - $versionedQuota;
+
+            $selectedVersioned = $this->selectSmartQuestionIds(
+                $versionedIds, $seenQuestionIds, $questionFailureRates, $versionedQuota
+            );
+            $selectedNonVersioned = $this->selectSmartQuestionIds(
+                $nonVersionedIds, $seenQuestionIds, $questionFailureRates, $nonVersionedQuota
+            );
+
+            // Fill from other pool if needed
+            $totalSelected = count($selectedVersioned) + count($selectedNonVersioned);
+            if ($totalSelected < $limit) {
+                $needed = $limit - $totalSelected;
+                $allSelected = array_merge($selectedVersioned, $selectedNonVersioned);
+                $remaining = array_diff($allIds, $allSelected);
+                shuffle($remaining);
+                $selectedNonVersioned = array_merge($selectedNonVersioned, array_slice($remaining, 0, min($needed, count($remaining))));
+            }
+
+            $selectedIds = array_merge($selectedVersioned, $selectedNonVersioned);
+        } else {
+            // Not enough versioned questions, fall back to standard selection
+            $selectedIds = $this->selectSmartQuestionIds(
+                $allIds, $seenQuestionIds, $questionFailureRates, $limit
+            );
+        }
         
         if (empty($selectedIds)) {
             return [];
@@ -509,11 +553,8 @@ class QuestionRepository extends ServiceEntityRepository
 
         $allIds = array_column($qb->getQuery()->getArrayResult(), 'id');
         
-        $selectedIds = $this->selectSmartQuestionIds(
-            $allIds,
-            $seenQuestionIds,
-            $questionFailureRates,
-            $limit
+        $selectedIds = $this->selectSmartWithVersionWeighting(
+            $allIds, $seenQuestionIds, $questionFailureRates, $limit
         );
         
         if (empty($selectedIds)) {
@@ -555,11 +596,8 @@ class QuestionRepository extends ServiceEntityRepository
 
         $allIds = array_column($qb->getQuery()->getArrayResult(), 'id');
         
-        $selectedIds = $this->selectSmartQuestionIds(
-            $allIds,
-            $seenQuestionIds,
-            $questionFailureRates,
-            $limit
+        $selectedIds = $this->selectSmartWithVersionWeighting(
+            $allIds, $seenQuestionIds, $questionFailureRates, $limit
         );
         
         if (empty($selectedIds)) {
@@ -586,6 +624,7 @@ class QuestionRepository extends ServiceEntityRepository
         array $seenQuestionIds,
         array $questionFailureRates
     ): array {
+        // Get all certification question IDs
         $qb = $this->createQueryBuilder('q')
             ->select('q.id')
             ->where('q.isCertification = :isCert')
@@ -593,14 +632,56 @@ class QuestionRepository extends ServiceEntityRepository
             ->setParameter('isCert', true)
             ->setParameter('isActive', true);
 
-        $allIds = array_column($qb->getQuery()->getArrayResult(), 'id');
+        $allCertIds = array_column($qb->getQuery()->getArrayResult(), 'id');
         
-        $selectedIds = $this->selectSmartQuestionIds(
-            $allIds,
+        // Get versioned (Symfony 7.4/8.0) certification question IDs
+        $versionedIds = array_column(
+            $this->createQueryBuilder('q')
+                ->select('q.id')
+                ->where('q.isCertification = :isCert')
+                ->andWhere('q.isActive = :isActive')
+                ->andWhere('q.symfonyVersion IS NOT NULL')
+                ->setParameter('isCert', true)
+                ->setParameter('isActive', true)
+                ->getQuery()
+                ->getArrayResult(),
+            'id'
+        );
+
+        // Non-versioned certification question IDs
+        $nonVersionedIds = array_diff($allCertIds, $versionedIds);
+
+        // Calculate 75/25 split
+        $versionedQuota = (int) ceil($limit * 0.75);
+        $nonVersionedQuota = $limit - $versionedQuota;
+
+        // Smart select from each pool
+        $selectedVersioned = $this->selectSmartQuestionIds(
+            $versionedIds,
             $seenQuestionIds,
             $questionFailureRates,
-            $limit
+            $versionedQuota
         );
+
+        $selectedNonVersioned = $this->selectSmartQuestionIds(
+            $nonVersionedIds,
+            $seenQuestionIds,
+            $questionFailureRates,
+            $nonVersionedQuota
+        );
+
+        // If one pool doesn't have enough, fill from the other
+        $totalSelected = count($selectedVersioned) + count($selectedNonVersioned);
+        if ($totalSelected < $limit) {
+            $needed = $limit - $totalSelected;
+            $allSelected = array_merge($selectedVersioned, $selectedNonVersioned);
+            $remaining = array_diff($allCertIds, $allSelected);
+            shuffle($remaining);
+            $extra = array_slice($remaining, 0, min($needed, count($remaining)));
+            $selectedNonVersioned = array_merge($selectedNonVersioned, $extra);
+        }
+
+        $selectedIds = array_merge($selectedVersioned, $selectedNonVersioned);
         
         if (empty($selectedIds)) {
             return [];
@@ -613,6 +694,99 @@ class QuestionRepository extends ServiceEntityRepository
             ->setParameter('ids', $selectedIds)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Get active question IDs filtered by symfony version
+     * @return array<int>
+     */
+    public function findIdsBySymfonyVersion(string $version): array
+    {
+        $qb = $this->createQueryBuilder('q')
+            ->select('q.id')
+            ->where('q.symfonyVersion = :version')
+            ->andWhere('q.isActive = :isActive')
+            ->setParameter('version', $version)
+            ->setParameter('isActive', true);
+
+        return array_column($qb->getQuery()->getArrayResult(), 'id');
+    }
+
+    /**
+     * Get active question IDs WITHOUT a specific symfony version
+     * @return array<int>
+     */
+    public function findIdsWithoutSymfonyVersion(string $version): array
+    {
+        $qb = $this->createQueryBuilder('q')
+            ->select('q.id')
+            ->where('q.symfonyVersion IS NULL OR q.symfonyVersion != :version')
+            ->andWhere('q.isActive = :isActive')
+            ->setParameter('version', $version)
+            ->setParameter('isActive', true);
+
+        return array_column($qb->getQuery()->getArrayResult(), 'id');
+    }
+
+    /**
+     * Apply 75/25 version weighting to a pool of question IDs.
+     * 75% from questions with a symfonyVersion set, 25% from others.
+     * Falls back to standard selection if not enough versioned questions.
+     *
+     * @param array<int> $allIds All available question IDs
+     * @param array<int> $seenQuestionIds
+     * @param array<int, float> $questionFailureRates
+     * @param int $limit
+     * @return array<int>
+     */
+    private function selectSmartWithVersionWeighting(
+        array $allIds,
+        array $seenQuestionIds,
+        array $questionFailureRates,
+        int $limit
+    ): array {
+        if (empty($allIds)) {
+            return [];
+        }
+
+        // Identify versioned IDs within the pool
+        $versionedIds = array_column(
+            $this->createQueryBuilder('q')
+                ->select('q.id')
+                ->where('q.id IN (:ids)')
+                ->andWhere('q.symfonyVersion IS NOT NULL')
+                ->setParameter('ids', $allIds)
+                ->getQuery()
+                ->getArrayResult(),
+            'id'
+        );
+
+        if (!empty($versionedIds) && count($versionedIds) >= 3) {
+            $nonVersionedIds = array_diff($allIds, $versionedIds);
+            $versionedQuota = (int) ceil($limit * 0.75);
+            $nonVersionedQuota = $limit - $versionedQuota;
+
+            $selectedVersioned = $this->selectSmartQuestionIds(
+                $versionedIds, $seenQuestionIds, $questionFailureRates, $versionedQuota
+            );
+            $selectedNonVersioned = $this->selectSmartQuestionIds(
+                $nonVersionedIds, $seenQuestionIds, $questionFailureRates, $nonVersionedQuota
+            );
+
+            $totalSelected = count($selectedVersioned) + count($selectedNonVersioned);
+            if ($totalSelected < $limit) {
+                $needed = $limit - $totalSelected;
+                $allSelected = array_merge($selectedVersioned, $selectedNonVersioned);
+                $remaining = array_diff($allIds, $allSelected);
+                shuffle($remaining);
+                $selectedNonVersioned = array_merge($selectedNonVersioned, array_slice($remaining, 0, min($needed, count($remaining))));
+            }
+
+            return array_merge($selectedVersioned, $selectedNonVersioned);
+        }
+
+        // Fallback: not enough versioned questions
+        return $this->selectSmartQuestionIds($allIds, $seenQuestionIds, $questionFailureRates, $limit);
     }
 
     /**

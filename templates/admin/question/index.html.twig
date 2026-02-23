@@ -99,6 +99,14 @@
                         <option value="0" {{ filters.active == '0' ? 'selected' : '' }}>Inactive only</option>
                     </select>
                 </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1">Symfony</label>
+                    <select name="symfony_version" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500 text-gray-900 dark:text-white">
+                        <option value="">All</option>
+                        {% for sv in symfonyVersions %}<option value="{{ sv.value }}" {{ filters.symfony_version == sv.value ? 'selected' : '' }}>{{ sv.label }}</option>{% endfor %}
+                        <option value="none" {{ filters.symfony_version == 'none' ? 'selected' : '' }}>No version</option>
+                    </select>
+                </div>
                 <div class="flex gap-2">
                     <button type="submit" class="btn-primary px-4 py-2 rounded-xl text-sm"><i class="fas fa-filter mr-1"></i> Filter</button>
                     <a href="{{ path('admin_question_index') }}" class="btn-ghost px-4 py-2 rounded-xl text-sm"><i class="fas fa-times mr-1"></i> Clear</a>
@@ -147,6 +155,7 @@
                             <div class="flex items-start gap-2">
                                 {% if not question.isActive %}<span class="bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0"><i class="fas fa-eye-slash"></i></span>{% endif %}
                                 {% if question.isCertification %}<span class="bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0"><i class="fas fa-certificate"></i></span>{% endif %}
+                                {% if question.symfonyVersion %}<span class="bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 px-1.5 py-0.5 rounded text-xs font-medium flex-shrink-0"><i class="fas fa-bolt mr-0.5"></i>{{ question.symfonyVersion }}</span>{% endif %}
                                 <div class="min-w-0">
                                     <a href="{{ path('admin_question_show', {id: question.id}) }}" class="text-gray-900 dark:text-white hover:text-primary-500 font-medium block truncate max-w-md transition" title="{{ question.text|striptags }}">
                                         {{ question.text|striptags|slice(0, 80) }}{% if question.text|length > 80 %}...{% endif %}

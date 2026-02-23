@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Answer;
 use App\Entity\Question;
 use App\Enum\QuestionType;
+use App\Enum\SymfonyVersion;
 use App\Repository\CategoryRepository;
 use App\Repository\QuestionRepository;
 use App\Repository\SubcategoryRepository;
@@ -33,6 +34,7 @@ class QuestionService
         ?int $difficulty = null,
         ?string $certification = null,
         ?string $active = null,
+        ?string $symfonyVersion = null,
     ): array {
         $offset = ($page - 1) * $limit;
 
@@ -45,7 +47,8 @@ class QuestionService
             $type,
             $difficulty,
             $certification,
-            $active
+            $active,
+            $symfonyVersion
         );
 
         return [
@@ -89,6 +92,14 @@ class QuestionService
         $difficulty = (int) ($formData['difficulty'] ?? 1);
         $question->setDifficulty($difficulty > 0 && $difficulty <= 5 ? $difficulty : 1);
         $question->setIsCertification(!empty($formData['is_certification']));
+
+        // Set Symfony version
+        $symfonyVersion = $formData['symfony_version'] ?? null;
+        if ($symfonyVersion && $symfonyVersion !== '') {
+            $question->setSymfonyVersion($symfonyVersion);
+        } else {
+            $question->setSymfonyVersion(null);
+        }
 
         // Set category and subcategory
         $categoryId = (int) ($formData['category'] ?? 0);
@@ -220,6 +231,7 @@ class QuestionService
         $newQuestion->setResourceUrl($question->getResourceUrl());
         $newQuestion->setDifficulty($question->getDifficulty());
         $newQuestion->setIsCertification($question->isCertification());
+        $newQuestion->setSymfonyVersion($question->getSymfonyVersion());
 
         foreach ($question->getAnswers() as $answer) {
             $newAnswer = new Answer();
