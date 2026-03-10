@@ -791,9 +791,12 @@ class QuestionRepository extends ServiceEntityRepository
 
     /**
      * Smart selection algorithm:
-     * - 40% unseen questions (prioritized)
-     * - 40% questions with high failure rate (>= 50%)
-     * - 20% random questions to add variety
+     * - 80% unseen questions (never answered by user)
+     * - 10% questions with high failure rate (>= 50%)
+     * - 10% random already-seen questions to add variety
+     * 
+     * If not enough unseen questions are available, the remaining slots
+     * are filled with seen questions (high failure rate first, then random).
      * 
      * @param array<int> $allIds All available question IDs
      * @param array<int> $seenQuestionIds Questions already seen by user
@@ -817,8 +820,8 @@ class QuestionRepository extends ServiceEntityRepository
         }
 
         // Separate unseen from seen questions
-        $unseenIds = array_diff($allIds, $seenQuestionIds);
-        $seenInPool = array_intersect($allIds, $seenQuestionIds);
+        $unseenIds = array_values(array_diff($allIds, $seenQuestionIds));
+        $seenInPool = array_values(array_intersect($allIds, $seenQuestionIds));
 
         // Get high failure rate questions (>= 50% failure rate)
         $highFailureIds = [];
@@ -831,14 +834,14 @@ class QuestionRepository extends ServiceEntityRepository
         arsort($highFailureIds);
         $highFailureIds = array_keys($highFailureIds);
 
-        // Calculate quotas
-        $unseenQuota = (int) ceil($limit * 0.4);    // 40% unseen
-        $failureQuota = (int) ceil($limit * 0.4);   // 40% high failure
-        $randomQuota = $limit - $unseenQuota - $failureQuota; // Rest random
+        // Calculate quotas: 80% unseen, 10% high failure, 10% random seen
+        $unseenQuota = (int) ceil($limit * 0.8);     // 80% unseen (never answered)
+        $failureQuota = (int) floor($limit * 0.1);   // 10% high failure
+        $randomQuota = $limit - $unseenQuota - $failureQuota; // 10% random seen
 
         $selectedIds = [];
 
-        // 1. Add unseen questions (up to quota)
+        // 1. Add unseen questions (up to 80% quota)
         shuffle($unseenIds);
         $unseenSelection = array_slice($unseenIds, 0, min($unseenQuota, count($unseenIds)));
         $selectedIds = array_merge($selectedIds, $unseenSelection);
@@ -848,7 +851,7 @@ class QuestionRepository extends ServiceEntityRepository
         $failureSelection = array_slice($remainingHighFailure, 0, min($failureQuota, count($remainingHighFailure)));
         $selectedIds = array_merge($selectedIds, $failureSelection);
 
-        // 3. Fill remaining with random questions not yet selected
+        // 3. Fill remaining with random seen questions not yet selected
         $remaining = array_diff($allIds, $selectedIds);
         shuffle($remaining);
         $needed = $limit - count($selectedIds);
